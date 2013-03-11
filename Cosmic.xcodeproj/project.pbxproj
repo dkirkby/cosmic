@@ -19,6 +19,7 @@
 		6398F40F16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6398F40D16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard */; };
 		6398F41216EE67FB00296AC3 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6398F41016EE67FB00296AC3 /* MainStoryboard_iPad.storyboard */; };
 		6398F41516EE67FB00296AC3 /* CosmicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6398F41416EE67FB00296AC3 /* CosmicViewController.m */; };
+		6398F41C16EE686400296AC3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F41B16EE686400296AC3 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		6398F41116EE67FB00296AC3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		6398F41316EE67FB00296AC3 /* CosmicViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CosmicViewController.h; sourceTree = "<group>"; };
 		6398F41416EE67FB00296AC3 /* CosmicViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CosmicViewController.m; sourceTree = "<group>"; };
+		6398F41B16EE686400296AC3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +48,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6398F41C16EE686400296AC3 /* AVFoundation.framework in Frameworks */,
 				6398F3F616EE67FB00296AC3 /* UIKit.framework in Frameworks */,
 				6398F3F816EE67FB00296AC3 /* Foundation.framework in Frameworks */,
 				6398F3FA16EE67FB00296AC3 /* CoreGraphics.framework in Frameworks */,
@@ -58,6 +61,7 @@
 		6398F3E916EE67FA00296AC3 = {
 			isa = PBXGroup;
 			children = (
+				6398F41B16EE686400296AC3 /* AVFoundation.framework */,
 				6398F3FB16EE67FB00296AC3 /* Cosmic */,
 				6398F3F416EE67FB00296AC3 /* Frameworks */,
 				6398F3F316EE67FB00296AC3 /* Products */,
