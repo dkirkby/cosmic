@@ -26,4 +26,8 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)goButtonPressed:(UIButton *)sender {
+    NSLog(@"go!");
+}
+
 @end
