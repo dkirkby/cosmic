@@ -7,12 +7,19 @@
 //
 
 #import "CosmicViewController.h"
+#import "CosmicBrain.h"
 
 @interface CosmicViewController ()
-
+@property (nonatomic,strong) CosmicBrain *brain;
 @end
 
 @implementation CosmicViewController
+
+- (CosmicBrain *)brain
+{
+    if(!_brain) _brain = [[CosmicBrain alloc] init];
+    return _brain;
+}
 
 - (void)viewDidLoad
 {
@@ -28,6 +35,7 @@
 
 - (IBAction)goButtonPressed:(UIButton *)sender {
     NSLog(@"go!");
+    [self.brain captureImage];
 }
 
 @end
