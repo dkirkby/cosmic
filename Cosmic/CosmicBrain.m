@@ -7,12 +7,18 @@
 //
 
 #import "CosmicBrain.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface CosmicBrain ()
-
+@property AVCaptureSession *captureSession;
 @end
 
 @implementation CosmicBrain
+
+- (void) initCapture {
+    NSLog(@"initializing capture...");
+    self.captureSession = [[AVCaptureSession alloc] init];
+}
 
 - (void) captureImage {
     NSLog(@"capturing image...");

@@ -10,6 +10,7 @@
 
 @interface CosmicBrain : NSObject
 
+- (void) initCapture;
 - (void) captureImage;
 
 @end
