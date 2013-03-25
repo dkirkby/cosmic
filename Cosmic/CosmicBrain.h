@@ -10,6 +10,7 @@
 
 @interface CosmicBrain : NSObject
 
+@property int exposureCount;
 - (void) initCapture;
 - (void) captureImage;
 

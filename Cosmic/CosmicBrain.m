@@ -8,6 +8,7 @@
 
 #import "CosmicBrain.h"
 #import <AVFoundation/AVFoundation.h>
+#import <ImageIO/ImageIO.h>
 
 @interface CosmicBrain ()
 @property AVCaptureSession *captureSession;
@@ -67,6 +68,18 @@
         size_t bytesPerRow = CVPixelBufferGetBytesPerRow(cameraFrame);
         // Do whatever with your bytes
         NSLog(@"processing raw data %lu x %lu with %lu bytes per row",width,height,bytesPerRow);
+
+        CFDictionaryRef exifAttachments = CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+        if (exifAttachments) {
+            // Do something with the attachments.
+            NSLog(@"attachements: %@", exifAttachments);
+        }
+        else {
+            NSLog(@"no attachments");
+        }
+        CFNumberRef shutter = CMGetAttachment( imageSampleBuffer, kCGImagePropertyExifShutterSpeedValue, NULL);
+        NSLog(@"\n shuttervalue : %@",shutter);
+
         //GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
     }];

@@ -24,6 +24,7 @@
 		6398F42116EE6D6D00296AC3 /* CosmicBrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6398F42016EE6D6D00296AC3 /* CosmicBrain.m */; };
 		63B66A2B1700DA3E004C5021 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2A1700DA3E004C5021 /* CoreMedia.framework */; };
 		63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2C1700DA60004C5021 /* CoreVideo.framework */; };
+		63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2E1700E73C004C5021 /* ImageIO.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		6398F42016EE6D6D00296AC3 /* CosmicBrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicBrain.m; sourceTree = "<group>"; };
 		63B66A2A1700DA3E004C5021 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		63B66A2C1700DA60004C5021 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		63B66A2E1700E73C004C5021 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */,
 				63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */,
 				63B66A2B1700DA3E004C5021 /* CoreMedia.framework in Frameworks */,
 				6398F41C16EE686400296AC3 /* AVFoundation.framework in Frameworks */,
@@ -72,6 +75,7 @@
 		6398F3E916EE67FA00296AC3 = {
 			isa = PBXGroup;
 			children = (
+				63B66A2E1700E73C004C5021 /* ImageIO.framework */,
 				63B66A2C1700DA60004C5021 /* CoreVideo.framework */,
 				63B66A2A1700DA3E004C5021 /* CoreMedia.framework */,
 				6398F41B16EE686400296AC3 /* AVFoundation.framework */,
