@@ -25,20 +25,26 @@
     else {
         NSLog(@"Failed to set the photo session preset!");
     }
-    // Look for an input device
+    // Look for a suitable input device (we look for "video" here since there is no separate still image type)
     NSArray *cameras=[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-    for(AVCaptureDevice *device in cameras) {
-        NSLog(@"found %@",device.localizedName);
+    if(cameras.count == 0) {
+        NSLog(@"No video devices available.");
+        return;
     }
-    // Set the input device
+    for(AVCaptureDevice *device in cameras) {
+        NSLog(@"found '%@'",device.localizedName);
+    }
+    // Use the first available input device (for now)
     NSError *error = nil;
     AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:[cameras objectAtIndex:0] error:&error];
     if(!input) {
         NSLog(@"PANIC: no media input");
+        return;
     }
-    else {
-        [self.captureSession addInput:input];
-    }
+    [self.captureSession addInput:input];
+    // Set the output device
+    AVCaptureStillImageOutput *output = [[AVCaptureStillImageOutput alloc] init];
+    [self.captureSession addOutput:output];
 }
 
 - (void) captureImage {
