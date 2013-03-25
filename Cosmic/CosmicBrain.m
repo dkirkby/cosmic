@@ -11,6 +11,7 @@
 
 @interface CosmicBrain ()
 @property AVCaptureSession *captureSession;
+@property AVCaptureStillImageOutput *cameraOutput;
 @end
 
 @implementation CosmicBrain
@@ -42,13 +43,30 @@
         return;
     }
     [self.captureSession addInput:input];
-    // Set the output device
-    AVCaptureStillImageOutput *output = [[AVCaptureStillImageOutput alloc] init];
-    [self.captureSession addOutput:output];
+    // Configure and set the output device
+    self.cameraOutput = [[AVCaptureStillImageOutput alloc] init];
+    NSDictionary *outputSettings = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
+                                    (id)kCVPixelBufferPixelFormatTypeKey,
+                                    nil];
+    [self.cameraOutput setOutputSettings:outputSettings];
+    [self.captureSession addOutput:self.cameraOutput];
+    // Start the session running now
+    [self.captureSession startRunning];
 }
 
 - (void) captureImage {
     NSLog(@"capturing image...");
+    [self.cameraOutput captureStillImageAsynchronouslyFromConnection:[[self.cameraOutput connections] objectAtIndex:0] completionHandler:^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
+        NSLog(@"got it!");
+        CVImageBufferRef cameraFrame = CMSampleBufferGetImageBuffer(imageSampleBuffer);
+        CVPixelBufferLockBaseAddress(cameraFrame, 0);
+        //GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
+        size_t bytesPerRow = CVPixelBufferGetBytesPerRow(cameraFrame);
+        // Do whatever with your bytes
+        NSLog(@"processing raw data with %lu bytes per row",bytesPerRow);
+        CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
+    }];
 }
 
 @end
