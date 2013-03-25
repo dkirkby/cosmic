@@ -45,6 +45,8 @@
     [self.captureSession addInput:input];
     // Configure and set the output device
     self.cameraOutput = [[AVCaptureStillImageOutput alloc] init];
+    // perhaps kCVPixelFormatType_32ARGB is faster?
+    // http://stackoverflow.com/questions/14383932/convert-cmsamplebufferref-to-uiimage
     NSDictionary *outputSettings = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
                                     (id)kCVPixelBufferPixelFormatTypeKey,
@@ -58,13 +60,14 @@
 - (void) captureImage {
     NSLog(@"capturing image...");
     [self.cameraOutput captureStillImageAsynchronouslyFromConnection:[[self.cameraOutput connections] objectAtIndex:0] completionHandler:^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
-        NSLog(@"got it!");
         CVImageBufferRef cameraFrame = CMSampleBufferGetImageBuffer(imageSampleBuffer);
         CVPixelBufferLockBaseAddress(cameraFrame, 0);
-        //GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
+        size_t width = CVPixelBufferGetWidth(cameraFrame);
+        size_t height = CVPixelBufferGetHeight(cameraFrame);
         size_t bytesPerRow = CVPixelBufferGetBytesPerRow(cameraFrame);
         // Do whatever with your bytes
-        NSLog(@"processing raw data with %lu bytes per row",bytesPerRow);
+        NSLog(@"processing raw data %lu x %lu with %lu bytes per row",width,height,bytesPerRow);
+        //GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
     }];
 }
