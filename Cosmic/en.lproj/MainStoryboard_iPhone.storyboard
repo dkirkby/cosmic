@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12C60" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="2">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -16,6 +16,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EUX-7s-8dh">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="81" id="Yr9-oj-bKE"/>
+                                    <constraint firstAttribute="width" constant="223" id="iVY-5u-JAv"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="GO">
@@ -29,19 +30,30 @@
                                     <action selector="goButtonPressed:" destination="2" eventType="touchUpInside" id="zZd-Bg-hAx"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zuk-KX-IVm">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="97" id="mkW-ad-gA9"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="QHR-6d-ICd" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="Icd-DV-bbZ"/>
                             <constraint firstAttribute="bottom" secondItem="QHR-6d-ICd" secondAttribute="bottom" constant="80" id="UJw-t7-cTg"/>
                             <constraint firstItem="EUX-7s-8dh" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="Yfm-uF-PTW"/>
-                            <constraint firstItem="EUX-7s-8dh" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="h5a-uT-oYd"/>
                             <constraint firstItem="QHR-6d-ICd" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="lmO-AB-E2K"/>
+                            <constraint firstItem="zuk-KX-IVm" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="msX-HY-g3T"/>
                             <constraint firstItem="EUX-7s-8dh" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="pZm-73-L44"/>
+                            <constraint firstItem="EUX-7s-8dh" firstAttribute="top" secondItem="zuk-KX-IVm" secondAttribute="top" type="default" id="vy7-BQ-FA1"/>
                             <constraint firstItem="QHR-6d-ICd" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="w41-Cs-IQv"/>
+                            <constraint firstItem="zuk-KX-IVm" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="zZQ-L4-LKY"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="exposureCount" destination="zuk-KX-IVm" id="U7h-q7-J9n"/>
                         <outlet property="goButton" destination="EUX-7s-8dh" id="grw-Hm-Lol"/>
                         <outlet property="scrollView" destination="QHR-6d-ICd" id="iuD-o3-qT0"/>
                     </connections>
@@ -55,6 +67,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
             <relationships>
                 <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="exposureCount" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="goButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>

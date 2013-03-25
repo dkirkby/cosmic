@@ -15,7 +15,8 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W0w-cB-5sD"/>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pVq-e9-Dox">
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="81" id="5yd-uK-GZD"/>
+                                    <constraint firstAttribute="width" constant="555" id="eij-jn-uhT"/>
+                                    <constraint firstAttribute="height" constant="81" id="v0t-yB-BNE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="GO">
@@ -29,20 +30,31 @@
                                     <action selector="goButtonPressed:" destination="msq-lx-ITe" eventType="touchUpInside" id="hrT-8u-H1f"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pm9-Cy-0ZK">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="213" id="sh0-nw-Qzw"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="W0w-cB-5sD" firstAttribute="top" secondItem="tAd-zh-rlh" secondAttribute="top" type="default" id="1Z3-iQ-DKl"/>
                             <constraint firstAttribute="bottom" secondItem="W0w-cB-5sD" secondAttribute="bottom" constant="80" id="36k-OI-U2P"/>
+                            <constraint firstItem="pm9-Cy-0ZK" firstAttribute="bottom" secondItem="tAd-zh-rlh" secondAttribute="bottom" type="default" id="6ap-yZ-bCw"/>
+                            <constraint firstItem="pm9-Cy-0ZK" firstAttribute="trailing" secondItem="tAd-zh-rlh" secondAttribute="trailing" type="default" id="707-mU-um9"/>
                             <constraint firstItem="pVq-e9-Dox" firstAttribute="leading" secondItem="tAd-zh-rlh" secondAttribute="leading" type="default" id="DAj-sT-WmC"/>
                             <constraint firstItem="pVq-e9-Dox" firstAttribute="bottom" secondItem="tAd-zh-rlh" secondAttribute="bottom" type="default" id="gqx-4s-PQv"/>
-                            <constraint firstItem="pVq-e9-Dox" firstAttribute="trailing" secondItem="tAd-zh-rlh" secondAttribute="trailing" type="default" id="n14-sz-sws"/>
+                            <constraint firstItem="pm9-Cy-0ZK" firstAttribute="top" secondItem="pVq-e9-Dox" secondAttribute="top" type="default" id="kWW-ra-XRk"/>
                             <constraint firstItem="W0w-cB-5sD" firstAttribute="leading" secondItem="tAd-zh-rlh" secondAttribute="leading" type="default" id="yg9-fZ-5gB"/>
                             <constraint firstItem="W0w-cB-5sD" firstAttribute="trailing" secondItem="tAd-zh-rlh" secondAttribute="trailing" type="default" id="zE7-PF-QfF"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
+                        <outlet property="exposureCount" destination="pm9-Cy-0ZK" id="9gp-Yl-6f0"/>
                         <outlet property="goButton" destination="pVq-e9-Dox" id="nsj-Hn-fqB"/>
                         <outlet property="scrollView" destination="W0w-cB-5sD" id="2HH-rn-oIm"/>
                     </connections>
@@ -56,6 +68,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
             <relationships>
                 <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="exposureCount" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="goButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
