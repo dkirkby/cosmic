@@ -11,6 +11,7 @@
 
 @interface CosmicViewController ()
 @property (nonatomic,strong) CosmicBrain *brain;
+@property (nonatomic,strong) UIImage *displayImage;
 @end
 
 @implementation CosmicViewController
@@ -19,6 +20,12 @@
 {
     if(!_brain) _brain = [[CosmicBrain alloc] init];
     return _brain;
+}
+
+- (UIImage*)displayImage
+{
+    if(!_displayImage) _displayImage = [[UIImage alloc] init];
+    return _displayImage;
 }
 
 - (void)viewDidLoad
