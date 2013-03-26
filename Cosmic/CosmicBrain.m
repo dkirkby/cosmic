@@ -13,6 +13,7 @@
 @interface CosmicBrain ()
 @property AVCaptureSession *captureSession;
 @property AVCaptureStillImageOutput *cameraOutput;
+- (void) gotImage;
 @end
 
 @implementation CosmicBrain
@@ -82,7 +83,16 @@
 
         //GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self gotImage];
+        });
     }];
+}
+
+- (void) gotImage {
+    self.exposureCount++;
+    NSLog(@"Got exposure #%d",self.exposureCount);
 }
 
 @end

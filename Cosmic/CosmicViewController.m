@@ -33,7 +33,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self.brain initCapture];
-    self.exposureCount.text = @"0";
+    self.exposureCountLabel.text = @"0";
 }
 
 - (void)didReceiveMemoryWarning

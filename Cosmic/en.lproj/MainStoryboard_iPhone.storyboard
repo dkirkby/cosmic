@@ -53,7 +53,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="exposureCount" destination="zuk-KX-IVm" id="U7h-q7-J9n"/>
+                        <outlet property="exposureCountLabel" destination="zuk-KX-IVm" id="1mZ-qW-WPX"/>
                         <outlet property="goButton" destination="EUX-7s-8dh" id="grw-Hm-Lol"/>
                         <outlet property="scrollView" destination="QHR-6d-ICd" id="iuD-o3-qT0"/>
                     </connections>
@@ -67,7 +67,7 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
             <relationships>
                 <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="exposureCount" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="exposureCountLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="goButton" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
