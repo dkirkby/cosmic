@@ -10,7 +10,7 @@
 
 #include "CosmicBrain.h"
 
-@interface CosmicViewController : UIViewController
+@interface CosmicViewController : UIViewController <CosmicBrainDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;

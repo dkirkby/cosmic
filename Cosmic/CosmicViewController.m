@@ -46,4 +46,9 @@
     [self.brain captureImage];
 }
 
+- (void) setExposureCount:(int)count {
+    NSLog(@"the count is now %d",count);
+    self.exposureCountLabel.text = [NSString stringWithFormat:@"%d",count];
+}
+
 @end
