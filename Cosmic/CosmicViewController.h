@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#include "CosmicBrain.h"
+
 @interface CosmicViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;

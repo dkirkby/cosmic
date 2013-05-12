@@ -7,7 +7,6 @@
 //
 
 #import "CosmicViewController.h"
-#import "CosmicBrain.h"
 
 @interface CosmicViewController ()
 @property (nonatomic,strong) CosmicBrain *brain;

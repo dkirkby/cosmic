@@ -8,8 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class CosmicBrain;
+@protocol CosmicBrainDelegate <NSObject>
+- (void) setExposureCount:(int)count;
+@end
+
 @interface CosmicBrain : NSObject
 
+@property(nonatomic,assign) id <CosmicBrainDelegate> brainDelegate;
 @property int exposureCount;
 - (void) initCapture;
 - (void) captureImage;
