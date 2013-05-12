@@ -93,6 +93,7 @@
 - (void) gotImage {
     self.exposureCount++;
     NSLog(@"Got exposure #%d",self.exposureCount);
+    [self.brainDelegate setExposureCount:self.exposureCount];
 }
 
 @end
