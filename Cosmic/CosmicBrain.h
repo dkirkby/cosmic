@@ -11,13 +11,14 @@
 @class CosmicBrain;
 @protocol CosmicBrainDelegate <NSObject>
 - (void) setExposureCount:(int)count;
+- (void) displayAnImage:(UIImage*)image;
 @end
 
 @interface CosmicBrain : NSObject
 
 @property(nonatomic,assign) id <CosmicBrainDelegate> brainDelegate;
 @property int exposureCount;
-@property(nonatomic) UIImage *lastImage;
+@property(nonatomic,strong) UIImage *lastImage;
 - (void) initCapture;
 - (void) captureImage;
 

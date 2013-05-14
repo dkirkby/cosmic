@@ -118,6 +118,7 @@
     self.exposureCount++;
     NSLog(@"Got exposure #%d",self.exposureCount);
     [self.brainDelegate setExposureCount:self.exposureCount];
+    [self.brainDelegate displayAnImage:self.lastImage];
 }
 
 @end
