@@ -101,7 +101,10 @@
                 }
             }
         }
-        self.lastImage = UIGraphicsGetImageFromCurrentImageContext();
+        
+        //quick fix to sideways image problem
+        self.lastImage = [[UIImage alloc] initWithCGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage scale:1.0 orientation:UIImageOrientationRight];
+        
         UIGraphicsEndImageContext();
         
         // All done with the image buffer so release it now

@@ -70,6 +70,7 @@
                 <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
                 <relationship kind="outlet" name="exposureCountLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="goButton" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="imageOutlet" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
             </relationships>
         </class>

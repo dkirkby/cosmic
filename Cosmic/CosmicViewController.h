@@ -10,10 +10,7 @@
 
 #include "CosmicBrain.h"
 
-@interface CosmicViewController : UIViewController <CosmicBrainDelegate>
-
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UIButton *goButton;
-@property (weak, nonatomic) IBOutlet UILabel *exposureCountLabel;
-
+@interface CosmicViewController : UIViewController
+- (IBAction)imageViewTapped:(UIGestureRecognizer *)gesture;
+- (IBAction)buttonSwipedDown:(UIGestureRecognizer *)gesture;
 @end
