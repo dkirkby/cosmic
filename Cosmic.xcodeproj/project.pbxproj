@@ -20,7 +20,6 @@
 		6398F41216EE67FB00296AC3 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6398F41016EE67FB00296AC3 /* MainStoryboard_iPad.storyboard */; };
 		6398F41516EE67FB00296AC3 /* CosmicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6398F41416EE67FB00296AC3 /* CosmicViewController.m */; };
 		6398F41C16EE686400296AC3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F41B16EE686400296AC3 /* AVFoundation.framework */; };
-		6398F41E16EE6CF100296AC3 /* MemorialChurch.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6398F41D16EE6CF100296AC3 /* MemorialChurch.jpg */; };
 		6398F42116EE6D6D00296AC3 /* CosmicBrain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6398F42016EE6D6D00296AC3 /* CosmicBrain.m */; };
 		63B66A2B1700DA3E004C5021 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2A1700DA3E004C5021 /* CoreMedia.framework */; };
 		63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2C1700DA60004C5021 /* CoreVideo.framework */; };
@@ -46,7 +45,6 @@
 		6398F41316EE67FB00296AC3 /* CosmicViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CosmicViewController.h; sourceTree = "<group>"; };
 		6398F41416EE67FB00296AC3 /* CosmicViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CosmicViewController.m; sourceTree = "<group>"; };
 		6398F41B16EE686400296AC3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		6398F41D16EE6CF100296AC3 /* MemorialChurch.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = MemorialChurch.jpg; sourceTree = "<group>"; };
 		6398F41F16EE6D6D00296AC3 /* CosmicBrain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicBrain.h; sourceTree = "<group>"; };
 		6398F42016EE6D6D00296AC3 /* CosmicBrain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicBrain.m; sourceTree = "<group>"; };
 		63B66A2A1700DA3E004C5021 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
@@ -111,7 +109,6 @@
 				6398F40D16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard */,
 				6398F41F16EE6D6D00296AC3 /* CosmicBrain.h */,
 				6398F42016EE6D6D00296AC3 /* CosmicBrain.m */,
-				6398F41D16EE6CF100296AC3 /* MemorialChurch.jpg */,
 				6398F41016EE67FB00296AC3 /* MainStoryboard_iPad.storyboard */,
 				6398F41316EE67FB00296AC3 /* CosmicViewController.h */,
 				6398F41416EE67FB00296AC3 /* CosmicViewController.m */,
@@ -192,7 +189,6 @@
 				6398F40C16EE67FB00296AC3 /* Default-568h@2x.png in Resources */,
 				6398F40F16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard in Resources */,
 				6398F41216EE67FB00296AC3 /* MainStoryboard_iPad.storyboard in Resources */,
-				6398F41E16EE6CF100296AC3 /* MemorialChurch.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
