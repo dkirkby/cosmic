@@ -17,7 +17,12 @@
 
 - (CosmicBrain *)brain
 {
-    if(!_brain) _brain = [[CosmicBrain alloc] init];
+    if(!_brain) {
+        // Lazy instantiation
+        _brain = [[CosmicBrain alloc] init];
+        // Register ourselves as a brain delegate
+        _brain.brainDelegate = self;
+    }
     return _brain;
 }
 
