@@ -17,6 +17,7 @@
 
 @property(nonatomic,assign) id <CosmicBrainDelegate> brainDelegate;
 @property int exposureCount;
+@property(nonatomic) UIImage *lastImage;
 - (void) initCapture;
 - (void) captureImage;
 
