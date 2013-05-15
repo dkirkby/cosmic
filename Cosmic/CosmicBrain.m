@@ -34,14 +34,26 @@
         NSLog(@"No video devices available.");
         return;
     }
+    AVCaptureDevice *bestDevice = NULL;
     for(AVCaptureDevice *device in cameras) {
-        NSLog(@"found '%@'",device.localizedName);
+        // Look up this camera's capabilities
+        BOOL exposureLock = [device isExposureModeSupported:AVCaptureExposureModeLocked];
+        BOOL focusLock = [device isFocusModeSupported:AVCaptureFocusModeLocked];
+        NSLog(@"Found '%@' (exposure lock? %s; focus lock? %s)",device.localizedName,
+              (exposureLock ? "yes":"no"),(focusLock ? "yes":"no"));
+        // Is this the best so far?
+        if(NULL == bestDevice && exposureLock && focusLock) bestDevice = device;
     }
-    // Use the first available input device (for now)
+    if(NULL == bestDevice) {
+        NSLog(@"PANIC: no suitable camera device available!");
+        return;
+    }
+    NSLog(@"Using '%@' to capture images.",bestDevice.localizedName);
+    // Configure a capture session with the best device available
     NSError *error = nil;
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:[cameras objectAtIndex:0] error:&error];
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:bestDevice error:&error];
     if(!input) {
-        NSLog(@"PANIC: no media input");
+        NSLog(@"PANIC: failed to configure device input!");
         return;
     }
     [self.captureSession addInput:input];
