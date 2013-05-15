@@ -20,6 +20,7 @@
 @property int exposureCount;
 @property(nonatomic,strong) UIImage *lastImage;
 - (void) initCapture;
+- (void) beginCapture;
 - (void) captureImage;
 
 @end

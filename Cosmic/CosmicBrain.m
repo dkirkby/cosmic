@@ -11,6 +11,7 @@
 #import <ImageIO/ImageIO.h>
 
 @interface CosmicBrain ()
+@property AVCaptureDevice *bestDevice;
 @property AVCaptureSession *captureSession;
 @property AVCaptureStillImageOutput *cameraOutput;
 - (void) gotImage;
@@ -34,7 +35,7 @@
         NSLog(@"No video devices available.");
         return;
     }
-    AVCaptureDevice *bestDevice = nil;
+    self.bestDevice = nil;
     for(AVCaptureDevice *device in cameras) {
         // Look up this camera's capabilities
         BOOL exposureLock = [device isExposureModeSupported:AVCaptureExposureModeLocked];
@@ -42,49 +43,17 @@
         NSLog(@"Found '%@' (exposure lock? %s; focus lock? %s)",device.localizedName,
               (exposureLock ? "yes":"no"),(focusLock ? "yes":"no"));
         // Is this the best so far?
-        if(nil == bestDevice && exposureLock && focusLock) bestDevice = device;
+        if(nil == self.bestDevice && exposureLock && focusLock) self.bestDevice = device;
     }
-    if(nil == bestDevice) {
+    if(nil == self.bestDevice) {
         NSLog(@"PANIC: no suitable camera device available!");
         return;
     }
-    NSLog(@"Using '%@' to capture images.",bestDevice.localizedName);
-    // Try to lock the exposure and focus for the best device.
-    NSError *error = nil;
-    if([bestDevice lockForConfiguration:&error]) {
-        CGPoint center = CGPointMake(0.5,0.5);
-        if([bestDevice isFocusPointOfInterestSupported]) {
-            [bestDevice setFocusPointOfInterest:center];
-            NSLog(@"Set focus point of interest.");
-        }
-        if([bestDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
-            [bestDevice setFocusMode:AVCaptureFocusModeAutoFocus];
-            NSLog(@"Autofocus successful.");
-        }
-        else if([bestDevice isFocusModeSupported:AVCaptureFocusModeLocked]) {
-            [bestDevice setFocusMode:AVCaptureFocusModeLocked];
-            NSLog(@"Focus lock successful.");
-        }
-        if([bestDevice isExposurePointOfInterestSupported]) {
-            [bestDevice setExposurePointOfInterest:center];
-            NSLog(@"Set exposure point of interest.");
-        }
-        if([bestDevice isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
-            [bestDevice setExposureMode:AVCaptureExposureModeAutoExpose];
-            NSLog(@"Autoexposure successful.");
-        }
-        else if([bestDevice isExposureModeSupported:AVCaptureExposureModeLocked]) {
-            [bestDevice setExposureMode:AVCaptureExposureModeLocked];
-            NSLog(@"Exposure lock successful.");
-        }
-        [bestDevice unlockForConfiguration];
-    }
-    else {
-        NSLog(@"PANIC: cannot lock device for exposure and focus configuration.");
-        return;
-    }
+    NSLog(@"Using '%@' to capture images.",self.bestDevice.localizedName);
     // Configure a capture session using the best device.
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:bestDevice error:&error];
+    NSError *error = nil;
+    AVCaptureDeviceInput *input =
+        [AVCaptureDeviceInput deviceInputWithDevice:self.bestDevice error:&error];
     if(!input) {
         NSLog(@"PANIC: failed to configure device input!");
         return;
@@ -104,7 +73,46 @@
     [self.captureSession startRunning];
 }
 
+- (void) beginCapture {
+    NSLog(@"begin capture...");
+    // Try to lock the exposure and focus for the best device.
+    NSError *error = nil;
+    if([self.bestDevice lockForConfiguration:&error]) {
+        CGPoint center = CGPointMake(0.5,0.5);
+        if([self.bestDevice isFocusPointOfInterestSupported]) {
+            [self.bestDevice setFocusPointOfInterest:center];
+            NSLog(@"Set focus point of interest.");
+        }
+        if([self.bestDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+            [self.bestDevice setFocusMode:AVCaptureFocusModeAutoFocus];
+            NSLog(@"Autofocus successful.");
+        }
+        else if([self.bestDevice isFocusModeSupported:AVCaptureFocusModeLocked]) {
+            [self.bestDevice setFocusMode:AVCaptureFocusModeLocked];
+            NSLog(@"Focus lock successful.");
+        }
+        if([self.bestDevice isExposurePointOfInterestSupported]) {
+            [self.bestDevice setExposurePointOfInterest:center];
+            NSLog(@"Set exposure point of interest.");
+        }
+        if([self.bestDevice isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
+            [self.bestDevice setExposureMode:AVCaptureExposureModeAutoExpose];
+            NSLog(@"Autoexposure successful.");
+        }
+        else if([self.bestDevice isExposureModeSupported:AVCaptureExposureModeLocked]) {
+            [self.bestDevice setExposureMode:AVCaptureExposureModeLocked];
+            NSLog(@"Exposure lock successful.");
+        }
+        [self.bestDevice unlockForConfiguration];
+    }
+    else {
+        NSLog(@"PANIC: cannot lock device for exposure and focus configuration.");
+        return;
+    }
+}
+
 - (void) captureImage {
+    if(0 == self.exposureCount) [self beginCapture];
     NSLog(@"capturing image...");
     [self.cameraOutput captureStillImageAsynchronouslyFromConnection:[[self.cameraOutput connections] objectAtIndex:0] completionHandler:^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
 
