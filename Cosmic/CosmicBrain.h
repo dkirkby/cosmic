@@ -24,9 +24,11 @@
 - (void) beginCapture;
 - (void) captureImage;
 - (UIImage*) createUIImageWithWidth:(int)imageWidth
-                          AndHeight:(int)imageHeight
+                             Height:(int)imageHeight
+                         AtLeftEdge:(int)leftEdge
+                            TopEdge:(int)topEdge
                         FromRawData:(unsigned char*)rawData
                        WithRawWidth:(int)rawWidth
-                       AndRawHeight:(int)rawHeight;
+                          RawHeight:(int)rawHeight;
 
 @end

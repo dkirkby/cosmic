@@ -147,7 +147,7 @@
         // Look at the actual image data
         GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
         
-        self.lastImage = [self createUIImageWithWidth:width AndHeight:height FromRawData:rawImageBytes WithRawWidth:width AndRawHeight:height];
+        self.lastImage = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:1000 TopEdge:1000 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
             
         // All done with the image buffer so release it now
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
@@ -164,28 +164,21 @@
     }];
 }
 
-- (UIImage*) createUIImageWithWidth:(int)imageWidth AndHeight:(int)imageHeight FromRawData:(unsigned char *)rawData WithRawWidth:(int)rawWidth AndRawHeight:(int)rawHeight {
+- (UIImage*) createUIImageWithWidth:(int)imageWidth Height:(int)imageHeight AtLeftEdge:(int)leftEdge TopEdge:(int)topEdge FromRawData:(unsigned char *)rawData WithRawWidth:(int)rawWidth RawHeight:(int)rawHeight {
 
-    //UIGraphicsBeginImageContextWithOptions(CGSizeMake(imageWidth,imageHeight),
-    //                                       NO,[UIScreen mainScreen].scale);
     UIGraphicsBeginImageContext(CGSizeMake(imageWidth,imageHeight));
     CGContextRef c = UIGraphicsGetCurrentContext();
-    unsigned char* data = CGBitmapContextGetData(c);
+    unsigned char* imgData = CGBitmapContextGetData(c);
 
-    int bytesPerPixel = 4;
-    for(int y = 0; y < rawHeight; y++) {
-        for(int x = 0; x < rawWidth; x++) {
-            int offset = bytesPerPixel*((rawWidth*y)+x);
-            data[offset] = rawData[offset];     // R
-            data[offset+1] = rawData[offset+1]; // G
-            data[offset+2] = rawData[offset+2]; // B
-            data[offset+3] = rawData[offset+3]; // A
-        }
+    size_t bytesPerImgRow = 4*imageWidth, bytesPerRawRow = 4*rawWidth;
+    for(int y = topEdge; y < topEdge + imageHeight; ++y) {
+        size_t imgOffset = (y-topEdge)*bytesPerImgRow;
+        size_t rawOffset = y*bytesPerRawRow;
+        memcpy(imgData+imgOffset, rawData+rawOffset, bytesPerImgRow);
     }
     
     //quick fix to sideways image problem
-    //UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIImage *image = [[UIImage alloc] initWithCGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationRight];
+    UIImage *image = [[UIImage alloc] initWithCGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage scale:1.0 orientation:UIImageOrientationRight];
  
     UIGraphicsEndImageContext();
     
