@@ -42,6 +42,7 @@
     self.collectionView.dataSource = self;
     [self.brain initCapture];
     [self.brain beginCapture];
+    self.goButton.enabled = NO;
     self.exposureCountLabel.text = @"0";
 }
 
@@ -56,6 +57,7 @@
 - (IBAction)goButtonPressed:(UIButton *)sender {
     NSLog(@"go!");
     [self.brain captureImage];
+    self.goButton.enabled = NO;
 }
 
 - (IBAction)refresh {
@@ -69,14 +71,10 @@
     self.exposureCountLabel.text = [NSString stringWithFormat:@"%d",count];
 }
 
-- (void) addAnImage:(UIImage *)image {
-    //[self.cosmicImages addObject:image];
-    [self.collectionView reloadData];
-}
-
 - (void)imageAdded
 {
     [self.collectionView reloadData];
+    self.goButton.enabled = YES;
 }
 
 #pragma mark - UICollectionViewDataSource
