@@ -11,10 +11,13 @@
 #import <ImageIO/ImageIO.h>
 
 @interface CosmicBrain ()
+
 @property AVCaptureDevice *bestDevice;
 @property AVCaptureSession *captureSession;
 @property AVCaptureStillImageOutput *cameraOutput;
-- (void) gotImage;
+@property enum { IDLE, BEGINNING, RUNNING } state;
+@property int exposureCount;
+
 @end
 
 @implementation CosmicBrain
@@ -147,7 +150,7 @@
         // Look at the actual image data
         GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
         
-        self.lastImage = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:1000 TopEdge:1000 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+        UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:1000 TopEdge:1000 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
             
         // All done with the image buffer so release it now
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
@@ -157,9 +160,12 @@
             self.state = RUNNING;
         }
         
-        // Update our UI thread
+        self.exposureCount++;
+
+        // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self gotImage];
+            [self.brainDelegate setExposureCount:self.exposureCount];
+            [self.brainDelegate addAnImage:image];
         });
     }];
 }
@@ -183,13 +189,6 @@
     UIGraphicsEndImageContext();
     
     return image;
-}
-
-- (void) gotImage {
-    self.exposureCount++;
-    NSLog(@"Got exposure #%d",self.exposureCount);
-    [self.brainDelegate setExposureCount:self.exposureCount];
-    [self.brainDelegate displayAnImage:self.lastImage];
 }
 
 @end

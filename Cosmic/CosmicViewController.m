@@ -82,7 +82,7 @@
     self.exposureCountLabel.text = [NSString stringWithFormat:@"%d",count];
 }
 
-- (void) displayAnImage:(UIImage *)image {
+- (void) addAnImage:(UIImage *)image {
     self.displayImage = image;
 }
 
