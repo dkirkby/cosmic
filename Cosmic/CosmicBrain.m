@@ -229,6 +229,24 @@
             self.state = RUNNING;
         }
         else { // RUNNING
+            // Loop over raw pixels to look for possible cosmics
+            unsigned int nfound = 0;
+            unsigned const char *bufptr = rawImageBytes;
+            int calibWidth = (width+CALIB_SIZE-1)/CALIB_SIZE;
+            for(int y = 0; y < height; ++y) {
+                int ycalib = y/CALIB_SIZE;
+                for(int x = 0; x < width; ++x) {
+                    int xcalib = x/CALIB_SIZE;
+                    int calibAddr = ycalib*calibWidth+xcalib;
+                    unsigned char r = *bufptr++, g = *bufptr++, b = *bufptr++;
+                    bufptr++; // ignore the alpha channel
+                    float intensity = r+g+b;
+                    if(intensity > self.calibMean[calibAddr]+45*self.calibRMS[calibAddr]) {
+                        nfound++;
+                    }
+                }
+            }
+            if(VERBOSE) NSLog(@"Found %d cosmics",nfound);
             // Add 0,1,or 2 sub-images for testing
             int nImages = self.exposureCount%3;
             for(int count = 0; count < nImages; ++count) {
