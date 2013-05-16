@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface CosmicCell : UICollectionViewCell
-@property (strong, nonatomic) NSString *title;
+- (void)setImage:(UIImage *)image;
 @end

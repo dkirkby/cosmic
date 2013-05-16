@@ -9,29 +9,22 @@
 #import "CosmicCell.h"
 
 @interface CosmicCell ()
-@property (strong, nonatomic) UILabel *cellLabel;
+@property (strong, nonatomic) UIImageView *cellImage;
 @end
 
 @implementation CosmicCell
-@synthesize title = _title;
 
-- (UILabel *)cellLabel
+- (UIImageView *)cellImage
 {
-    if(!_cellLabel) _cellLabel = [[UILabel alloc] initWithFrame:self.bounds];
-    return _cellLabel;
+    if(!_cellImage) _cellImage = [[UIImageView alloc] initWithFrame:self.bounds];
+    return _cellImage;
 }
 
-#define DEFAULT_LABEL_TEXT @"Stamp";
-- (NSString *)title
+- (void)setImage:(UIImage *)image
 {
-    if(!_title) _title = DEFAULT_LABEL_TEXT;
-    return _title;
-}
-
-- (void)setTitle:(NSString *)title
-{
-    _title = title;
-    self.cellLabel.text = title;
+    self.cellImage.image = nil;
+    self.cellImage.contentMode = UIViewContentModeScaleAspectFill;
+    self.cellImage.image = image;
 }
 
 - (void)awakeFromNib
@@ -50,9 +43,8 @@
 
 - (void)setup
 {
-    [self addSubview:self.cellLabel];
-    self.cellLabel.text = self.title;
-    self.cellLabel.backgroundColor = [UIColor blueColor];
+    [self addSubview:self.cellImage];
+    self.cellImage.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
 }
 
 /*

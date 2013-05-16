@@ -11,8 +11,8 @@
 #import "CosmicCell.h"
 
 @interface CosmicViewController () <CosmicBrainDelegate, UIScrollViewDelegate, UICollectionViewDataSource>
-@property (nonatomic,strong) CosmicBrain *brain;
-@property (nonatomic,strong) UIImage *displayImage;
+@property (strong, nonatomic) CosmicBrain *brain;
+@property (strong, nonatomic) NSMutableArray *cosmicImages;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
@@ -20,7 +20,6 @@
 @end
 
 @implementation CosmicViewController
-@synthesize displayImage = _displayImage;
 
 #pragma mark - Setters/Getters
 
@@ -35,20 +34,10 @@
     return _brain;
 }
 
-- (UIImage *)displayImage
+- (NSMutableArray *)cosmicImages
 {
-    if(!_displayImage) _displayImage = [[UIImage alloc] init];
-    return _displayImage;
-}
-
-- (void)setDisplayImage:(UIImage *)displayImage
-{
-    _displayImage = displayImage;
-    
-    [self.collectionView reloadData];
-    
-    //self.imageOutlet.image = displayImage;
-    //self.imageOutlet.contentMode = UIViewContentModeScaleAspectFill; //Fit or Fill is a preference
+    if(!_cosmicImages) _cosmicImages = [[NSMutableArray alloc] init];
+    return _cosmicImages;
 }
 
 #pragma mark - ViewController Lifecycle
@@ -88,7 +77,8 @@
 }
 
 - (void) addAnImage:(UIImage *)image {
-    self.displayImage = image;
+    [self.cosmicImages addObject:image];
+    [self.collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -96,6 +86,11 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.brain.stampCount;
+}
+
+- (UIImage *)imageForIndexPath:(NSIndexPath *)indexPath
+{
+    return self.cosmicImages[indexPath.item];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -106,7 +101,7 @@
     
     if(!cell) NSLog(@"Error: No Cell");
     
-    cell.title = [NSString stringWithFormat:@"Stamp #%i", indexPath.item];
+    [cell setImage:[self imageForIndexPath:indexPath]];
     
     return cell;
 }
