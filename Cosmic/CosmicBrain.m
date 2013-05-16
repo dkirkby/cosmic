@@ -22,6 +22,16 @@
 
 @implementation CosmicBrain
 
+#pragma mark - Setters/Getters
+
+- (NSMutableArray *)cosmicImages
+{
+    if(!_cosmicImages) _cosmicImages = [[NSMutableArray alloc] init];
+    return _cosmicImages;
+}
+
+#pragma mark - Initialization
+
 - (void) initCapture {
     NSLog(@"initializing capture...");
     // Initialize a session with the photo preset
@@ -77,6 +87,8 @@
     self.state = IDLE;
 }
 
+#pragma mark - Initial Focus/Exposure Locking
+
 - (void) beginCapture {
     self.state = BEGINNING;
     NSLog(@"begin capture...");
@@ -117,6 +129,8 @@
         return;
     }
 }
+
+#pragma mark - Capture
 
 - (void) captureImage {
     if(self.state == IDLE) {
@@ -175,10 +189,9 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.brainDelegate setExposureCount:self.exposureCount];
             for(int index = 0; index < images.count; ++index) {
-                self.stampCount++;
-                [self.brainDelegate addAnImage:[images objectAtIndex:index]];
+                [self.cosmicImages addObject:[images objectAtIndex:index]];
             }
-            NSLog(@"Stamp Count at %i", self.stampCount);
+            [self.brainDelegate imageAdded];
         });
     }];
 }

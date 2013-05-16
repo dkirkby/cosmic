@@ -11,12 +11,12 @@
 @class CosmicBrain;
 @protocol CosmicBrainDelegate <NSObject>
 - (void) setExposureCount:(int)count;
-- (void) addAnImage:(UIImage*)image;
+- (void) imageAdded;
 @end
 
 @interface CosmicBrain : NSObject
 
-@property (nonatomic) NSUInteger stampCount;
+@property (strong, nonatomic) NSMutableArray *cosmicImages;
 
 @property(nonatomic,assign) id <CosmicBrainDelegate> brainDelegate;
 

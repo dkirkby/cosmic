@@ -12,7 +12,6 @@
 
 @interface CosmicViewController () <CosmicBrainDelegate, UIScrollViewDelegate, UICollectionViewDataSource>
 @property (strong, nonatomic) CosmicBrain *brain;
-@property (strong, nonatomic) NSMutableArray *cosmicImages;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
@@ -32,12 +31,6 @@
         _brain.brainDelegate = self;
     }
     return _brain;
-}
-
-- (NSMutableArray *)cosmicImages
-{
-    if(!_cosmicImages) _cosmicImages = [[NSMutableArray alloc] init];
-    return _cosmicImages;
 }
 
 #pragma mark - ViewController Lifecycle
@@ -77,7 +70,12 @@
 }
 
 - (void) addAnImage:(UIImage *)image {
-    [self.cosmicImages addObject:image];
+    //[self.cosmicImages addObject:image];
+    [self.collectionView reloadData];
+}
+
+- (void)imageAdded
+{
     [self.collectionView reloadData];
 }
 
@@ -85,12 +83,12 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.brain.stampCount;
+    return self.brain.cosmicImages.count;
 }
 
 - (UIImage *)imageForIndexPath:(NSIndexPath *)indexPath
 {
-    return self.cosmicImages[indexPath.item];
+    return self.brain.cosmicImages[indexPath.item];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
