@@ -150,8 +150,17 @@
         // Look at the actual image data
         GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
         
-        UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:1000 TopEdge:1000 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
-            
+        NSMutableArray *images = [[NSMutableArray alloc] init];
+        // Add 0,1,or 2 sub-images for testing
+        int nImages = self.exposureCount%3;
+        for(int count = 0; count < nImages; ++count) {
+            // Grab a sub-image
+            UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:800+128*count TopEdge:800+128*count FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+            // Add this sub-image to our list of saved images
+            [images addObject:image];
+        }
+        NSLog(@"Added %d images from this exposure.",images.count);
+        
         // All done with the image buffer so release it now
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
         
@@ -165,7 +174,9 @@
         // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.brainDelegate setExposureCount:self.exposureCount];
-            [self.brainDelegate addAnImage:image];
+            for(int index = 0; index < images.count; ++index) {
+                [self.brainDelegate addAnImage:[images objectAtIndex:index]];
+            }
         });
     }];
 }
