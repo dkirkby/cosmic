@@ -58,6 +58,7 @@
     [super viewDidLoad];
     
     [self.brain initCapture];
+    [self.brain beginCapture];
     self.exposureCountLabel.text = @"0";
 }
 

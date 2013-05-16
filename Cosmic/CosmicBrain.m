@@ -71,9 +71,11 @@
     [self.captureSession addOutput:self.cameraOutput];
     // Start the session running now
     [self.captureSession startRunning];
+    self.state = IDLE;
 }
 
 - (void) beginCapture {
+    self.state = BEGINNING;
     NSLog(@"begin capture...");
     // Try to lock the exposure and focus for the best device.
     NSError *error = nil;
@@ -104,6 +106,8 @@
             NSLog(@"Exposure lock successful.");
         }
         [self.bestDevice unlockForConfiguration];
+        // Capture an initial calibration image
+        [self captureImage];
     }
     else {
         NSLog(@"PANIC: cannot lock device for exposure and focus configuration.");
@@ -112,10 +116,13 @@
 }
 
 - (void) captureImage {
-    if(0 == self.exposureCount) [self beginCapture];
-    NSLog(@"capturing image...");
+    if(self.state == IDLE) {
+        NSLog(@"Cannot captureImage before beginImage.");
+        return;
+    }
+    NSLog(@"capturing image in state %d...",self.state);
     [self.cameraOutput captureStillImageAsynchronouslyFromConnection:[[self.cameraOutput connections] objectAtIndex:0] completionHandler:^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
-
+        
         // Lookup this frame's properties
         CVImageBufferRef cameraFrame = CMSampleBufferGetImageBuffer(imageSampleBuffer);
         CVPixelBufferLockBaseAddress(cameraFrame, 0);
@@ -140,34 +147,46 @@
         // Look at the actual image data
         GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
         
-        UIGraphicsBeginImageContext(CGSizeMake(width,height));
-        CGContextRef c = UIGraphicsGetCurrentContext();
-        unsigned char* data = CGBitmapContextGetData(c);
-        if (data != NULL) {
-            for(int y = 0; y < height; y++) {
-                for(int x = 0; x < width; x++) {
-                    int offset = bytesPerPixel*((width*y)+x);
-                    data[offset] = rawImageBytes[offset];     // R
-                    data[offset+1] = rawImageBytes[offset+1]; // G
-                    data[offset+2] = rawImageBytes[offset+2]; // B
-                    data[offset+3] = rawImageBytes[offset+3]; // A
-                }
-            }
-        }
-        
-        //quick fix to sideways image problem
-        self.lastImage = [[UIImage alloc] initWithCGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage scale:1.0 orientation:UIImageOrientationRight];
-        
-        UIGraphicsEndImageContext();
-        
+        self.lastImage = [self createUIImageWithWidth:width AndHeight:height FromRawData:rawImageBytes WithRawWidth:width AndRawHeight:height];
+            
         // All done with the image buffer so release it now
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
+        
+        // The first image is for calibration only.
+        if(self.state == BEGINNING) {
+            self.state = RUNNING;
+        }
         
         // Update our UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self gotImage];
         });
     }];
+}
+
+- (UIImage*) createUIImageWithWidth:(int)imageWidth AndHeight:(int)imageHeight FromRawData:(unsigned char *)rawData WithRawWidth:(int)rawWidth AndRawHeight:(int)rawHeight {
+
+    UIGraphicsBeginImageContext(CGSizeMake(imageWidth,imageHeight));
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    unsigned char* data = CGBitmapContextGetData(c);
+
+    int bytesPerPixel = 4;
+    for(int y = 0; y < rawHeight; y++) {
+        for(int x = 0; x < rawWidth; x++) {
+            int offset = bytesPerPixel*((rawWidth*y)+x);
+            data[offset] = rawData[offset];     // R
+            data[offset+1] = rawData[offset+1]; // G
+            data[offset+2] = rawData[offset+2]; // B
+            data[offset+3] = rawData[offset+3]; // A
+        }
+    }
+    
+    //quick fix to sideways image problem
+    UIImage *image = [[UIImage alloc] initWithCGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage scale:1.0 orientation:UIImageOrientationRight];
+    
+    UIGraphicsEndImageContext();
+    
+    return image;
 }
 
 - (void) gotImage {
