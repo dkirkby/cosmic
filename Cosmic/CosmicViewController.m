@@ -60,10 +60,6 @@
     self.goButton.enabled = NO;
 }
 
-- (IBAction)refresh {
-    [self.collectionView reloadData];
-}
-
 #pragma mark - CosmicBrainDelegate
 
 - (void) setExposureCount:(int)count {
@@ -108,32 +104,82 @@
 #define MAX_OPACITY 0.85
 - (IBAction)imageViewTapped:(UIGestureRecognizer *)gesture
 {
-    if(self.goButton.hidden){
-        //display buttons with animation
+    NSLog(@"Tap");
+    if(self.goButton.isHidden){
+        //if buttons are already hidden, display buttons with animation
         [UIView animateWithDuration:FADE_TIME animations:^{
             self.goButton.alpha = MAX_OPACITY;
             self.exposureCountLabel.alpha = MAX_OPACITY;
-            self.goButton.hidden = FALSE;
-            self.exposureCountLabel.hidden = FALSE;
+            self.goButton.hidden = NO;
+            self.exposureCountLabel.hidden = NO;
         }];
     } else {
-        //hide buttons immediately
-        self.goButton.alpha = 0.0;
-        self.exposureCountLabel.alpha = 0.0;
-        self.goButton.hidden = TRUE;
-        self.exposureCountLabel.hidden = TRUE;
+        //if buttons are currently visible, hide buttons immediately
+        if(!CGRectContainsPoint([self controlButtonArea], [gesture locationInView:self.view])){
+            self.goButton.alpha = 0.0;
+            self.exposureCountLabel.alpha = 0.0;
+            self.goButton.hidden = YES;
+            self.exposureCountLabel.hidden = YES;
+        }
     }
+}
+           
+- (CGRect)controlButtonArea{
+    CGFloat x = self.goButton.frame.origin.x;
+    CGFloat y = self.goButton.frame.origin.y;
+    CGFloat width = self.goButton.frame.size.width + self.exposureCountLabel.frame.size.width;
+    CGFloat height = self.goButton.frame.size.height;
+
+    return CGRectMake(x, y, width, height);
 }
 
 - (IBAction)buttonSwipedDown:(UIGestureRecognizer *)gesture
 {
-    /*
-    NSLog(@"Swipe");
-    [UIView animateWithDuration:FADE_TIME delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.goButton.frame = CGRectMake(self.goButton.frame.origin.x, self.goButton.frame.origin.y + self.goButton.frame.size.height, self.goButton.frame.size.width, self.goButton.frame.size.height);
-        self.exposureCountLabel.frame = CGRectMake(self.exposureCountLabel.frame.origin.x, self.exposureCountLabel.frame.origin.y + self.exposureCountLabel.frame.size.height, self.exposureCountLabel.frame.size.width, self.exposureCountLabel.frame.size.height);
-    } completion:nil];
-     */
+    NSLog(@"Swipe Down");
+    if(!self.goButton.isHidden){
+        [UIView animateWithDuration:FADE_TIME delay:0 options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState animations:^{
+            [self moveFrameDown:self.goButton];
+            [self moveFrameDown:self.exposureCountLabel];
+        } completion:^(BOOL success){
+            if(success){
+                self.goButton.alpha = 0.0;
+                self.exposureCountLabel.alpha = 0.0;
+                self.goButton.hidden = YES;
+                self.exposureCountLabel.hidden = YES;
+                [self moveFrameUp:self.goButton];
+                [self moveFrameUp:self.exposureCountLabel];
+            }
+        }];
+    }
+}
+
+- (IBAction)buttonSwipedUp:(UIGestureRecognizer *)gesture
+{
+    NSLog(@"Swipe Up");
+    
+    if(self.goButton.isHidden){
+        [self moveFrameDown:self.goButton];
+        [self moveFrameDown:self.exposureCountLabel];
+        self.goButton.alpha = MAX_OPACITY;
+        self.exposureCountLabel.alpha = MAX_OPACITY;
+        self.goButton.hidden = NO;
+        self.exposureCountLabel.hidden = NO;
+        
+        [UIView animateWithDuration:FADE_TIME delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            [self moveFrameUp:self.goButton];
+            [self moveFrameUp:self.exposureCountLabel];
+        } completion:nil];
+    }
+}
+
+- (void)moveFrameDown:(UIView *)viewToMove
+{
+    viewToMove.frame = CGRectMake(viewToMove.frame.origin.x, viewToMove.frame.origin.y + viewToMove.frame.size.height, viewToMove.frame.size.width, viewToMove.frame.size.height);
+}
+
+- (void)moveFrameUp:(UIView *)viewToMove
+{
+    viewToMove.frame = CGRectMake(viewToMove.frame.origin.x, viewToMove.frame.origin.y - viewToMove.frame.size.height, viewToMove.frame.size.width, viewToMove.frame.size.height);
 }
 
 @end

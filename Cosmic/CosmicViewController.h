@@ -13,4 +13,5 @@
 @interface CosmicViewController : UIViewController
 - (IBAction)imageViewTapped:(UIGestureRecognizer *)gesture;
 - (IBAction)buttonSwipedDown:(UIGestureRecognizer *)gesture;
+- (IBAction)buttonSwipedUp:(UIGestureRecognizer *)gesture;
 @end
