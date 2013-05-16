@@ -17,7 +17,7 @@
 @property AVCaptureDevice *bestDevice;
 @property AVCaptureSession *captureSession;
 @property AVCaptureStillImageOutput *cameraOutput;
-@property enum { IDLE, BEGINNING, RUNNING } state;
+@property enum { IDLE, BEGINNING, CALIBRATING, RUNNING } state;
 @property int exposureCount;
 
 @end
@@ -165,27 +165,32 @@
 
         // Look at the actual image data
         GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
-        
+
+        // Create an empty array of stamps to save from this exposure
         NSMutableArray *images = [[NSMutableArray alloc] init];
-        // Add 0,1,or 2 sub-images for testing
-        int nImages = self.exposureCount%3;
-        for(int count = 0; count < nImages; ++count) {
-            // Grab a sub-image
-            UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:800+128*count TopEdge:800+128*count FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
-            // Add this sub-image to our list of saved images
-            [images addObject:image];
-        }
-        if(VERBOSE) NSLog(@"Added %d images from this exposure.",images.count);
         
         // All done with the image buffer so release it now
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
         
-        // The first image is for calibration only.
         if(self.state == BEGINNING) {
+            // The first image is for locking focus and exposure only.
+            self.state = CALIBRATING;
+        }
+        else if(self.state == CALIBRATING) {
             self.state = RUNNING;
         }
-        
-        self.exposureCount++;
+        else { // RUNNING
+            // Add 0,1,or 2 sub-images for testing
+            int nImages = self.exposureCount%3;
+            for(int count = 0; count < nImages; ++count) {
+                // Grab a sub-image
+                UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:800+128*count TopEdge:800+128*count FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+                // Add this sub-image to our list of saved images
+                [images addObject:image];
+            }
+            self.exposureCount++;
+            if(VERBOSE) NSLog(@"Added %d images from exposure %d.",images.count,self.exposureCount);
+        }
 
         // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
