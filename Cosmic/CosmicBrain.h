@@ -16,6 +16,8 @@
 
 @interface CosmicBrain : NSObject
 
+@property (nonatomic) NSUInteger stampCount;
+
 @property(nonatomic,assign) id <CosmicBrainDelegate> brainDelegate;
 
 - (void) initCapture;

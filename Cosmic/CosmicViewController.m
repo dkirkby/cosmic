@@ -9,20 +9,15 @@
 #import "CosmicViewController.h"
 #import <AVFoundation/AVFoundation.h>
 
-//We dont need to publicly declare we implement this delegate.
-//We also dont need to publicly declare our UI outlets, they can be private too.
-@interface CosmicViewController () <CosmicBrainDelegate, UIScrollViewDelegate>
+@interface CosmicViewController () <CosmicBrainDelegate, UIScrollViewDelegate, UICollectionViewDataSource>
 @property (nonatomic,strong) CosmicBrain *brain;
 @property (nonatomic,strong) UIImage *displayImage;
-
-@property (weak, nonatomic) IBOutlet UIImageView *imageOutlet;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UILabel *exposureCountLabel;
-@property (weak, nonatomic) IBOutlet UIView *tappableView;
 @end
 
 @implementation CosmicViewController
-@synthesize displayImage = _displayImage;   //need to synthezize b/c overriding setter AND getter
+@synthesize displayImage = _displayImage;
 
 #pragma mark - Setters/Getters
 
@@ -47,8 +42,10 @@
 {
     _displayImage = displayImage;
     
-    self.imageOutlet.image = displayImage;
-    self.imageOutlet.contentMode = UIViewContentModeScaleAspectFill; //Fit or Fill is a preference
+    //[self.collectionView reloadData];
+    
+    //self.imageOutlet.image = displayImage;
+    //self.imageOutlet.contentMode = UIViewContentModeScaleAspectFill; //Fit or Fill is a preference
 }
 
 #pragma mark - ViewController Lifecycle
@@ -57,6 +54,7 @@
 {
     [super viewDidLoad];
     
+    //self.collectionView.dataSource = self;
     [self.brain initCapture];
     [self.brain beginCapture];
     self.exposureCountLabel.text = @"0";
@@ -86,6 +84,26 @@
     self.displayImage = image;
 }
 
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.brain.stampCount;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *reuseIdentifier = @"StampCell";
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    
+    //configure cell
+    UILabel *label = [[UILabel alloc] initWithFrame:cell.frame];
+    label.text = [NSString stringWithFormat:@"Stamp #%i", indexPath.item];
+    [cell addSubview:label];
+    
+    return cell;
+}
+
 #pragma mark - Gesture Recognizers
 
 #define FADE_TIME 0.25
@@ -93,7 +111,6 @@
 - (IBAction)imageViewTapped:(UIGestureRecognizer *)gesture
 {
     if(self.goButton.hidden){
-        self.tappableView.frame = CGRectMake(0, 0, self.tappableView.frame.size.width, self.tappableView.frame.size.height - self.goButton.frame.size.height);
         //display buttons with animation
         [UIView animateWithDuration:FADE_TIME animations:^{
             self.goButton.alpha = MAX_OPACITY;
@@ -102,7 +119,6 @@
             self.exposureCountLabel.hidden = FALSE;
         }];
     } else {
-        self.tappableView.frame = CGRectMake(0, 0, self.tappableView.frame.size.width, self.tappableView.frame.size.height + self.goButton.frame.size.height);
         //hide buttons immediately
         self.goButton.alpha = 0.0;
         self.exposureCountLabel.alpha = 0.0;

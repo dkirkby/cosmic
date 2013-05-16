@@ -12,9 +12,25 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PLk-dq-oFF">
-                                <gestureRecognizers/>
-                            </imageView>
+                            <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hKD-O5-IMn">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wYm-DA-PGU">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StampCell" id="knI-HD-4xN">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                             <button opaque="NO" alpha="0.84999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EUX-7s-8dh">
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
@@ -32,7 +48,6 @@
                                 </state>
                                 <connections>
                                     <action selector="goButtonPressed:" destination="2" eventType="touchUpInside" id="zZd-Bg-hAx"/>
-                                    <outletCollection property="gestureRecognizers" destination="Fdx-lo-vWo" appends="YES" id="wBF-3J-mlY"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zuk-KX-IVm">
@@ -44,41 +59,28 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="Fdx-lo-vWo" appends="YES" id="NzP-Le-ZZu"/>
-                                </connections>
                             </label>
-                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GSd-Sj-24U" userLabel="TappableView">
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="6AZ-Q1-yjU" appends="YES" id="8r7-IJ-imZ"/>
-                                </connections>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="GSd-Sj-24U" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="4A1-jm-be8"/>
                             <constraint firstItem="EUX-7s-8dh" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="9BT-5Z-eea"/>
-                            <constraint firstItem="GSd-Sj-24U" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="J2L-4d-HCW"/>
-                            <constraint firstItem="PLk-dq-oFF" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="PCc-b4-bDT"/>
-                            <constraint firstItem="GSd-Sj-24U" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="T9K-5i-w8E"/>
-                            <constraint firstItem="PLk-dq-oFF" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="U8W-hw-nmc"/>
-                            <constraint firstItem="EUX-7s-8dh" firstAttribute="top" secondItem="GSd-Sj-24U" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="jNN-MR-bwS"/>
-                            <constraint firstItem="PLk-dq-oFF" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="kUh-xt-rj9"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="L4H-Gz-qnn"/>
+                            <constraint firstItem="zuk-KX-IVm" firstAttribute="top" secondItem="EUX-7s-8dh" secondAttribute="top" type="default" id="Q5d-iF-bnD"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="RXE-r8-iTf"/>
                             <constraint firstItem="zuk-KX-IVm" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="msX-HY-g3T"/>
-                            <constraint firstItem="PLk-dq-oFF" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="pkB-Vo-1dU"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="rwM-nG-Evc"/>
                             <constraint firstItem="EUX-7s-8dh" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="vIG-sq-U7k"/>
-                            <constraint firstItem="zuk-KX-IVm" firstAttribute="top" secondItem="GSd-Sj-24U" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="z6g-gN-a0c"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="y04-Lr-GTa"/>
                             <constraint firstItem="zuk-KX-IVm" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="zZQ-L4-LKY"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="6AZ-Q1-yjU" appends="YES" id="IUK-AL-7UP"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="exposureCountLabel" destination="zuk-KX-IVm" id="1mZ-qW-WPX"/>
                         <outlet property="goButton" destination="EUX-7s-8dh" id="grw-Hm-Lol"/>
-                        <outlet property="imageOutlet" destination="PLk-dq-oFF" id="PBa-0W-Aoc"/>
-                        <outlet property="tappableView" destination="GSd-Sj-24U" id="Yad-B7-cNV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
@@ -87,11 +89,6 @@
                         <action selector="imageViewTapped:" destination="2" id="ja3-cP-F5n"/>
                     </connections>
                 </tapGestureRecognizer>
-                <swipeGestureRecognizer direction="down" id="Fdx-lo-vWo">
-                    <connections>
-                        <action selector="buttonSwipedDown:" destination="2" id="c6b-T8-tDw"/>
-                    </connections>
-                </swipeGestureRecognizer>
             </objects>
         </scene>
     </scenes>
@@ -103,16 +100,22 @@
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
             <relationships>
                 <relationship kind="action" name="buttonSwipedDown:" candidateClass="UIGestureRecognizer"/>
-                <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="imageViewTapped:" candidateClass="UIGestureRecognizer"/>
                 <relationship kind="outlet" name="exposureCountLabel" candidateClass="UILabel"/>
                 <relationship kind="outlet" name="goButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="imageOutlet" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="tappableView" candidateClass="UIView"/>
             </relationships>
         </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="UICollectionReusableView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
+        </class>
+        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
+        </class>
+        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

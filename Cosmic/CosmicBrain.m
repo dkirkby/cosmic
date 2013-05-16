@@ -158,6 +158,7 @@
             UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:800+128*count TopEdge:800+128*count FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
             // Add this sub-image to our list of saved images
             [images addObject:image];
+            self.stampCount++;
         }
         NSLog(@"Added %d images from this exposure.",images.count);
         
