@@ -166,6 +166,8 @@
 
 - (UIImage*) createUIImageWithWidth:(int)imageWidth AndHeight:(int)imageHeight FromRawData:(unsigned char *)rawData WithRawWidth:(int)rawWidth AndRawHeight:(int)rawHeight {
 
+    //UIGraphicsBeginImageContextWithOptions(CGSizeMake(imageWidth,imageHeight),
+    //                                       NO,[UIScreen mainScreen].scale);
     UIGraphicsBeginImageContext(CGSizeMake(imageWidth,imageHeight));
     CGContextRef c = UIGraphicsGetCurrentContext();
     unsigned char* data = CGBitmapContextGetData(c);
@@ -182,8 +184,9 @@
     }
     
     //quick fix to sideways image problem
-    UIImage *image = [[UIImage alloc] initWithCGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage scale:1.0 orientation:UIImageOrientationRight];
-    
+    //UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage *image = [[UIImage alloc] initWithCGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationRight];
+ 
     UIGraphicsEndImageContext();
     
     return image;
