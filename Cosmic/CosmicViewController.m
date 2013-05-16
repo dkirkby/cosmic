@@ -55,7 +55,7 @@
 #pragma mark - Target/Action
 
 - (IBAction)goButtonPressed:(UIButton *)sender {
-    NSLog(@"go!");
+    NSLog(@"Taking Exposure");
     [self.brain captureImage];
     self.goButton.enabled = NO;
 }
@@ -63,7 +63,6 @@
 #pragma mark - CosmicBrainDelegate
 
 - (void) setExposureCount:(int)count {
-    NSLog(@"the count is now %d",count);
     self.exposureCountLabel.text = [NSString stringWithFormat:@"%d",count];
 }
 
@@ -89,7 +88,6 @@
 {
     static NSString *reuseIdentifier = @"StampCell";
     CosmicCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    NSLog(@"Index Path: %@", indexPath);
     
     if(!cell) NSLog(@"Error: No Cell");
     
@@ -104,7 +102,6 @@
 #define MAX_OPACITY 0.85
 - (IBAction)imageViewTapped:(UIGestureRecognizer *)gesture
 {
-    NSLog(@"Tap");
     if(self.goButton.isHidden){
         //if buttons are already hidden, display buttons with animation
         [UIView animateWithDuration:FADE_TIME animations:^{
@@ -135,7 +132,6 @@
 
 - (IBAction)buttonSwipedDown:(UIGestureRecognizer *)gesture
 {
-    NSLog(@"Swipe Down");
     if(!self.goButton.isHidden){
         [UIView animateWithDuration:FADE_TIME delay:0 options:UIViewAnimationOptionCurveEaseIn | UIViewAnimationOptionBeginFromCurrentState animations:^{
             [self moveFrameDown:self.goButton];
@@ -154,9 +150,7 @@
 }
 
 - (IBAction)buttonSwipedUp:(UIGestureRecognizer *)gesture
-{
-    NSLog(@"Swipe Up");
-    
+{    
     if(self.goButton.isHidden){
         [self moveFrameDown:self.goButton];
         [self moveFrameDown:self.exposureCountLabel];
