@@ -207,7 +207,7 @@
     size_t bytesPerImgRow = 4*imageWidth, bytesPerRawRow = 4*rawWidth;
     for(int y = topEdge; y < topEdge + imageHeight; ++y) {
         size_t imgOffset = (y-topEdge)*bytesPerImgRow;
-        size_t rawOffset = y*bytesPerRawRow;
+        size_t rawOffset = y*bytesPerRawRow + leftEdge;
         memcpy(imgData+imgOffset, rawData+rawOffset, bytesPerImgRow);
     }
     
