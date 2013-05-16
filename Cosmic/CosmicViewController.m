@@ -8,10 +8,13 @@
 
 #import "CosmicViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "CosmicCell.h"
 
 @interface CosmicViewController () <CosmicBrainDelegate, UIScrollViewDelegate, UICollectionViewDataSource>
 @property (nonatomic,strong) CosmicBrain *brain;
 @property (nonatomic,strong) UIImage *displayImage;
+
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UILabel *exposureCountLabel;
 @end
@@ -42,7 +45,7 @@
 {
     _displayImage = displayImage;
     
-    //[self.collectionView reloadData];
+    [self.collectionView reloadData];
     
     //self.imageOutlet.image = displayImage;
     //self.imageOutlet.contentMode = UIViewContentModeScaleAspectFill; //Fit or Fill is a preference
@@ -54,7 +57,7 @@
 {
     [super viewDidLoad];
     
-    //self.collectionView.dataSource = self;
+    self.collectionView.dataSource = self;
     [self.brain initCapture];
     [self.brain beginCapture];
     self.exposureCountLabel.text = @"0";
@@ -71,6 +74,10 @@
 - (IBAction)goButtonPressed:(UIButton *)sender {
     NSLog(@"go!");
     [self.brain captureImage];
+}
+
+- (IBAction)refresh {
+    [self.collectionView reloadData];
 }
 
 #pragma mark - CosmicBrainDelegate
@@ -94,12 +101,12 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *reuseIdentifier = @"StampCell";
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    CosmicCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    NSLog(@"Index Path: %@", indexPath);
     
-    //configure cell
-    UILabel *label = [[UILabel alloc] initWithFrame:cell.frame];
-    label.text = [NSString stringWithFormat:@"Stamp #%i", indexPath.item];
-    [cell addSubview:label];
+    if(!cell) NSLog(@"Error: No Cell");
+    
+    cell.title = [NSString stringWithFormat:@"Stamp #%i", indexPath.item];
     
     return cell;
 }

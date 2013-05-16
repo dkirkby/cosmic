@@ -27,6 +27,7 @@
 		FC6F4273174296C20029EB1C /* cosmos.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4272174296C20029EB1C /* cosmos.png */; };
 		FC6F4279174298BB0029EB1C /* cosmic_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4278174298BB0029EB1C /* cosmic_icon.png */; };
 		FC6F427B174298C20029EB1C /* cosmic_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */; };
+		FCF707C317452ECA00BC0D53 /* CosmicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF707C217452ECA00BC0D53 /* CosmicCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,8 @@
 		FC6F4272174296C20029EB1C /* cosmos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cosmos.png; sourceTree = "<group>"; };
 		FC6F4278174298BB0029EB1C /* cosmic_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cosmic_icon.png; path = ../cosmic_icon.png; sourceTree = "<group>"; };
 		FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cosmic_icon@2x.png"; path = "../cosmic_icon@2x.png"; sourceTree = "<group>"; };
+		FCF707C117452ECA00BC0D53 /* CosmicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicCell.h; sourceTree = "<group>"; };
+		FCF707C217452ECA00BC0D53 /* CosmicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +119,8 @@
 				6398F42016EE6D6D00296AC3 /* CosmicBrain.m */,
 				6398F41316EE67FB00296AC3 /* CosmicViewController.h */,
 				6398F41416EE67FB00296AC3 /* CosmicViewController.m */,
+				FCF707C117452ECA00BC0D53 /* CosmicCell.h */,
+				FCF707C217452ECA00BC0D53 /* CosmicCell.m */,
 				6398F3FC16EE67FB00296AC3 /* Supporting Files */,
 			);
 			path = Cosmic;
@@ -215,6 +220,7 @@
 				6398F40616EE67FB00296AC3 /* CosmicAppDelegate.m in Sources */,
 				6398F41516EE67FB00296AC3 /* CosmicViewController.m in Sources */,
 				6398F42116EE6D6D00296AC3 /* CosmicBrain.m in Sources */,
+				FCF707C317452ECA00BC0D53 /* CosmicCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
