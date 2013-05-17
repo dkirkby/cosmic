@@ -12,6 +12,7 @@
 
 @interface CosmicViewController () <CosmicBrainDelegate, UIScrollViewDelegate, UICollectionViewDataSource>
 @property (strong, nonatomic) CosmicBrain *brain;
+@property (nonatomic) BOOL shouldTakeAnotherImage;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
@@ -70,6 +71,8 @@
 {
     [self.collectionView reloadData];
     self.goButton.enabled = YES;
+    //loops infinitely
+    [self.brain captureImage];
 }
 
 #pragma mark - UICollectionViewDataSource

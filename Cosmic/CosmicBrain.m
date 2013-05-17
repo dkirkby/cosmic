@@ -10,16 +10,23 @@
 #import <AVFoundation/AVFoundation.h>
 #import <ImageIO/ImageIO.h>
 
-#define VERBOSE YES
+#define VERBOSE NO
 
 #define CALIB_SIZE 16
+
+typedef enum {
+    IDLE,
+    BEGINNING,
+    CALIBRATING,
+    RUNNING
+} CosmicState;
 
 @interface CosmicBrain ()
 
 @property AVCaptureDevice *bestDevice;
 @property AVCaptureSession *captureSession;
 @property AVCaptureStillImageOutput *cameraOutput;
-@property enum { IDLE, BEGINNING, CALIBRATING, RUNNING } state;
+@property CosmicState state;
 @property int exposureCount;
 @property float *calibMean, *calibRMS;
 @property unsigned int *calibCount;
@@ -249,11 +256,22 @@
             if(VERBOSE) NSLog(@"Found %d cosmics",nfound);
             // Add 0,1,or 2 sub-images for testing
             int nImages = self.exposureCount%3;
+            
+            UIImage *image = [self createUIImageWithWidth:width Height:height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+            // Add this sub-image to our list of saved images
+            NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+            NSString *pathComponent = [NSString stringWithFormat:@"%@", [NSDate date]];
+            NSURL *imageURL = [docsDirectory URLByAppendingPathComponent:pathComponent];
+            NSError *writeError;
+            [UIImagePNGRepresentation(image) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
+            NSLog(@"Written To Filesystem at %@", imageURL);
+            if(writeError) NSLog(@"Write to Filesystem Error: %@", writeError.userInfo);
+            
             for(int count = 0; count < nImages; ++count) {
                 // Grab a sub-image
-                UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:800+128*count TopEdge:800+128*count FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+                //UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:800+128*count TopEdge:800+128*count FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
                 // Add this sub-image to our list of saved images
-                [images addObject:image];
+                //[images addObject:image];
             }
             self.exposureCount++;
             if(VERBOSE) NSLog(@"Added %d images from exposure %d.",images.count,self.exposureCount);
