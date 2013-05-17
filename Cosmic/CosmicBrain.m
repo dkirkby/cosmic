@@ -208,18 +208,6 @@ typedef enum {
             UIImage *stamp = [self createUIImageWithWidth:(x2-x1+1) Height:(y2-y1+1) AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
             [self.cosmicImages addObject:stamp];
             
-            /***
-            UIImage *image = [self createUIImageWithWidth:width Height:height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
-
-            // Add this sub-image to our list of saved images
-            NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-            NSString *pathComponent = [NSString stringWithFormat:@"%@.png", [NSDate date]];
-            NSURL *imageURL = [docsDirectory URLByAppendingPathComponent:pathComponent];
-            NSError *writeError;
-            [UIImagePNGRepresentation(image) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
-            NSLog(@"Written To Filesystem at %@", imageURL);
-            if(writeError) NSLog(@"Write to Filesystem Error: %@", writeError.userInfo);
-            ***/
             self.exposureCount++;
         }
 
@@ -232,6 +220,17 @@ typedef enum {
             [self.brainDelegate imageAdded];
         });
     }];
+}
+
+- (void) saveImageToFilesystem:(UIImage*)image {
+    // Add this sub-image to our list of saved images
+    NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSString *pathComponent = [NSString stringWithFormat:@"%@.png", [NSDate date]];
+    NSURL *imageURL = [docsDirectory URLByAppendingPathComponent:pathComponent];
+    NSError *writeError;
+    [UIImagePNGRepresentation(image) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
+    if(VERBOSE) NSLog(@"Written To Filesystem at %@", imageURL);
+    if(writeError) NSLog(@"Write to Filesystem Error: %@", writeError.userInfo);    
 }
 
 - (UIImage*) createUIImageWithWidth:(int)imageWidth Height:(int)imageHeight AtLeftEdge:(int)leftEdge TopEdge:(int)topEdge FromRawData:(unsigned char *)rawData WithRawWidth:(int)rawWidth RawHeight:(int)rawHeight {
