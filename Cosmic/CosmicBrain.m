@@ -258,9 +258,10 @@ typedef enum {
             int nImages = self.exposureCount%3;
             
             UIImage *image = [self createUIImageWithWidth:width Height:height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+            [images addObject:image];
             // Add this sub-image to our list of saved images
             NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-            NSString *pathComponent = [NSString stringWithFormat:@"%@", [NSDate date]];
+            NSString *pathComponent = [NSString stringWithFormat:@"%@.png", [NSDate date]];
             NSURL *imageURL = [docsDirectory URLByAppendingPathComponent:pathComponent];
             NSError *writeError;
             [UIImagePNGRepresentation(image) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
