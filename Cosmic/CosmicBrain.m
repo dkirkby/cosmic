@@ -13,6 +13,7 @@
 #define VERBOSE NO
 
 #define CALIB_SIZE 16
+#define STAMP_SIZE 15
 
 typedef enum {
     IDLE,
@@ -177,15 +178,10 @@ typedef enum {
         // Look at the actual image data
         GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
 
-        // Create an empty array of stamps to save from this exposure
-        NSMutableArray *images = [[NSMutableArray alloc] init];
-        
-        // All done with the image buffer so release it now
-        CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
-        
         if(self.state == BEGINNING) {
             // The first image is for locking focus and exposure only.
-            self.state = CALIBRATING;
+            // go directly to RUNNING and skip CALIBRATING step for now
+            self.state = RUNNING;
         }
         else if(self.state == CALIBRATING) {
             // Calculate the dimensions of the coarse calibration grid
@@ -236,27 +232,36 @@ typedef enum {
             self.state = RUNNING;
         }
         else { // RUNNING
-            // Loop over raw pixels to look for possible cosmics
-            unsigned int nfound = 0;
-            unsigned const char *bufptr = rawImageBytes;
-            int calibWidth = (width+CALIB_SIZE-1)/CALIB_SIZE;
-            for(int y = 0; y < height; ++y) {
-                int ycalib = y/CALIB_SIZE;
-                for(int x = 0; x < width; ++x) {
-                    int xcalib = x/CALIB_SIZE;
-                    int calibAddr = ycalib*calibWidth+xcalib;
-                    unsigned char r = *bufptr++, g = *bufptr++, b = *bufptr++;
-                    bufptr++; // ignore the alpha channel
-                    float intensity = r+g+b;
-                    if(intensity > self.calibMean[calibAddr]+45*self.calibRMS[calibAddr]) {
-                        nfound++;
-                    }
+            // Loop over raw pixels to find the pixel with the largest intensity r+2*g+b
+            unsigned int maxIntensity = 0;
+            unsigned maxIndex, lastIndex = width*height, index = 0;
+            unsigned int *bufptr = (unsigned int *)rawImageBytes;
+            while(index < lastIndex) {
+                unsigned int val = *bufptr++;
+                // val = (A << 24) | (B << 16) | (G << 8) | R
+                // we only shift G component by 7 so that it gets multiplied by 2
+                unsigned int intensity = ((val&0xff0000) >> 16) + ((val&0xff00) >> 7) + (val&0xff);
+                if(intensity > maxIntensity) {
+                    maxIntensity = intensity;
+                    maxIndex = index;
                 }
+                index++;
             }
-            if(VERBOSE) NSLog(@"Found %d cosmics",nfound);
-            // Add 0,1,or 2 sub-images for testing
-            int nImages = self.exposureCount%3;
+            int maxY = index/width;
+            int maxX = index%height;
+            NSLog(@"Found max intensity %d at index %d (%d,%d)",maxIntensity,maxIndex,maxX,maxY);
             
+            // Save a stamp centered (as far as possible) around maxX,maxY
+            int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
+            if(x1 < 0) x1 = 0;
+            else if(x2 >= width) x2 = width-1;
+            int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
+            if(y1 < 0) y1 = 0;
+            else if(y2 >= height) y2 = height-1;
+            UIImage *stamp = [self createUIImageWithWidth:(x2-x1+1) Height:(y2-y1+1) AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+            [self.cosmicImages addObject:stamp];
+            
+            /***
             UIImage *image = [self createUIImageWithWidth:width Height:height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
 
             // Add this sub-image to our list of saved images
@@ -267,23 +272,16 @@ typedef enum {
             [UIImagePNGRepresentation(image) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
             NSLog(@"Written To Filesystem at %@", imageURL);
             if(writeError) NSLog(@"Write to Filesystem Error: %@", writeError.userInfo);
-            
-            for(int count = 0; count < nImages; ++count) {
-                // Grab a sub-image
-                //UIImage *image = [self createUIImageWithWidth:256 Height:256 AtLeftEdge:800+128*count TopEdge:800+128*count FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
-                // Add this sub-image to our list of saved images
-                //[images addObject:image];
-            }
+            ***/
             self.exposureCount++;
-            if(VERBOSE) NSLog(@"Added %d images from exposure %d.",images.count,self.exposureCount);
         }
 
+        // All done with the image buffer so release it now
+        CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
+                
         // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.brainDelegate setExposureCount:self.exposureCount];
-            for(int index = 0; index < images.count; ++index) {
-                [self.cosmicImages addObject:[images objectAtIndex:index]];
-            }
             [self.brainDelegate imageAdded];
         });
     }];
@@ -298,7 +296,7 @@ typedef enum {
     size_t bytesPerImgRow = 4*imageWidth, bytesPerRawRow = 4*rawWidth;
     for(int y = topEdge; y < topEdge + imageHeight; ++y) {
         size_t imgOffset = (y-topEdge)*bytesPerImgRow;
-        size_t rawOffset = y*bytesPerRawRow + leftEdge;
+        size_t rawOffset = y*bytesPerRawRow + 4*leftEdge;
         memcpy(imgData+imgOffset, rawData+rawOffset, bytesPerImgRow);
     }
     
