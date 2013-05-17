@@ -13,6 +13,8 @@
 #define VERBOSE NO
 
 #define STAMP_SIZE 15
+#define HISTORY_BUFFER_SIZE 16
+#define MIN_INTENSITY 128
 
 typedef enum {
     IDLE,
@@ -20,7 +22,9 @@ typedef enum {
     RUNNING
 } CosmicState;
 
-@interface CosmicBrain ()
+@interface CosmicBrain () {
+    unsigned int *_historyBuffer;
+}
 
 @property AVCaptureDevice *bestDevice;
 @property AVCaptureSession *captureSession;
@@ -94,6 +98,11 @@ typedef enum {
     [self.captureSession addOutput:self.cameraOutput];
     // Start the session running now
     [self.captureSession startRunning];
+    // Initialize our history buffer
+    if(_historyBuffer) free(_historyBuffer);
+    _historyBuffer = malloc(sizeof(unsigned int)*HISTORY_BUFFER_SIZE);
+    // Initialize our state
+    self.exposureCount = 0;
     self.state = IDLE;
 }
 
@@ -180,33 +189,50 @@ typedef enum {
         }
         else { // RUNNING
             // Loop over raw pixels to find the pixel with the largest intensity r+2*g+b
-            unsigned int maxIntensity = 0;
-            unsigned maxIndex, lastIndex = width*height, index = 0;
+            unsigned int maxIntensity = MIN_INTENSITY;
+            unsigned maxIndex = width*height, lastIndex = width*height, index = 0;
             unsigned int *bufptr = (unsigned int *)rawImageBytes;
             while(index < lastIndex) {
+                // get the next 32-bit word of pixel data and advance our buffer pointer
                 unsigned int val = *bufptr++;
                 // val = (A << 24) | (B << 16) | (G << 8) | R
                 // we only shift G component by 7 so that it gets multiplied by 2
                 unsigned int intensity = ((val&0xff0000) >> 16) + ((val&0xff00) >> 7) + (val&0xff);
                 if(intensity > maxIntensity) {
-                    maxIntensity = intensity;
-                    maxIndex = index;
+                    // is this index in our history?
+                    int hindex = self.exposureCount;
+                    if(hindex > HISTORY_BUFFER_SIZE) hindex = HISTORY_BUFFER_SIZE;
+                    while(hindex > 0 && _historyBuffer[--hindex] != index) ;
+                    if(_historyBuffer[hindex] == index) {
+                        NSLog(@"Masking hot pixel %d in exposure %d",index,self.exposureCount);
+                    }
+                    else {
+                        maxIntensity = intensity;
+                        maxIndex = index;
+                    }
                 }
                 index++;
             }
-            int maxY = index/width;
-            int maxX = index%height;
-            NSLog(@"Found max intensity %d at index %d (%d,%d)",maxIntensity,maxIndex,maxX,maxY);
-            
-            // Save a stamp centered (as far as possible) around maxX,maxY
-            int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
-            if(x1 < 0) x1 = 0;
-            else if(x2 >= width) x2 = width-1;
-            int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
-            if(y1 < 0) y1 = 0;
-            else if(y2 >= height) y2 = height-1;
-            UIImage *stamp = [self createUIImageWithWidth:(x2-x1+1) Height:(y2-y1+1) AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
-            [self.cosmicImages addObject:stamp];
+            // Did we find a candidate in this exposure?
+            if(maxIndex != lastIndex) {
+                // Add this candidate to our history
+                _historyBuffer[self.exposureCount % HISTORY_BUFFER_SIZE] = maxIndex;
+                // Convert the candidate index back to (x,y) coordinates in the raw image
+                int maxX = maxIndex%width;
+                int maxY = maxIndex/width;
+                NSLog(@"Found max intensity %d at index %d (%d,%d) in exposure %d",
+                      maxIntensity,maxIndex,maxX,maxY,self.exposureCount);
+                
+                // Save a stamp centered (as far as possible) around maxX,maxY
+                int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
+                if(x1 < 0) x1 = 0;
+                else if(x2 >= width) x2 = width-1;
+                int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
+                if(y1 < 0) y1 = 0;
+                else if(y2 >= height) y2 = height-1;
+                UIImage *stamp = [self createUIImageWithWidth:(x2-x1+1) Height:(y2-y1+1) AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+                [self.cosmicImages addObject:stamp];
+            }
             
             self.exposureCount++;
         }
