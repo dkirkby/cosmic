@@ -12,13 +12,11 @@
 
 #define VERBOSE NO
 
-#define CALIB_SIZE 16
 #define STAMP_SIZE 15
 
 typedef enum {
     IDLE,
     BEGINNING,
-    CALIBRATING,
     RUNNING
 } CosmicState;
 
@@ -29,8 +27,6 @@ typedef enum {
 @property AVCaptureStillImageOutput *cameraOutput;
 @property CosmicState state;
 @property int exposureCount;
-@property float *calibMean, *calibRMS;
-@property unsigned int *calibCount;
 
 @end
 
@@ -180,55 +176,6 @@ typedef enum {
 
         if(self.state == BEGINNING) {
             // The first image is for locking focus and exposure only.
-            // go directly to RUNNING and skip CALIBRATING step for now
-            self.state = RUNNING;
-        }
-        else if(self.state == CALIBRATING) {
-            // Calculate the dimensions of the coarse calibration grid
-            if(width % CALIB_SIZE || height % CALIB_SIZE) {
-                if(VERBOSE) NSLog(@"WARNING: CALIB_SIZE does not divide evenly into the image size");
-            }
-            int calibWidth = (width+CALIB_SIZE-1)/CALIB_SIZE;
-            int calibHeight = (height+CALIB_SIZE-1)/CALIB_SIZE;
-            size_t calibSize = sizeof(float)*calibWidth*calibHeight;
-            if(VERBOSE) NSLog(@"Calibrating on %d x %d grid...",calibWidth,calibHeight);
-            // Allocate memory for calibration data
-            if(self.calibMean) free(self.calibMean);
-            self.calibMean = malloc(calibSize);
-            bzero(self.calibMean,calibSize);
-            if(self.calibRMS) free(self.calibRMS);
-            self.calibRMS = malloc(calibSize);
-            bzero(self.calibRMS,calibSize);
-            calibSize = sizeof(unsigned int)*calibWidth*calibHeight;
-            if(self.calibCount) free(self.calibCount);
-            self.calibCount = malloc(calibSize);
-            bzero(self.calibCount,calibSize);
-            // Loop over raw pixels to accumulate calibration statistics
-            unsigned const char *bufptr = rawImageBytes;
-            for(int y = 0; y < height; ++y) {
-                int ycalib = y/CALIB_SIZE;
-                for(int x = 0; x < width; ++x) {
-                    int xcalib = x/CALIB_SIZE;
-                    int calibAddr = ycalib*calibWidth+xcalib;
-                    unsigned char r = *bufptr++, g = *bufptr++, b = *bufptr++;
-                    bufptr++; // ignore the alpha channel
-                    float intensity = r+g+b;
-                    self.calibMean[calibAddr] += intensity;
-                    self.calibRMS[calibAddr] += intensity*intensity;
-                    self.calibCount[calibAddr]++;
-                }
-            }
-            // Loop over calibration grid to finalize statistics
-            for(int ycalib = 0; ycalib < calibHeight; ++ycalib) {
-                for(int xcalib = 0; xcalib < calibWidth; ++xcalib) {
-                    int calibAddr = ycalib*calibWidth+xcalib;
-                    float count = self.calibCount[calibAddr];
-                    float mean = self.calibMean[calibAddr]/count;
-                    float var = self.calibRMS[calibAddr]/count - mean*mean;
-                    self.calibMean[calibAddr] = mean;
-                    self.calibRMS[calibAddr] = var > 0 ? sqrt(var) : 0;
-                }
-            }
             self.state = RUNNING;
         }
         else { // RUNNING
