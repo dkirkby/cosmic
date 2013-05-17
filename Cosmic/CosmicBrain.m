@@ -13,7 +13,7 @@
 #define VERBOSE NO
 
 #define STAMP_SIZE 15
-#define HISTORY_BUFFER_SIZE 16
+#define HISTORY_BUFFER_SIZE 32
 #define MIN_INTENSITY 128
 
 typedef enum {
@@ -232,6 +232,7 @@ typedef enum {
                 else if(y2 >= height) y2 = height-1;
                 UIImage *stamp = [self createUIImageWithWidth:(x2-x1+1) Height:(y2-y1+1) AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
                 [self.cosmicImages addObject:stamp];
+                [self saveImageToFilesystem:stamp];
             }
             
             self.exposureCount++;
