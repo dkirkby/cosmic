@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <ImageIO/ImageIO.h>
 
-#define VERBOSE NO
+#define VERBOSE YES
 
 #define STAMP_SIZE 15
 #define HISTORY_BUFFER_SIZE 32
@@ -180,7 +180,13 @@ typedef enum {
         CFNumberRef shutter = CMGetAttachment( imageSampleBuffer, kCGImagePropertyExifShutterSpeedValue, NULL);
         if(VERBOSE) NSLog(@"\n shuttervalue : %@",shutter);
 
-        // Look at the actual image data
+        // Look at the actual image data. Each pixel is stored as four bytes. When accessed
+        // as an unsigned int, the bytes are packed as (A << 24) | (B << 16) | (G << 8) | R.
+        // The first pixel in the buffer corresponds to the top-right corner of the sensor
+        // (when the device is held in its normal portrait orientation). Pixels increase
+        // fastest along the "width", which actually moves down in the image from the top-right
+        // corner. After each width pixels, the image data moves down one row, or left in the
+        // sensor. The last pixel corresponds to the bottom-left corner of the sensor.
         GLubyte *rawImageBytes = CVPixelBufferGetBaseAddress(cameraFrame);
 
         if(self.state == BEGINNING) {
@@ -234,13 +240,17 @@ typedef enum {
                 [self.cosmicImages addObject:stamp];
                 [self saveImageToFilesystem:stamp];
             }
+            if(self.exposureCount == 0) {
+                UIImage *img = [self createUIImageWithWidth:1000 Height:1000 AtLeftEdge:750 TopEdge:500 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+                [self saveImageToFilesystem:img];
+            }
             
             self.exposureCount++;
         }
 
         // All done with the image buffer so release it now
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
-                
+        
         // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.brainDelegate setExposureCount:self.exposureCount];
@@ -264,13 +274,18 @@ typedef enum {
 
     UIGraphicsBeginImageContext(CGSizeMake(imageWidth,imageHeight));
     CGContextRef c = UIGraphicsGetCurrentContext();
-    unsigned char* imgData = CGBitmapContextGetData(c);
 
-    size_t bytesPerImgRow = 4*imageWidth, bytesPerRawRow = 4*rawWidth;
-    for(int y = topEdge; y < topEdge + imageHeight; ++y) {
-        size_t imgOffset = (y-topEdge)*bytesPerImgRow;
-        size_t rawOffset = y*bytesPerRawRow + 4*leftEdge;
-        memcpy(imgData+imgOffset, rawData+rawOffset, bytesPerImgRow);
+    // Initialize pointers to the top-left corner of the destination image and the source
+    // rectangle in the raw data.
+    unsigned int *imgPtr = (unsigned int*)CGBitmapContextGetData(c);
+    unsigned int *rawPtr = (unsigned int*)rawData + topEdge*rawWidth + leftEdge;
+    size_t bytesPerImgRow = 4*imageWidth;
+    
+    // Loop over rows to copy from the raw data into the image data array
+    for(int y = 0; y < imageHeight; ++y) {
+        memcpy(imgPtr,rawPtr,bytesPerImgRow);
+        imgPtr += imageWidth;
+        rawPtr += rawWidth;
     }
     
     //quick fix to sideways image problem
