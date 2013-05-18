@@ -10,11 +10,11 @@
 #import <AVFoundation/AVFoundation.h>
 #import <ImageIO/ImageIO.h>
 
-#define VERBOSE YES
+#define VERBOSE NO
 
-#define STAMP_SIZE 2
+#define STAMP_SIZE 10
 #define HISTORY_BUFFER_SIZE 32
-#define MIN_INTENSITY 16
+#define MIN_INTENSITY 64
 
 typedef enum {
     IDLE,
@@ -248,15 +248,12 @@ typedef enum {
                 
                 // Save a stamp centered (as far as possible) around maxX,maxY
                 int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
-                if(x1 < 0) x1 = 0;
-                else if(x2 >= width) x2 = width-1;
+                if(x1 < 0) { x1 = 0; x2 = 2*STAMP_SIZE; }
+                else if(x2 >= width) { x2 = width-1; x1 = width - 2*STAMP_SIZE - 1; }
                 int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
-                if(y1 < 0) y1 = 0;
-                else if(y2 >= height) y2 = height-1;
-                NSLog(@"Saving stamp at (%d,%d) with size %d x %d",x1,y1,x2-x1+1,y2-y1+1);
-                UIImage *stamp = [self createUIImageWithWidth:(x2-x1+1) Height:(y2-y1+1) AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
-                [self.cosmicImages addObject:stamp];
-                [self saveImageToFilesystem:stamp withIdentifier:identifier];
+                if(y1 < 0) { y1 = 0; y2 = 2*STAMP_SIZE; }
+                else if(y2 >= height) { y2 = height-1; y1 = height - 2*STAMP_SIZE - 1; }
+                [self saveImageDataWithIdentifier:identifier Width:2*STAMP_SIZE+1 Height:2*STAMP_SIZE+1 AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
             }
             // Save fixed sub-image in first exposure, for debugging
             if(false && self.exposureCount == 0) {
@@ -322,6 +319,32 @@ typedef enum {
     UIGraphicsEndImageContext();
     
     return image;
+}
+
+- (void) saveImageDataWithIdentifier:(NSString*)identifier Width:(int)imageWidth Height:(int)imageHeight AtLeftEdge:(int)leftEdge TopEdge:(int)topEdge FromRawData:(unsigned char *)rawData WithRawWidth:(int)rawWidth RawHeight:(int)rawHeight {
+    
+    NSLog(@"Saving %@...",identifier);
+
+    // Add this sub-image to our list of saved images
+    NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    NSString *pathComponent = [NSString stringWithFormat:@"%@.dat",identifier];
+    const char *filename = [[[docsDirectory URLByAppendingPathComponent:pathComponent] path] cStringUsingEncoding:NSASCIIStringEncoding];
+    FILE *out = fopen(filename,"w");
+
+    // Initialize pointer to the top-left corner of the source rectangle in the raw data.
+    unsigned int *rawPtr = (unsigned int*)rawData + topEdge*rawWidth + leftEdge;
+    
+    // Loop over rows in the output image
+    for(int y = 0; y < imageHeight; ++y) {
+        for(int x = 0; x < imageWidth; ++x) {
+            unsigned int val = rawPtr[x];
+            unsigned char R = (val & 0xff), G = (val & 0xff00) >> 8, B = (val & 0xff0000) >> 16;
+            fprintf(out,"  %4d %4d %4d",R,G,B);
+        }
+        fprintf(out,"\n");
+        rawPtr += rawWidth;
+    }
+    fclose(out);
 }
 
 @end
