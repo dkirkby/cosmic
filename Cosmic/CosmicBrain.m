@@ -12,9 +12,9 @@
 
 #define VERBOSE YES
 
-#define STAMP_SIZE 15
+#define STAMP_SIZE 2
 #define HISTORY_BUFFER_SIZE 32
-#define MIN_INTENSITY 128
+#define MIN_INTENSITY 16
 
 typedef enum {
     IDLE,
@@ -26,11 +26,12 @@ typedef enum {
     unsigned int *_historyBuffer;
 }
 
-@property AVCaptureDevice *bestDevice;
-@property AVCaptureSession *captureSession;
-@property AVCaptureStillImageOutput *cameraOutput;
+@property(strong,nonatomic) AVCaptureDevice *bestDevice;
+@property(strong,nonatomic) AVCaptureSession *captureSession;
+@property(strong,nonatomic) AVCaptureStillImageOutput *cameraOutput;
 @property CosmicState state;
 @property int exposureCount;
+@property(strong,nonatomic) NSDateFormatter *timestampFormatter;
 
 @end
 
@@ -42,6 +43,15 @@ typedef enum {
 {
     if(!_cosmicImages) _cosmicImages = [[NSMutableArray alloc] init];
     return _cosmicImages;
+}
+
+- (NSDateFormatter*)timestampFormatter
+{
+    if(!_timestampFormatter) {
+        _timestampFormatter = [[NSDateFormatter alloc] init];
+        [_timestampFormatter setDateFormat:@"YY-MM-dd-hh-mm-ss-SSS"];
+    }
+    return _timestampFormatter;
 }
 
 #pragma mark - Initialization
@@ -159,6 +169,9 @@ typedef enum {
     if(VERBOSE) NSLog(@"capturing image in state %d...",self.state);
     [self.cameraOutput captureStillImageAsynchronouslyFromConnection:[[self.cameraOutput connections] objectAtIndex:0] completionHandler:^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
         
+        // Get a timestamp for this capture
+        NSDate *timestamp = [[NSDate alloc] init];
+        
         // Lookup this frame's properties
         CVImageBufferRef cameraFrame = CMSampleBufferGetImageBuffer(imageSampleBuffer);
         CVPixelBufferLockBaseAddress(cameraFrame, 0);
@@ -221,13 +234,17 @@ typedef enum {
             }
             // Did we find a candidate in this exposure?
             if(maxIndex != lastIndex) {
+
                 // Add this candidate to our history
                 _historyBuffer[self.exposureCount % HISTORY_BUFFER_SIZE] = maxIndex;
                 // Convert the candidate index back to (x,y) coordinates in the raw image
                 int maxX = maxIndex%width;
                 int maxY = maxIndex/width;
-                NSLog(@"Found max intensity %d at index %d (%d,%d) in exposure %d",
-                      maxIntensity,maxIndex,maxX,maxY,self.exposureCount);
+                NSLog(@"Found max intensity %d at index %d (%d,%d) in exposure %d at %@",
+                      maxIntensity,maxIndex,maxX,maxY,self.exposureCount,timestamp.description);
+                
+                // Create a unique string identifier for this capture
+                NSString *identifier = [[NSString alloc] initWithFormat:@"stamp_%@_%04d-%04d",[self.timestampFormatter stringFromDate:timestamp],maxX,maxY];
                 
                 // Save a stamp centered (as far as possible) around maxX,maxY
                 int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
@@ -236,13 +253,15 @@ typedef enum {
                 int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
                 if(y1 < 0) y1 = 0;
                 else if(y2 >= height) y2 = height-1;
+                NSLog(@"Saving stamp at (%d,%d) with size %d x %d",x1,y1,x2-x1+1,y2-y1+1);
                 UIImage *stamp = [self createUIImageWithWidth:(x2-x1+1) Height:(y2-y1+1) AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
                 [self.cosmicImages addObject:stamp];
-                [self saveImageToFilesystem:stamp];
+                [self saveImageToFilesystem:stamp withIdentifier:identifier];
             }
-            if(self.exposureCount == 0) {
-                UIImage *img = [self createUIImageWithWidth:1000 Height:1000 AtLeftEdge:750 TopEdge:500 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
-                [self saveImageToFilesystem:img];
+            // Save fixed sub-image in first exposure, for debugging
+            if(false && self.exposureCount == 0) {
+                UIImage *img = [self createUIImageWithWidth:64 Height:64 AtLeftEdge:750 TopEdge:500 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+                [self saveImageToFilesystem:img withIdentifier:@"testing"];
             }
             
             self.exposureCount++;
@@ -259,13 +278,14 @@ typedef enum {
     }];
 }
 
-- (void) saveImageToFilesystem:(UIImage*)image {
+- (void) saveImageToFilesystem:(UIImage*)image withIdentifier:(NSString*)identifier {
     // Add this sub-image to our list of saved images
     NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-    NSString *pathComponent = [NSString stringWithFormat:@"%@.png", [NSDate date]];
+    NSString *pathComponent = [NSString stringWithFormat:@"%@.png",identifier];
     NSURL *imageURL = [docsDirectory URLByAppendingPathComponent:pathComponent];
     NSError *writeError;
     [UIImagePNGRepresentation(image) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
+    //[UIImageJPEGRepresentation(image,1.0) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
     if(VERBOSE) NSLog(@"Written To Filesystem at %@", imageURL);
     if(writeError) NSLog(@"Write to Filesystem Error: %@", writeError.userInfo);    
 }
@@ -284,6 +304,14 @@ typedef enum {
     // Loop over rows to copy from the raw data into the image data array
     for(int y = 0; y < imageHeight; ++y) {
         memcpy(imgPtr,rawPtr,bytesPerImgRow);
+        
+        for(int x = 0; x < imageWidth; ++x) {
+            unsigned int val = imgPtr[x];
+            unsigned char R = (val & 0xff), G = (val & 0xff00) >> 8, B = (val & 0xff0000) >> 16, A = val>>24;
+            unsigned int intensity = R+2*G+B;
+            NSLog(@"dump (%d,%d) R=%d G=%d B=%d A=%d I=%d",x,y,R,G,B,A,intensity);
+        }
+        
         imgPtr += imageWidth;
         rawPtr += rawWidth;
     }
