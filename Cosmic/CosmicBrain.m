@@ -14,7 +14,7 @@
 
 #define STAMP_SIZE 7
 #define HISTORY_BUFFER_SIZE 128
-#define MIN_INTENSITY 0
+#define MIN_INTENSITY 128
 #define MAX_REPEATS 2
 
 typedef enum {
@@ -25,6 +25,7 @@ typedef enum {
 
 @interface CosmicBrain () {
     unsigned char *_pixelCount;
+    NSDate *_beginAt;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -181,6 +182,7 @@ typedef enum {
         int bytesPerPixel = bytesPerRow/width;
         if(VERBOSE) NSLog(@"processing raw data %lu x %lu with %d bytes per pixel",width,height,bytesPerPixel);
 
+        /**
         // Lookup this image's metadata
         CFDictionaryRef exifAttachments = CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
         if (exifAttachments) {
@@ -192,6 +194,7 @@ typedef enum {
         }
         CFNumberRef shutter = CMGetAttachment( imageSampleBuffer, kCGImagePropertyExifShutterSpeedValue, NULL);
         if(VERBOSE) NSLog(@"\n shuttervalue : %@",shutter);
+         **/
 
         // Look at the actual image data. Each pixel is stored as four bytes. When accessed
         // as an unsigned int, the bytes are packed as (A << 24) | (B << 16) | (G << 8) | R.
@@ -211,6 +214,7 @@ typedef enum {
             _pixelCount = malloc(countSize);
             bzero(_pixelCount,countSize);
             NSLog(@"Initialized for %ld x %ld images",width,height);
+            _beginAt = [timestamp copy];
             self.state = RUNNING;
         }
         else { // RUNNING
@@ -264,6 +268,10 @@ typedef enum {
             }
             
             self.exposureCount++;
+            if(self.exposureCount > 1 && self.exposureCount % 10 == 0) {
+                NSTimeInterval elapsed = [timestamp timeIntervalSinceDate:_beginAt];
+                NSLog(@"Exposure capture rate = %.3f / sec",elapsed/self.exposureCount);
+            }
         }
 
         // All done with the image buffer so release it now
@@ -272,7 +280,9 @@ typedef enum {
         // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.brainDelegate setExposureCount:self.exposureCount];
-            [self.brainDelegate imageAdded];
+            //[self.brainDelegate imageAdded];
+            [self captureImage];
+
         });
     }];
 }

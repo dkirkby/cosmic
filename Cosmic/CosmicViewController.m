@@ -71,8 +71,6 @@
 {
     [self.collectionView reloadData];
     self.goButton.enabled = YES;
-    //loops infinitely
-    [self.brain captureImage];
 }
 
 #pragma mark - UICollectionViewDataSource
