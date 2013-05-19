@@ -14,7 +14,7 @@
 
 #define STAMP_SIZE 7
 #define MIN_INTENSITY 48
-#define MAX_REPEATS 4
+#define MAX_REPEATS 2
 
 typedef enum {
     IDLE,
