@@ -13,9 +13,8 @@
 #define VERBOSE NO
 
 #define STAMP_SIZE 7
-#define HISTORY_BUFFER_SIZE 128
-#define MIN_INTENSITY 128
-#define MAX_REPEATS 2
+#define MIN_INTENSITY 48
+#define MAX_REPEATS 4
 
 typedef enum {
     IDLE,
@@ -26,6 +25,7 @@ typedef enum {
 @interface CosmicBrain () {
     unsigned char *_pixelCount;
     NSDate *_beginAt;
+    NSTimeInterval _captureElapsed;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -168,10 +168,14 @@ typedef enum {
         return;
     }
     if(VERBOSE) NSLog(@"capturing image in state %d...",self.state);
+    NSDate *startAt = [[NSDate alloc] init];
     [self.cameraOutput captureStillImageAsynchronouslyFromConnection:[[self.cameraOutput connections] objectAtIndex:0] completionHandler:^(CMSampleBufferRef imageSampleBuffer, NSError *error) {
         
         // Get a timestamp for this capture
         NSDate *timestamp = [[NSDate alloc] init];
+
+        // Keep track of the elapsed time in the capture routine
+        _captureElapsed += [timestamp timeIntervalSinceDate:startAt];
         
         // Lookup this frame's properties
         CVImageBufferRef cameraFrame = CMSampleBufferGetImageBuffer(imageSampleBuffer);
@@ -182,20 +186,18 @@ typedef enum {
         int bytesPerPixel = bytesPerRow/width;
         if(VERBOSE) NSLog(@"processing raw data %lu x %lu with %d bytes per pixel",width,height,bytesPerPixel);
 
-        /**
-        // Lookup this image's metadata
-        CFDictionaryRef exifAttachments = CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
-        if (exifAttachments) {
-            // Do something with the attachments.
-            if(VERBOSE) NSLog(@"attachements: %@", exifAttachments);
+        // Print out exposure metdata first time only
+        if(self.state == RUNNING && self.exposureCount == 0) {
+            CFDictionaryRef exifAttachments = CMGetAttachment(imageSampleBuffer, kCGImagePropertyExifDictionary, NULL);
+            if (exifAttachments) {
+                // Do something with the attachments.
+                NSLog(@"attachements: %@", exifAttachments);
+            }
+            else {
+                NSLog(@"no attachments");
+            }
         }
-        else {
-            if(VERBOSE) NSLog(@"no attachments");
-        }
-        CFNumberRef shutter = CMGetAttachment( imageSampleBuffer, kCGImagePropertyExifShutterSpeedValue, NULL);
-        if(VERBOSE) NSLog(@"\n shuttervalue : %@",shutter);
-         **/
-
+        
         // Look at the actual image data. Each pixel is stored as four bytes. When accessed
         // as an unsigned int, the bytes are packed as (A << 24) | (B << 16) | (G << 8) | R.
         // The first pixel in the buffer corresponds to the top-right corner of the sensor
@@ -215,6 +217,7 @@ typedef enum {
             bzero(_pixelCount,countSize);
             NSLog(@"Initialized for %ld x %ld images",width,height);
             _beginAt = [timestamp copy];
+            _captureElapsed = 0;
             self.state = RUNNING;
         }
         else { // RUNNING
@@ -266,14 +269,13 @@ typedef enum {
                 UIImage *img = [self createUIImageWithWidth:64 Height:64 AtLeftEdge:750 TopEdge:500 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
                 [self saveImageToFilesystem:img withIdentifier:@"testing"];
             }
-            
+            // Update our exposure statistics
             self.exposureCount++;
             if(self.exposureCount > 1 && self.exposureCount % 10 == 0) {
                 NSTimeInterval elapsed = [timestamp timeIntervalSinceDate:_beginAt];
-                NSLog(@"Exposure capture rate = %.3f / sec",elapsed/self.exposureCount);
+                NSLog(@"Exposure cycle time = %.3f sec, capture time = %.3f sec",elapsed/self.exposureCount,_captureElapsed/self.exposureCount);
             }
         }
-
         // All done with the image buffer so release it now
         CVPixelBufferUnlockBaseAddress(cameraFrame, 0);
         
