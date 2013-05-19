@@ -12,9 +12,10 @@
 
 #define VERBOSE NO
 
-#define STAMP_SIZE 10
-#define HISTORY_BUFFER_SIZE 32
-#define MIN_INTENSITY 64
+#define STAMP_SIZE 7
+#define HISTORY_BUFFER_SIZE 128
+#define MIN_INTENSITY 0
+#define MAX_REPEATS 2
 
 typedef enum {
     IDLE,
@@ -23,7 +24,7 @@ typedef enum {
 } CosmicState;
 
 @interface CosmicBrain () {
-    unsigned int *_historyBuffer;
+    unsigned char *_pixelCount;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -108,9 +109,6 @@ typedef enum {
     [self.captureSession addOutput:self.cameraOutput];
     // Start the session running now
     [self.captureSession startRunning];
-    // Initialize our history buffer
-    if(_historyBuffer) free(_historyBuffer);
-    _historyBuffer = malloc(sizeof(unsigned int)*HISTORY_BUFFER_SIZE);
     // Initialize our state
     self.exposureCount = 0;
     self.state = IDLE;
@@ -119,8 +117,7 @@ typedef enum {
 #pragma mark - Initial Focus/Exposure Locking
 
 - (void) beginCapture {
-    self.state = BEGINNING;
-    if(VERBOSE) NSLog(@"begin capture...");
+    NSLog(@"begin capture...");
     // Try to lock the exposure and focus for the best device.
     NSError *error = nil;
     if([self.bestDevice lockForConfiguration:&error]) {
@@ -150,6 +147,9 @@ typedef enum {
             if(VERBOSE) NSLog(@"Exposure lock successful.");
         }
         [self.bestDevice unlockForConfiguration];
+        // Initialize our state
+        self.state = BEGINNING;
+        self.exposureCount = 0;
         // Capture an initial calibration image
         [self captureImage];
     }
@@ -204,6 +204,13 @@ typedef enum {
 
         if(self.state == BEGINNING) {
             // The first image is for locking focus and exposure only.
+            // Now that we know the image dimensions, initialize an array to count how often each pixel
+            // is selected as the maximum intensity in an exposure.
+            if(_pixelCount) free(_pixelCount);
+            int countSize = sizeof(unsigned char)*width*height;
+            _pixelCount = malloc(countSize);
+            bzero(_pixelCount,countSize);
+            NSLog(@"Initialized for %ld x %ld images",width,height);
             self.state = RUNNING;
         }
         else { // RUNNING
@@ -211,21 +218,16 @@ typedef enum {
             unsigned int maxIntensity = MIN_INTENSITY;
             unsigned maxIndex = width*height, lastIndex = width*height, index = 0;
             unsigned int *bufptr = (unsigned int *)rawImageBytes;
+            unsigned char *countPtr = _pixelCount;
             while(index < lastIndex) {
                 // get the next 32-bit word of pixel data and advance our buffer pointer
                 unsigned int val = *bufptr++;
-                // val = (A << 24) | (B << 16) | (G << 8) | R
-                // we only shift G component by 7 so that it gets multiplied by 2
-                unsigned int intensity = ((val&0xff0000) >> 16) + ((val&0xff00) >> 7) + (val&0xff);
-                if(intensity > maxIntensity) {
-                    // is this index in our history?
-                    int hindex = self.exposureCount;
-                    if(hindex > HISTORY_BUFFER_SIZE) hindex = HISTORY_BUFFER_SIZE;
-                    while(hindex > 0 && _historyBuffer[--hindex] != index) ;
-                    if(_historyBuffer[hindex] == index) {
-                        NSLog(@"Masking hot pixel %d in exposure %d",index,self.exposureCount);
-                    }
-                    else {
+                // skip hot pixels
+                if(*countPtr++ < MAX_REPEATS) {
+                    // val = (A << 24) | (B << 16) | (G << 8) | R
+                    // we only shift G component by 7 so that it gets multiplied by 2
+                    unsigned int intensity = ((val&0xff0000) >> 16) + ((val&0xff00) >> 7) + (val&0xff);
+                    if(intensity > maxIntensity) {
                         maxIntensity = intensity;
                         maxIndex = index;
                     }
@@ -234,17 +236,17 @@ typedef enum {
             }
             // Did we find a candidate in this exposure?
             if(maxIndex != lastIndex) {
-
-                // Add this candidate to our history
-                _historyBuffer[self.exposureCount % HISTORY_BUFFER_SIZE] = maxIndex;
+                
                 // Convert the candidate index back to (x,y) coordinates in the raw image
                 int maxX = maxIndex%width;
                 int maxY = maxIndex/width;
-                NSLog(@"Found max intensity %d at index %d (%d,%d) in exposure %d at %@",
-                      maxIntensity,maxIndex,maxX,maxY,self.exposureCount,timestamp.description);
-                
+
                 // Create a unique string identifier for this capture
                 NSString *identifier = [[NSString alloc] initWithFormat:@"stamp_%@_%04d-%04d",[self.timestampFormatter stringFromDate:timestamp],maxX,maxY];
+                NSLog(@"Found max intensity %d at %@",maxIntensity,identifier);
+                
+                // Update our counts for this pixel
+                _pixelCount[maxIndex]++;
                 
                 // Save a stamp centered (as far as possible) around maxX,maxY
                 int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
@@ -323,7 +325,7 @@ typedef enum {
 
 - (void) saveImageDataWithIdentifier:(NSString*)identifier Width:(int)imageWidth Height:(int)imageHeight AtLeftEdge:(int)leftEdge TopEdge:(int)topEdge FromRawData:(unsigned char *)rawData WithRawWidth:(int)rawWidth RawHeight:(int)rawHeight {
     
-    NSLog(@"Saving %@...",identifier);
+    if(VERBOSE) NSLog(@"Saving %@...",identifier);
 
     // Add this sub-image to our list of saved images
     NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
