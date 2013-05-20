@@ -14,7 +14,7 @@
 
 #define STAMP_SIZE 7
 #define MIN_INTENSITY 64
-#define MAX_REPEATS 2
+#define MAX_REPEATS 4
 
 typedef enum {
     IDLE,
@@ -45,7 +45,7 @@ typedef struct {
 @property(strong,nonatomic) AVCaptureSession *captureSession;
 @property(strong,nonatomic) AVCaptureStillImageOutput *cameraOutput;
 @property CosmicState state;
-@property int exposureCount;
+@property int exposureCount, saveCount;
 @property(strong,nonatomic) NSDateFormatter *timestampFormatter;
 
 @end
@@ -95,7 +95,7 @@ typedef struct {
         if(VERBOSE) NSLog(@"Found '%@' (exposure lock? %s; focus lock? %s)",device.localizedName,
               (exposureLock ? "yes":"no"),(focusLock ? "yes":"no"));
         // Is this the best so far?
-        if(nil == self.bestDevice && exposureLock && focusLock) self.bestDevice = device;
+        if(!self.bestDevice && exposureLock) self.bestDevice = device;
     }
     if(nil == self.bestDevice) {
         if(VERBOSE) NSLog(@"PANIC: no suitable camera device available!");
@@ -163,7 +163,7 @@ typedef struct {
         [self.bestDevice unlockForConfiguration];
         // Initialize our state
         self.state = BEGINNING;
-        self.exposureCount = 0;
+        self.exposureCount = self.saveCount = 0;
         // Capture an initial calibration image
         [self captureImage];
     }
@@ -233,7 +233,7 @@ typedef struct {
             _theStamp = malloc(sizeof(Stamp));
             NSLog(@"Initialized for %ld x %ld images and %d x %d stamps (%ld bytes)",width,height,2*STAMP_SIZE+1,2*STAMP_SIZE+1,sizeof(Stamp));
             _beginAt = [timestamp copy];
-            _captureElapsed = 0;
+            _captureElapsed = self.saveCount = 0;
             self.state = RUNNING;
         }
         else { // RUNNING
@@ -295,6 +295,7 @@ typedef struct {
                 // Save our Stamp structure to disk
                 NSString *filename = [[NSString alloc] initWithFormat:@"stamp_%@.dat",[self.timestampFormatter stringFromDate:timestamp]];
                 [self saveStampToFilename:filename];
+                self.saveCount++;
             }
             // Save fixed sub-image in first exposure, for debugging
             if(false && self.exposureCount == 0) {
@@ -305,7 +306,7 @@ typedef struct {
             self.exposureCount++;
             if(self.exposureCount > 1 && self.exposureCount % 10 == 0) {
                 NSTimeInterval elapsed = [timestamp timeIntervalSinceDate:_beginAt];
-                NSLog(@"Exposure cycle time = %.3f sec, capture time = %.3f sec",elapsed/self.exposureCount,_captureElapsed/self.exposureCount);
+                NSLog(@"Exposure cycle time = %.3f sec, capture time = %.3f sec, saved %d / %d exposures",elapsed/self.exposureCount,_captureElapsed/self.exposureCount,self.saveCount,self.exposureCount);
             }
         }
         // All done with the image buffer so release it now

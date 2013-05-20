@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="msq-lx-ITe">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="LEE-63-vu7">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
         <!--Cosmic View Controller-->
-        <scene sceneID="NUP-Jy-4TV">
+        <scene sceneID="0ad-bV-p5i">
             <objects>
-                <viewController id="msq-lx-ITe" customClass="CosmicViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="tAd-zh-rlh">
+                <viewController id="LEE-63-vu7" customClass="CosmicViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AHb-c4-2JS">
                         <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W0w-cB-5sD"/>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pVq-e9-Dox">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bMj-kX-MJw">
+                                <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="fbo-yL-yvO">
+                                    <size key="itemSize" width="80" height="80"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StampCell" id="nUV-ly-i1q" customClass="CosmicCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" red="5.6274711639999997e-05" green="0.73840862770000004" blue="0.035807823850000003" alpha="1" colorSpace="calibratedRGB"/>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <button opaque="NO" alpha="0.85000002384185791" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jfp-om-a5z">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="555" id="eij-jn-uhT"/>
-                                    <constraint firstAttribute="height" constant="81" id="v0t-yB-BNE"/>
+                                    <constraint firstAttribute="width" constant="224" id="bcM-AT-woW"/>
+                                    <constraint firstAttribute="height" constant="82" id="d6U-BW-KGb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="GO">
+                                <state key="normal" title="GO" image="cosmos.png">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -27,57 +49,69 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="goButtonPressed:" destination="msq-lx-ITe" eventType="touchUpInside" id="hrT-8u-H1f"/>
+                                    <action selector="goButtonPressed:" destination="LEE-63-vu7" eventType="touchUpInside" id="aLP-Do-dek"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pm9-Cy-0ZK">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.85000002384185791" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wuB-a1-L3r">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="213" id="sh0-nw-Qzw"/>
+                                    <constraint firstAttribute="width" constant="96" id="iob-4o-CBQ"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="W0w-cB-5sD" firstAttribute="top" secondItem="tAd-zh-rlh" secondAttribute="top" type="default" id="1Z3-iQ-DKl"/>
-                            <constraint firstAttribute="bottom" secondItem="W0w-cB-5sD" secondAttribute="bottom" constant="80" id="36k-OI-U2P"/>
-                            <constraint firstItem="pm9-Cy-0ZK" firstAttribute="bottom" secondItem="tAd-zh-rlh" secondAttribute="bottom" type="default" id="6ap-yZ-bCw"/>
-                            <constraint firstItem="pm9-Cy-0ZK" firstAttribute="trailing" secondItem="tAd-zh-rlh" secondAttribute="trailing" type="default" id="707-mU-um9"/>
-                            <constraint firstItem="pVq-e9-Dox" firstAttribute="leading" secondItem="tAd-zh-rlh" secondAttribute="leading" type="default" id="DAj-sT-WmC"/>
-                            <constraint firstItem="pVq-e9-Dox" firstAttribute="bottom" secondItem="tAd-zh-rlh" secondAttribute="bottom" type="default" id="gqx-4s-PQv"/>
-                            <constraint firstItem="pm9-Cy-0ZK" firstAttribute="top" secondItem="pVq-e9-Dox" secondAttribute="top" type="default" id="kWW-ra-XRk"/>
-                            <constraint firstItem="W0w-cB-5sD" firstAttribute="leading" secondItem="tAd-zh-rlh" secondAttribute="leading" type="default" id="yg9-fZ-5gB"/>
-                            <constraint firstItem="W0w-cB-5sD" firstAttribute="trailing" secondItem="tAd-zh-rlh" secondAttribute="trailing" type="default" id="zE7-PF-QfF"/>
+                            <constraint firstItem="bMj-kX-MJw" firstAttribute="trailing" secondItem="AHb-c4-2JS" secondAttribute="trailing" type="default" id="2W9-N6-hjd"/>
+                            <constraint firstItem="bMj-kX-MJw" firstAttribute="leading" secondItem="AHb-c4-2JS" secondAttribute="leading" type="default" id="55t-EV-Veg"/>
+                            <constraint firstItem="wuB-a1-L3r" firstAttribute="bottom" secondItem="AHb-c4-2JS" secondAttribute="bottom" type="default" id="DAQ-Fu-Kt4"/>
+                            <constraint firstItem="jfp-om-a5z" firstAttribute="bottom" secondItem="AHb-c4-2JS" secondAttribute="bottom" type="default" id="GCW-ho-eHD"/>
+                            <constraint firstItem="jfp-om-a5z" firstAttribute="leading" secondItem="AHb-c4-2JS" secondAttribute="leading" type="default" id="NMh-8c-0Tb"/>
+                            <constraint firstItem="wuB-a1-L3r" firstAttribute="top" secondItem="jfp-om-a5z" secondAttribute="top" type="default" id="TNe-kL-ZPe"/>
+                            <constraint firstItem="wuB-a1-L3r" firstAttribute="trailing" secondItem="AHb-c4-2JS" secondAttribute="trailing" type="default" id="ewP-jE-wsl"/>
+                            <constraint firstItem="bMj-kX-MJw" firstAttribute="bottom" secondItem="AHb-c4-2JS" secondAttribute="bottom" type="default" id="wjZ-xC-Lq5"/>
+                            <constraint firstItem="bMj-kX-MJw" firstAttribute="top" secondItem="AHb-c4-2JS" secondAttribute="top" type="default" id="wul-fA-oqY"/>
                         </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="K8b-4K-4C7" appends="YES" id="Qme-hx-kkJ"/>
+                            <outletCollection property="gestureRecognizers" destination="9mR-mG-wrI" appends="YES" id="qK2-N5-vsA"/>
+                            <outletCollection property="gestureRecognizers" destination="2VQ-8Y-Y5R" appends="YES" id="0yU-qx-Sua"/>
+                        </connections>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
-                        <outlet property="exposureCountLabel" destination="pm9-Cy-0ZK" id="3pU-jV-t5O"/>
-                        <outlet property="goButton" destination="pVq-e9-Dox" id="nsj-Hn-fqB"/>
-                        <outlet property="scrollView" destination="W0w-cB-5sD" id="2HH-rn-oIm"/>
+                        <outlet property="collectionView" destination="bMj-kX-MJw" id="Dec-E3-cGf"/>
+                        <outlet property="exposureCountLabel" destination="wuB-a1-L3r" id="SdN-O0-k44"/>
+                        <outlet property="goButton" destination="jfp-om-a5z" id="G4O-Na-XbQ"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4nc-AR-zwn" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BuE-rD-FVa" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="K8b-4K-4C7">
+                    <connections>
+                        <action selector="imageViewTapped:" destination="LEE-63-vu7" id="wx5-bN-AQa"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <swipeGestureRecognizer direction="down" id="9mR-mG-wrI">
+                    <connections>
+                        <action selector="buttonSwipedDown:" destination="LEE-63-vu7" id="vKi-sK-dSC"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="up" id="2VQ-8Y-Y5R">
+                    <connections>
+                        <action selector="buttonSwipedUp:" destination="LEE-63-vu7" id="e5i-41-eEa"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
+            <point key="canvasLocation" x="-56" y="-133"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="CosmicViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="exposureCountLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="goButton" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="imageOutlet" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-    </classes>
+    <resources>
+        <image name="cosmos.png" width="448" height="162"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
