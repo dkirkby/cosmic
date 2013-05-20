@@ -30,6 +30,9 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" red="5.6274711639999997e-05" green="0.73840862770000004" blue="0.035807823850000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <segue destination="WFD-Db-qnA" kind="push" id="isk-6b-d3o"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -106,6 +109,74 @@
                 </swipeGestureRecognizer>
             </objects>
         </scene>
+        <!--Cosmic Stamp View Controller-->
+        <scene sceneID="oHS-cK-t5L">
+            <objects>
+                <viewController id="WFD-Db-qnA" customClass="CosmicStampViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Bwj-67-5I9">
+                        <rect key="frame" x="0.0" y="20" width="320" height="460"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4u6-k5-ZuG">
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jsW-bs-yKJ">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VN4-MK-Mh6">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgC-8P-5KG">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MOP-8J-QJH">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="(x,y)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHM-0d-Mhu">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yfk-cM-NEA">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="VN4-MK-Mh6" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="0CT-3A-Ytj"/>
+                            <constraint firstAttribute="bottom" secondItem="4u6-k5-ZuG" secondAttribute="bottom" constant="140" id="0b7-68-v0m"/>
+                            <constraint firstAttribute="trailing" secondItem="RgC-8P-5KG" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="4xm-ZT-VEC"/>
+                            <constraint firstItem="qHM-0d-Mhu" firstAttribute="centerX" secondItem="4u6-k5-ZuG" secondAttribute="centerX" type="default" id="EAY-dl-fD4"/>
+                            <constraint firstItem="jsW-bs-yKJ" firstAttribute="top" secondItem="MOP-8J-QJH" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="FBT-Jo-9fU"/>
+                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" type="default" id="HGh-of-B7b"/>
+                            <constraint firstItem="jsW-bs-yKJ" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Jvl-kj-x6D"/>
+                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="top" secondItem="Bwj-67-5I9" secondAttribute="top" type="default" id="Ztb-uS-2qA"/>
+                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="trailing" secondItem="Bwj-67-5I9" secondAttribute="trailing" type="default" id="cLp-mx-YHt"/>
+                            <constraint firstItem="MOP-8J-QJH" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="dAM-Bt-gTp"/>
+                            <constraint firstAttribute="trailing" secondItem="Yfk-cM-NEA" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="mPE-lk-f1f"/>
+                            <constraint firstAttribute="bottom" secondItem="jsW-bs-yKJ" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="nu0-q5-pbE"/>
+                            <constraint firstItem="VN4-MK-Mh6" firstAttribute="centerX" secondItem="qHM-0d-Mhu" secondAttribute="centerX" type="default" id="oA8-gk-XKx"/>
+                            <constraint firstAttribute="bottom" secondItem="RgC-8P-5KG" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="ogW-0v-tkZ"/>
+                            <constraint firstItem="qHM-0d-Mhu" firstAttribute="baseline" secondItem="MOP-8J-QJH" secondAttribute="baseline" type="default" id="oxA-Ee-PIM"/>
+                            <constraint firstItem="Yfk-cM-NEA" firstAttribute="baseline" secondItem="qHM-0d-Mhu" secondAttribute="baseline" type="default" id="zKA-QZ-jSN"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="GQy-Ho-TYF"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0DL-Fo-T8Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="684" y="-6"/>
+        </scene>
     </scenes>
     <resources>
         <image name="cosmos.png" width="448" height="162"/>
@@ -137,6 +208,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
