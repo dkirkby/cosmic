@@ -13,7 +13,7 @@
 #define VERBOSE NO
 
 #define STAMP_SIZE 7
-#define MIN_INTENSITY 48
+#define MIN_INTENSITY 128
 #define MAX_REPEATS 2
 
 typedef enum {
@@ -51,7 +51,7 @@ typedef enum {
 {
     if(!_timestampFormatter) {
         _timestampFormatter = [[NSDateFormatter alloc] init];
-        [_timestampFormatter setDateFormat:@"YY-MM-dd-hh-mm-ss-SSS"];
+        [_timestampFormatter setDateFormat:@"YY-MM-dd-HH-mm-ss-SSS"];
     }
     return _timestampFormatter;
 }
@@ -249,7 +249,7 @@ typedef enum {
                 int maxY = maxIndex/width;
 
                 // Create a unique string identifier for this capture
-                NSString *identifier = [[NSString alloc] initWithFormat:@"stamp_%@_%04d-%04d",[self.timestampFormatter stringFromDate:timestamp],maxX,maxY];
+                NSString *identifier = [[NSString alloc] initWithFormat:@"stamp_%06d_%@_%04d-%04d",self.exposureCount,[self.timestampFormatter stringFromDate:timestamp],maxX,maxY];
                 NSLog(@"Found max intensity %d at %@",maxIntensity,identifier);
                 
                 // Update our counts for this pixel
