@@ -13,6 +13,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    // I'm not sure if this NO/YES sequence is really necessary?
+    application.idleTimerDisabled = NO;
+    application.idleTimerDisabled = YES;
+    NSLog(@"Disabled idle timer.");
     return YES;
 }
 							
