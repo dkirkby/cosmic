@@ -60,6 +60,7 @@
 		FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cosmic_icon@2x.png"; path = "../cosmic_icon@2x.png"; sourceTree = "<group>"; };
 		FC9249D9174A3B520094DFB4 /* CosmicStampView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicStampView.h; sourceTree = "<group>"; };
 		FC9249DA174A3B520094DFB4 /* CosmicStampView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicStampView.m; sourceTree = "<group>"; };
+		FC9249DC174A41350094DFB4 /* Stamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stamp.h; sourceTree = "<group>"; };
 		FCF707C117452ECA00BC0D53 /* CosmicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicCell.h; sourceTree = "<group>"; };
 		FCF707C217452ECA00BC0D53 /* CosmicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +119,7 @@
 			children = (
 				6398F40D16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard */,
 				6398F41016EE67FB00296AC3 /* MainStoryboard_iPad.storyboard */,
+				FC9249DC174A41350094DFB4 /* Stamp.h */,
 				6398F41F16EE6D6D00296AC3 /* CosmicBrain.h */,
 				6398F42016EE6D6D00296AC3 /* CosmicBrain.m */,
 				6398F40416EE67FB00296AC3 /* CosmicAppDelegate.h */,
