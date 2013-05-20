@@ -47,6 +47,12 @@ typedef enum {
     return _cosmicStamps;
 }
 
+- (NSMutableArray *)cosmicStampPointers
+{
+    if(!_cosmicStampPointers) _cosmicStampPointers = [[NSMutableArray alloc] init];
+    return _cosmicStampPointers;
+}
+
 - (NSDateFormatter*)timestampFormatter
 {
     if(!_timestampFormatter) {
@@ -264,10 +270,10 @@ typedef enum {
                 else if(y2 >= height) { y2 = height-1; y1 = height - 2*STAMP_SIZE - 1; }
 
                 // Fill in our Stamp structure
-                _theStamp->elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
-                _theStamp->maxPixelIndex = maxIndex;
-                _theStamp->exposureCount = self.exposureCount;
-                uint8_t *rgbPtr = _theStamp->rgb;
+                _theStamp.elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
+                _theStamp.maxPixelIndex = maxIndex;
+                _theStamp.exposureCount = self.exposureCount;
+                uint8_t *rgbPtr = _theStamp.rgb;
                 uint32_t *rawPtr = (uint32_t*)rawImageBytes + y1*width + x1;
                 for(int y = 0; y < 2*STAMP_SIZE+1; ++y) {
                     for(int x = 0; x < 2*STAMP_SIZE+1; ++x) {
@@ -283,6 +289,13 @@ typedef enum {
                 NSString *filename = [[NSString alloc] initWithFormat:@"stamp_%@.dat",[self.timestampFormatter stringFromDate:timestamp]];
                 [self saveStampToFilename:filename];
                 [self.cosmicStamps addObject:[NSValue valueWithBytes:_theStamp objCType:@encode(Stamp)]];
+                
+                
+                NSValue *cosmicStamp = [self.cosmicStamps lastObject];
+                Stamp buffer;
+                [cosmicStamp getValue:buffer];
+                
+                
                 self.saveCount++;
             }
             // Save fixed sub-image in first exposure, for debugging
