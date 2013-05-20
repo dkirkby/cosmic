@@ -28,6 +28,7 @@
 		FC6F4279174298BB0029EB1C /* cosmic_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4278174298BB0029EB1C /* cosmic_icon.png */; };
 		FC6F427B174298C20029EB1C /* cosmic_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */; };
 		FC9249DB174A3B520094DFB4 /* CosmicStampView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DA174A3B520094DFB4 /* CosmicStampView.m */; };
+		FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */; };
 		FCF707C317452ECA00BC0D53 /* CosmicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF707C217452ECA00BC0D53 /* CosmicCell.m */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +62,8 @@
 		FC9249D9174A3B520094DFB4 /* CosmicStampView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicStampView.h; sourceTree = "<group>"; };
 		FC9249DA174A3B520094DFB4 /* CosmicStampView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicStampView.m; sourceTree = "<group>"; };
 		FC9249DC174A41350094DFB4 /* Stamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stamp.h; sourceTree = "<group>"; };
+		FC9249DD174A63C60094DFB4 /* CosmicStampViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicStampViewController.h; sourceTree = "<group>"; };
+		FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicStampViewController.m; sourceTree = "<group>"; };
 		FCF707C117452ECA00BC0D53 /* CosmicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicCell.h; sourceTree = "<group>"; };
 		FCF707C217452ECA00BC0D53 /* CosmicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +129,8 @@
 				6398F40516EE67FB00296AC3 /* CosmicAppDelegate.m */,
 				6398F41316EE67FB00296AC3 /* CosmicViewController.h */,
 				6398F41416EE67FB00296AC3 /* CosmicViewController.m */,
+				FC9249DD174A63C60094DFB4 /* CosmicStampViewController.h */,
+				FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */,
 				FCF707C117452ECA00BC0D53 /* CosmicCell.h */,
 				FCF707C217452ECA00BC0D53 /* CosmicCell.m */,
 				FC9249D9174A3B520094DFB4 /* CosmicStampView.h */,
@@ -229,6 +234,7 @@
 				6398F42116EE6D6D00296AC3 /* CosmicBrain.m in Sources */,
 				FCF707C317452ECA00BC0D53 /* CosmicCell.m in Sources */,
 				FC9249DB174A3B520094DFB4 /* CosmicStampView.m in Sources */,
+				FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
