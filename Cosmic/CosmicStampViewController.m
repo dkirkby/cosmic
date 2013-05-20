@@ -9,9 +9,28 @@
 #import "CosmicStampViewController.h"
 
 @interface CosmicStampViewController ()
+@property (nonatomic) Stamp tempStamp;
 
+@property (weak, nonatomic) IBOutlet CosmicStampView *cosmicStampView;
+@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
+@property (weak, nonatomic) IBOutlet UILabel *coordinatesLabel;
+@property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @end
 
 @implementation CosmicStampViewController
+
+#define WIDTH 2592
+- (void)setStamp:(Stamp)stamp
+{
+    self.tempStamp = stamp;
+}
+
+- (void)viewDidLoad
+{
+    [self.cosmicStampView setStamp:self.tempStamp];
+    self.timeLabel.text = [NSString stringWithFormat:@"%u ms", self.tempStamp.elapsedMSecs];
+    self.coordinatesLabel.text = [NSString stringWithFormat:@"(%u,%u)", self.tempStamp.maxPixelIndex/WIDTH, self.tempStamp.maxPixelIndex%WIDTH];
+    self.countLabel.text = [NSString stringWithFormat:@"%u", self.tempStamp.exposureCount];
+}
 
 @end

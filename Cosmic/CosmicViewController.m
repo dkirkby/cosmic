@@ -9,6 +9,7 @@
 #import "CosmicViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #import "CosmicCell.h"
+#import "CosmicStampViewController.h"
 
 @interface CosmicViewController () <CosmicBrainDelegate, UIScrollViewDelegate, UICollectionViewDataSource>
 @property (strong, nonatomic) CosmicBrain *brain;
@@ -45,12 +46,29 @@
     [self.brain beginCapture];
     self.goButton.enabled = NO;
     self.exposureCountLabel.text = @"0";
+    
+    
+    self.navigationController.navigationBar.tintColor = [UIColor blackColor];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Segue
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    static NSString *identifier = @"showCosmicStamp";
+    if([segue.identifier isEqualToString:identifier]){
+        if([segue.destinationViewController isKindOfClass:[CosmicStampViewController class]]){
+            Stamp stamp = [self stampForindexPath:[self.collectionView indexPathForCell:sender]];
+            CosmicStampViewController *csvc = (CosmicStampViewController *)segue.destinationViewController;
+            [csvc setStamp:stamp];
+        }
+    }
 }
 
 #pragma mark - Target/Action

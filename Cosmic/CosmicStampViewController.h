@@ -10,8 +10,5 @@
 #import "CosmicStampView.h"
 
 @interface CosmicStampViewController : UIViewController
-@property (weak, nonatomic) IBOutlet CosmicStampView *cosmicStampView;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *coordinatesLabel;
-@property (weak, nonatomic) IBOutlet UILabel *countLabel;
+- (void)setStamp:(Stamp)stamp;
 @end
