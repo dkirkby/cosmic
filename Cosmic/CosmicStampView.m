@@ -79,6 +79,8 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     [[UIColor colorWithRed:red/MAX_COLOR green:green/MAX_COLOR blue:blue/MAX_COLOR alpha:1.0] setFill];
     CGContextFillRect(context, pixel);
+    [[UIColor whiteColor] setStroke];
+    CGContextStrokeRect(context, pixel);
 }
 
 @end
