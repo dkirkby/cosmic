@@ -7,6 +7,11 @@
 //
 
 #import "CosmicStampView.h"
+#define BORDER YES
+
+@interface CosmicStampView ()
+@property (nonatomic) UInt8 maxColor;
+@end
 
 @implementation CosmicStampView
 
@@ -15,6 +20,7 @@
 - (void)setStamp:(Stamp)stamp
 {
     _stamp = stamp;
+    [self pruneStamp];
     [self setNeedsDisplay];
 }
 
@@ -39,6 +45,29 @@
     //do nothing
 }
 
+#pragma mark - Pruning
+
+- (void)pruneStamp
+{
+    int stampWidthInPixels = (2*STAMP_SIZE+1);
+    int stampHeightInPixels = (2*STAMP_SIZE+1);
+    
+    UInt8 *rgbPointer = self.stamp.rgb;
+    
+    self.maxColor = 0;
+    for(int x=0; x<stampHeightInPixels; ++x){
+        for(int y=0; y<stampWidthInPixels; ++y){
+            UInt8 red = *rgbPointer++;
+            UInt8 green = *rgbPointer++;
+            UInt8 blue = *rgbPointer++;
+            if(red > _maxColor)_maxColor = red;
+            if(green > _maxColor)_maxColor = green;
+            if(blue > _maxColor)_maxColor = blue;
+
+        }
+    }
+}
+
 #pragma mark - Custom Drawing
 
 // Only override drawRect: if you perform custom drawing.
@@ -58,11 +87,9 @@
             UInt8 blue = *rgbPointer++;
             [self drawPixelWithX:x withY:y andR:red andG:green andB:blue];
         }
-        //return
     }
 }
 
-#define MAX_COLOR 255
 - (void) drawPixelWithX:(int)x withY:(int)y andR:(UInt8)red andG:(UInt8)green andB:(UInt8)blue
 {
     //Note: will distort if bounds are not square
@@ -77,10 +104,10 @@
     
     CGRect pixel = CGRectMake(x*pixelWidth, y*pixelHeight, pixelWidth, pixelHeight);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [[UIColor colorWithRed:red/MAX_COLOR green:green/MAX_COLOR blue:blue/MAX_COLOR alpha:1.0] setFill];
+    [[UIColor colorWithRed:red/(CGFloat)self.maxColor green:green/(CGFloat)self.maxColor blue:blue/(CGFloat)self.maxColor alpha:1.0] setFill];
     CGContextFillRect(context, pixel);
-    [[UIColor whiteColor] setStroke];
-    CGContextStrokeRect(context, pixel);
+    [[UIColor darkGrayColor] setStroke];
+    if(BORDER)CGContextStrokeRect(context, pixel);
 }
 
 @end

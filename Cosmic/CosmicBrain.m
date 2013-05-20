@@ -12,7 +12,7 @@
 
 #define VERBOSE NO
 
-#define MIN_INTENSITY 32
+#define MIN_INTENSITY 64
 #define MAX_REPEATS 4
 
 typedef enum {
