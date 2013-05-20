@@ -1,44 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="LEE-63-vu7">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="Lzo-tx-ttU">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--Cosmic View Controller-->
-        <scene sceneID="0ad-bV-p5i">
+        <!--Cosmic View Controller - Cosmic Rays-->
+        <scene sceneID="ZgZ-8E-KI8">
             <objects>
-                <viewController id="LEE-63-vu7" customClass="CosmicViewController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="AHb-c4-2JS">
-                        <rect key="frame" x="0.0" y="20" width="768" height="1004"/>
+                <viewController id="6gM-nw-Wbh" customClass="CosmicViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="7Hg-oS-u4v">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="bMj-kX-MJw">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ful-qM-YUC">
                                 <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="fbo-yL-yvO">
-                                    <size key="itemSize" width="80" height="80"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="B9c-qa-KiY">
+                                    <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StampCell" id="nUV-ly-i1q" customClass="CosmicCell">
-                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StampCell" id="GzE-Nq-Xlq" customClass="CosmicCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" red="5.6274711639999997e-05" green="0.73840862770000004" blue="0.035807823850000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <segue destination="TU8-Dm-RwX" kind="push" identifier="showCosmicStamp" id="Jj3-FT-Sy0"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" alpha="0.85000002384185791" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jfp-om-a5z">
+                            <button opaque="NO" alpha="0.85000002384185791" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="844-NC-a90">
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="224" id="bcM-AT-woW"/>
-                                    <constraint firstAttribute="height" constant="82" id="d6U-BW-KGb"/>
+                                    <constraint firstAttribute="height" constant="82" id="lD4-U4-7fP"/>
+                                    <constraint firstAttribute="width" constant="224" id="vaq-7V-eCp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="GO" image="cosmos.png">
@@ -49,64 +52,161 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="goButtonPressed:" destination="LEE-63-vu7" eventType="touchUpInside" id="aLP-Do-dek"/>
+                                    <action selector="goButtonPressed:" destination="6gM-nw-Wbh" eventType="touchUpInside" id="atA-72-xyg"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.85000002384185791" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wuB-a1-L3r">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.85000002384185791" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5oo-6I-SbW">
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="96" id="iob-4o-CBQ"/>
+                                    <constraint firstAttribute="width" constant="96" id="ER6-HA-kdL"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="YUQ-8p-N46" appends="YES" id="ysJ-bs-pZT"/>
+                                </connections>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="bMj-kX-MJw" firstAttribute="trailing" secondItem="AHb-c4-2JS" secondAttribute="trailing" type="default" id="2W9-N6-hjd"/>
-                            <constraint firstItem="bMj-kX-MJw" firstAttribute="leading" secondItem="AHb-c4-2JS" secondAttribute="leading" type="default" id="55t-EV-Veg"/>
-                            <constraint firstItem="wuB-a1-L3r" firstAttribute="bottom" secondItem="AHb-c4-2JS" secondAttribute="bottom" type="default" id="DAQ-Fu-Kt4"/>
-                            <constraint firstItem="jfp-om-a5z" firstAttribute="bottom" secondItem="AHb-c4-2JS" secondAttribute="bottom" type="default" id="GCW-ho-eHD"/>
-                            <constraint firstItem="jfp-om-a5z" firstAttribute="leading" secondItem="AHb-c4-2JS" secondAttribute="leading" type="default" id="NMh-8c-0Tb"/>
-                            <constraint firstItem="wuB-a1-L3r" firstAttribute="top" secondItem="jfp-om-a5z" secondAttribute="top" type="default" id="TNe-kL-ZPe"/>
-                            <constraint firstItem="wuB-a1-L3r" firstAttribute="trailing" secondItem="AHb-c4-2JS" secondAttribute="trailing" type="default" id="ewP-jE-wsl"/>
-                            <constraint firstItem="bMj-kX-MJw" firstAttribute="bottom" secondItem="AHb-c4-2JS" secondAttribute="bottom" type="default" id="wjZ-xC-Lq5"/>
-                            <constraint firstItem="bMj-kX-MJw" firstAttribute="top" secondItem="AHb-c4-2JS" secondAttribute="top" type="default" id="wul-fA-oqY"/>
+                            <constraint firstItem="ful-qM-YUC" firstAttribute="bottom" secondItem="7Hg-oS-u4v" secondAttribute="bottom" type="default" id="42C-EE-5ch"/>
+                            <constraint firstItem="5oo-6I-SbW" firstAttribute="top" secondItem="844-NC-a90" secondAttribute="top" type="default" id="ACe-GS-Dbo"/>
+                            <constraint firstItem="844-NC-a90" firstAttribute="leading" secondItem="7Hg-oS-u4v" secondAttribute="leading" type="default" id="IxT-gm-VpR"/>
+                            <constraint firstItem="5oo-6I-SbW" firstAttribute="bottom" secondItem="7Hg-oS-u4v" secondAttribute="bottom" type="default" id="WeZ-si-HVV"/>
+                            <constraint firstItem="ful-qM-YUC" firstAttribute="top" secondItem="7Hg-oS-u4v" secondAttribute="top" type="default" id="XWM-CX-dKc"/>
+                            <constraint firstItem="ful-qM-YUC" firstAttribute="trailing" secondItem="7Hg-oS-u4v" secondAttribute="trailing" type="default" id="ept-x5-P2a"/>
+                            <constraint firstItem="5oo-6I-SbW" firstAttribute="trailing" secondItem="7Hg-oS-u4v" secondAttribute="trailing" type="default" id="j7w-6c-FsD"/>
+                            <constraint firstItem="ful-qM-YUC" firstAttribute="leading" secondItem="7Hg-oS-u4v" secondAttribute="leading" type="default" id="ju9-x6-SYt"/>
+                            <constraint firstItem="844-NC-a90" firstAttribute="bottom" secondItem="7Hg-oS-u4v" secondAttribute="bottom" type="default" id="rH0-Ll-WB5"/>
                         </constraints>
                         <connections>
-                            <outletCollection property="gestureRecognizers" destination="K8b-4K-4C7" appends="YES" id="Qme-hx-kkJ"/>
-                            <outletCollection property="gestureRecognizers" destination="9mR-mG-wrI" appends="YES" id="qK2-N5-vsA"/>
-                            <outletCollection property="gestureRecognizers" destination="2VQ-8Y-Y5R" appends="YES" id="0yU-qx-Sua"/>
+                            <outletCollection property="gestureRecognizers" destination="640-Wh-WWE" appends="YES" id="OVv-Pm-6qJ"/>
+                            <outletCollection property="gestureRecognizers" destination="11O-Dc-yBj" appends="YES" id="fKX-Pb-fch"/>
                         </connections>
                     </view>
+                    <navigationItem key="navigationItem" title="Cosmic Rays" id="fWc-ws-Xuf"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
                     <connections>
-                        <outlet property="collectionView" destination="bMj-kX-MJw" id="Dec-E3-cGf"/>
-                        <outlet property="exposureCountLabel" destination="wuB-a1-L3r" id="SdN-O0-k44"/>
-                        <outlet property="goButton" destination="jfp-om-a5z" id="G4O-Na-XbQ"/>
+                        <outlet property="collectionView" destination="ful-qM-YUC" id="5zg-kd-bUk"/>
+                        <outlet property="exposureCountLabel" destination="5oo-6I-SbW" id="sVc-O4-D0O"/>
+                        <outlet property="goButton" destination="844-NC-a90" id="3nL-WI-wRB"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="BuE-rD-FVa" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="K8b-4K-4C7">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NSc-KH-8MX" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="down" id="640-Wh-WWE">
                     <connections>
-                        <action selector="imageViewTapped:" destination="LEE-63-vu7" id="wx5-bN-AQa"/>
+                        <action selector="buttonSwipedDown:" destination="6gM-nw-Wbh" id="EYh-cN-xo5"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="up" id="11O-Dc-yBj">
+                    <connections>
+                        <action selector="buttonSwipedUp:" destination="6gM-nw-Wbh" id="xra-dr-J6G"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <tapGestureRecognizer id="YUQ-8p-N46">
+                    <connections>
+                        <action selector="imageViewTapped:" destination="6gM-nw-Wbh" id="STr-aS-Cw4"/>
                     </connections>
                 </tapGestureRecognizer>
-                <swipeGestureRecognizer direction="down" id="9mR-mG-wrI">
-                    <connections>
-                        <action selector="buttonSwipedDown:" destination="LEE-63-vu7" id="vKi-sK-dSC"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="up" id="2VQ-8Y-Y5R">
-                    <connections>
-                        <action selector="buttonSwipedUp:" destination="LEE-63-vu7" id="e5i-41-eEa"/>
-                    </connections>
-                </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-56" y="-133"/>
+            <point key="canvasLocation" x="128" y="-111"/>
+        </scene>
+        <!--Cosmic Stamp View Controller - Close Up-->
+        <scene sceneID="sfw-dz-SVt">
+            <objects>
+                <viewController id="TU8-Dm-RwX" customClass="CosmicStampViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="u5k-9v-af6">
+                        <rect key="frame" x="0.0" y="64" width="768" height="960"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EdI-KD-YFP" customClass="CosmicStampView">
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5kY-4p-71X">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sEL-TB-ckP">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEh-vD-gQ6">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QUp-ap-0ce">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="(x,y)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NLm-jr-9n5">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="izx-E5-YUe">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="sEL-TB-ckP" firstAttribute="centerX" secondItem="NLm-jr-9n5" secondAttribute="centerX" type="default" id="8VD-Wb-i3e"/>
+                            <constraint firstAttribute="bottom" secondItem="sEL-TB-ckP" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="AfP-OW-jeD"/>
+                            <constraint firstItem="NLm-jr-9n5" firstAttribute="centerX" secondItem="EdI-KD-YFP" secondAttribute="centerX" type="default" id="C6b-P4-DWi"/>
+                            <constraint firstItem="QUp-ap-0ce" firstAttribute="leading" secondItem="u5k-9v-af6" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="HX4-kS-yiC"/>
+                            <constraint firstItem="EdI-KD-YFP" firstAttribute="leading" secondItem="u5k-9v-af6" secondAttribute="leading" type="default" id="KDK-ZG-a5h"/>
+                            <constraint firstItem="izx-E5-YUe" firstAttribute="baseline" secondItem="NLm-jr-9n5" secondAttribute="baseline" type="default" id="MKI-Ym-HDS"/>
+                            <constraint firstItem="EdI-KD-YFP" firstAttribute="top" secondItem="u5k-9v-af6" secondAttribute="top" type="default" id="OKl-h5-VsL"/>
+                            <constraint firstItem="EdI-KD-YFP" firstAttribute="trailing" secondItem="u5k-9v-af6" secondAttribute="trailing" type="default" id="Vof-aO-BMx"/>
+                            <constraint firstItem="5kY-4p-71X" firstAttribute="top" secondItem="QUp-ap-0ce" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="afa-bC-nVs"/>
+                            <constraint firstAttribute="trailing" secondItem="hEh-vD-gQ6" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="b3e-C3-H4T"/>
+                            <constraint firstAttribute="bottom" secondItem="5kY-4p-71X" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="huE-lX-nv7"/>
+                            <constraint firstAttribute="trailing" secondItem="izx-E5-YUe" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="l3n-bF-2sQ"/>
+                            <constraint firstItem="NLm-jr-9n5" firstAttribute="baseline" secondItem="QUp-ap-0ce" secondAttribute="baseline" type="default" id="uiC-l5-5kU"/>
+                            <constraint firstAttribute="bottom" secondItem="hEh-vD-gQ6" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="wmW-sZ-5N1"/>
+                            <constraint firstAttribute="bottom" secondItem="EdI-KD-YFP" secondAttribute="bottom" constant="140" id="xjt-w2-Yht"/>
+                            <constraint firstItem="5kY-4p-71X" firstAttribute="leading" secondItem="u5k-9v-af6" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="yX1-1j-Bg0"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Close Up" id="S0M-j8-5kA"/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <connections>
+                        <outlet property="coordinatesLabel" destination="sEL-TB-ckP" id="i60-0p-v92"/>
+                        <outlet property="cosmicStampView" destination="EdI-KD-YFP" id="wUr-fB-28d"/>
+                        <outlet property="countLabel" destination="hEh-vD-gQ6" id="nUI-L8-ngK"/>
+                        <outlet property="timeLabel" destination="5kY-4p-71X" id="Iri-8Z-LVU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Uy-xb-Q23" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1142" y="-111"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="fBM-3O-IRY">
+            <objects>
+                <navigationController id="Lzo-tx-ttU" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackTranslucent"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Err-Bw-rv4">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="6gM-nw-Wbh" kind="relationship" relationship="rootViewController" id="iQs-Tz-XI5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tAA-ck-W1C" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-796" y="-111"/>
         </scene>
     </scenes>
     <resources>
@@ -115,6 +215,18 @@
     <classes>
         <class className="CosmicCell" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicCell.h"/>
+        </class>
+        <class className="CosmicStampView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicStampView.h"/>
+        </class>
+        <class className="CosmicStampViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicStampViewController.h"/>
+            <relationships>
+                <relationship kind="outlet" name="coordinatesLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="cosmicStampView" candidateClass="CosmicStampView"/>
+                <relationship kind="outlet" name="countLabel" candidateClass="UILabel"/>
+                <relationship kind="outlet" name="timeLabel" candidateClass="UILabel"/>
+            </relationships>
         </class>
         <class className="CosmicViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
