@@ -67,22 +67,25 @@
     self.exposureCountLabel.text = [NSString stringWithFormat:@"%d",count];
 }
 
-- (void)imageAdded
+- (void)stampAdded
 {
+    Stamp buffer;
+    NSValue *stampWrapper = [self.brain.cosmicStamps lastObject];
+    [stampWrapper getValue:&buffer];
+    NSLog(@"Cosmic Stamp: %u", buffer.exposureCount);
     [self.collectionView reloadData];
-    self.goButton.enabled = YES;
 }
 
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.brain.cosmicImages.count;
+    return self.brain.cosmicStamps.count;
 }
 
 - (UIImage *)imageForIndexPath:(NSIndexPath *)indexPath
 {
-    return self.brain.cosmicImages[indexPath.item];
+    return nil;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

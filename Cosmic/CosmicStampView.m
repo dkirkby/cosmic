@@ -10,13 +10,25 @@
 
 @implementation CosmicStampView
 
+#pragma mark - Initialization
+
+- (void)awakeFromNib
+{
+    [self setup];
+}
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
+        [self setup];
     }
     return self;
+}
+
+- (void)setup
+{
+    
 }
 
 /*

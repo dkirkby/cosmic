@@ -12,7 +12,6 @@
 
 #define VERBOSE NO
 
-#define STAMP_SIZE 7
 #define MIN_INTENSITY 64
 #define MAX_REPEATS 4
 
@@ -21,18 +20,6 @@ typedef enum {
     BEGINNING,
     RUNNING
 } CosmicState;
-
-typedef struct {
-    // milliseconds since program started, wraps around after 49.7 days
-    uint32_t elapsedMSecs;
-    // index = y*width+x of stamp's central pixel with largest R+2*G+B
-    uint32_t maxPixelIndex;
-    // exposure counter for this stamp (starting from zero)
-    uint32_t exposureCount;
-    // RGB byte data starting from sensor's top-right corner (with phone in portrait orientation)
-    // and increasing fastest down the sensor.
-    uint8_t rgb[3*(2*STAMP_SIZE+1)*(2*STAMP_SIZE+1)];
-} Stamp;
 
 @interface CosmicBrain () {
     unsigned char *_pixelCount;
@@ -54,10 +41,10 @@ typedef struct {
 
 #pragma mark - Setters/Getters
 
-- (NSMutableArray *)cosmicImages
+- (NSMutableArray *)cosmicStamps
 {
-    if(!_cosmicImages) _cosmicImages = [[NSMutableArray alloc] init];
-    return _cosmicImages;
+    if(!_cosmicStamps) _cosmicStamps = [[NSMutableArray alloc] init];
+    return _cosmicStamps;
 }
 
 - (NSDateFormatter*)timestampFormatter
@@ -295,6 +282,7 @@ typedef struct {
                 // Save our Stamp structure to disk
                 NSString *filename = [[NSString alloc] initWithFormat:@"stamp_%@.dat",[self.timestampFormatter stringFromDate:timestamp]];
                 [self saveStampToFilename:filename];
+                [self.cosmicStamps addObject:[NSValue valueWithBytes:_theStamp objCType:@encode(Stamp)]];
                 self.saveCount++;
             }
             // Save fixed sub-image in first exposure, for debugging
@@ -315,7 +303,7 @@ typedef struct {
         // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.brainDelegate setExposureCount:self.exposureCount];
-            //[self.brainDelegate imageAdded];
+            [self.brainDelegate stampAdded];
             [self captureImage];
 
         });
