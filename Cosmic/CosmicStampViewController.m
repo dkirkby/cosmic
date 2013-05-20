@@ -27,6 +27,8 @@
 
 - (void)viewDidLoad
 {
+    self.cosmicStampView.frame = CGRectMake(self.cosmicStampView.frame.origin.x, self.cosmicStampView.frame.origin.y, self.cosmicStampView.frame.size.width, self.cosmicStampView.frame.size.width);
+    
     [self.cosmicStampView setStamp:self.tempStamp];
     self.timeLabel.text = [NSString stringWithFormat:@"%u ms", self.tempStamp.elapsedMSecs];
     self.coordinatesLabel.text = [NSString stringWithFormat:@"(%u,%u)", self.tempStamp.maxPixelIndex/WIDTH, self.tempStamp.maxPixelIndex%WIDTH];

@@ -4,7 +4,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--Cosmic View Controller-->
+        <!--Cosmic View Controller - Cosmic Rays-->
         <scene sceneID="5">
             <objects>
                 <viewController id="2" customClass="CosmicViewController" sceneMemberID="viewController">
@@ -87,7 +87,7 @@
                             <outletCollection property="gestureRecognizers" destination="FwX-Jl-Ws5" appends="YES" id="vhJ-iK-KLN"/>
                         </connections>
                     </view>
-                    <navigationItem key="navigationItem" id="cxv-X9-jHZ"/>
+                    <navigationItem key="navigationItem" title="Cosmic Rays" id="cxv-X9-jHZ"/>
                     <connections>
                         <outlet property="collectionView" destination="hKD-O5-IMn" id="6ue-4q-TLM"/>
                         <outlet property="exposureCountLabel" destination="zuk-KX-IVm" id="1mZ-qW-WPX"/>
@@ -113,7 +113,7 @@
             </objects>
             <point key="canvasLocation" x="596" y="-11"/>
         </scene>
-        <!--Cosmic Stamp View Controller-->
+        <!--Cosmic Stamp View Controller - Close Up-->
         <scene sceneID="oHS-cK-t5L">
             <objects>
                 <viewController id="WFD-Db-qnA" customClass="CosmicStampViewController" sceneMemberID="viewController">
@@ -175,7 +175,7 @@
                             <constraint firstItem="Yfk-cM-NEA" firstAttribute="baseline" secondItem="qHM-0d-Mhu" secondAttribute="baseline" type="default" id="zKA-QZ-jSN"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="GQy-Ho-TYF"/>
+                    <navigationItem key="navigationItem" title="Close Up" id="GQy-Ho-TYF"/>
                     <connections>
                         <outlet property="coordinatesLabel" destination="VN4-MK-Mh6" id="rqg-7W-QD6"/>
                         <outlet property="cosmicStampView" destination="4u6-k5-ZuG" id="XDW-2s-wiD"/>
