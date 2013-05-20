@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CosmicStampView.h"
 
 @interface CosmicCell : UICollectionViewCell
-- (void)setImage:(UIImage *)image;
+- (void)setStamp:(Stamp *)stamp;
 @end

@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#include "Stamp.h"
 
 @interface CosmicStampView : UIView
+@property (nonatomic) Stamp *stamp;
 @end

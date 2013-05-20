@@ -10,6 +10,14 @@
 
 @implementation CosmicStampView
 
+#pragma mark - Setters/Getters
+
+- (void)setStamp:(Stamp *)stamp
+{
+    _stamp = stamp;
+    [self setNeedsDisplay];
+}
+
 #pragma mark - Initialization
 
 - (void)awakeFromNib
@@ -28,16 +36,49 @@
 
 - (void)setup
 {
-    
+    //do nothing
 }
 
-/*
+#pragma mark - Custom Drawing
+
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect
 {
     // Drawing code
+    int stampWidthInPixels = (2*STAMP_SIZE+1);
+    int stampHeightInPixels = (2*STAMP_SIZE+1);
+    
+    UInt8 *rgbPointer = self.stamp->rgb;
+        
+    for(int x=0; x<stampHeightInPixels; ++x){
+        for(int y=0; y<stampWidthInPixels; ++y){
+            UInt8 red = *rgbPointer++;
+            UInt8 green = *rgbPointer++;
+            UInt8 blue = *rgbPointer++;
+            [self drawPixelWithX:x withY:y andR:red andG:green andB:blue];
+        }
+        //return
+    }
 }
-*/
+
+#define MAX_COLOR 255
+- (void) drawPixelWithX:(int)x withY:(int)y andR:(UInt8)red andG:(UInt8)green andB:(UInt8)blue
+{
+    //Note: will distort if bounds are not square
+    CGFloat max_x = self.bounds.origin.x + self.bounds.size.width;
+    CGFloat max_y = self.bounds.origin.y + self.bounds.size.height;
+    
+    int stampWidthInPixels = (2*STAMP_SIZE+1);
+    int stampHeightInPixels = (2*STAMP_SIZE+1);
+    
+    CGFloat pixelWidth = max_x / stampWidthInPixels;
+    CGFloat pixelHeight = max_y / stampHeightInPixels;
+    
+    CGRect pixel = CGRectMake(x*pixelWidth, y*pixelHeight, pixelWidth, pixelHeight);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [[UIColor colorWithRed:red/MAX_COLOR green:green/MAX_COLOR blue:blue/MAX_COLOR alpha:1.0] setFill];
+    CGContextFillRect(context, pixel);
+}
 
 @end

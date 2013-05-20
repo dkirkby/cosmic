@@ -9,22 +9,21 @@
 #import "CosmicCell.h"
 
 @interface CosmicCell ()
-@property (strong, nonatomic) UIImageView *cellImage;
+@property (strong, nonatomic) CosmicStampView *cosmicStampView;
 @end
 
 @implementation CosmicCell
 
-- (UIImageView *)cellImage
+- (CosmicStampView *)cosmicStampView
 {
-    if(!_cellImage) _cellImage = [[UIImageView alloc] initWithFrame:self.bounds];
-    return _cellImage;
+    if(!_cosmicStampView) _cosmicStampView = [[CosmicStampView alloc] initWithFrame:self.bounds];
+    return _cosmicStampView;
 }
 
-- (void)setImage:(UIImage *)image
+- (void)setStamp:(Stamp *)stamp
 {
-    self.cellImage.image = nil;
-    self.cellImage.contentMode = UIViewContentModeScaleAspectFill;
-    self.cellImage.image = image;
+    self.cosmicStampView.stamp = nil;
+    self.cosmicStampView.stamp = stamp;
 }
 
 - (void)awakeFromNib
@@ -43,8 +42,8 @@
 
 - (void)setup
 {
-    [self addSubview:self.cellImage];
-    self.cellImage.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
+    [self addSubview:self.cosmicStampView];
+    self.cosmicStampView.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
 }
 
 /*
