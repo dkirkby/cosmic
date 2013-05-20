@@ -13,7 +13,7 @@
 #define VERBOSE NO
 
 #define STAMP_SIZE 7
-#define MIN_INTENSITY 128
+#define MIN_INTENSITY 64
 #define MAX_REPEATS 2
 
 typedef enum {
@@ -22,10 +22,23 @@ typedef enum {
     RUNNING
 } CosmicState;
 
+typedef struct {
+    // milliseconds since program started, wraps around after 49.7 days
+    uint32_t elapsedMSecs;
+    // index = y*width+x of stamp's central pixel with largest R+2*G+B
+    uint32_t maxPixelIndex;
+    // exposure counter for this stamp (starting from zero)
+    uint32_t exposureCount;
+    // RGB byte data starting from sensor's top-right corner (with phone in portrait orientation)
+    // and increasing fastest down the sensor.
+    uint8_t rgb[3*(2*STAMP_SIZE+1)*(2*STAMP_SIZE+1)];
+} Stamp;
+
 @interface CosmicBrain () {
     unsigned char *_pixelCount;
     NSDate *_beginAt;
     NSTimeInterval _captureElapsed;
+    Stamp *_theStamp;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -215,7 +228,10 @@ typedef enum {
             int countSize = sizeof(unsigned char)*width*height;
             _pixelCount = malloc(countSize);
             bzero(_pixelCount,countSize);
-            NSLog(@"Initialized for %ld x %ld images",width,height);
+            // Allocate the stamp buffer we will use
+            if(!_theStamp) free(_theStamp);
+            _theStamp = malloc(sizeof(Stamp));
+            NSLog(@"Initialized for %ld x %ld images and %d x %d stamps (%ld bytes)",width,height,2*STAMP_SIZE+1,2*STAMP_SIZE+1,sizeof(Stamp));
             _beginAt = [timestamp copy];
             _captureElapsed = 0;
             self.state = RUNNING;
@@ -244,25 +260,41 @@ typedef enum {
             // Did we find a candidate in this exposure?
             if(maxIndex != lastIndex) {
                 
+                // Update our counts for this pixel
+                _pixelCount[maxIndex]++;
+                
                 // Convert the candidate index back to (x,y) coordinates in the raw image
                 int maxX = maxIndex%width;
                 int maxY = maxIndex/width;
 
-                // Create a unique string identifier for this capture
-                NSString *identifier = [[NSString alloc] initWithFormat:@"stamp_%06d_%@_%04d-%04d",self.exposureCount,[self.timestampFormatter stringFromDate:timestamp],maxX,maxY];
-                NSLog(@"Found max intensity %d at %@",maxIntensity,identifier);
-                
-                // Update our counts for this pixel
-                _pixelCount[maxIndex]++;
-                
-                // Save a stamp centered (as far as possible) around maxX,maxY
+                // Calculate stamp bounds [x1,y1]-[x2,y2] that are centered (as far as possible)
+                // around maxX,maxY
                 int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
                 if(x1 < 0) { x1 = 0; x2 = 2*STAMP_SIZE; }
                 else if(x2 >= width) { x2 = width-1; x1 = width - 2*STAMP_SIZE - 1; }
                 int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
                 if(y1 < 0) { y1 = 0; y2 = 2*STAMP_SIZE; }
                 else if(y2 >= height) { y2 = height-1; y1 = height - 2*STAMP_SIZE - 1; }
-                [self saveImageDataWithIdentifier:identifier Width:2*STAMP_SIZE+1 Height:2*STAMP_SIZE+1 AtLeftEdge:x1 TopEdge:y1 FromRawData:rawImageBytes WithRawWidth:width RawHeight:height];
+
+                // Fill in our Stamp structure
+                _theStamp->elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
+                _theStamp->maxPixelIndex = maxIndex;
+                _theStamp->exposureCount = self.exposureCount;
+                uint8_t *rgbPtr = _theStamp->rgb;
+                uint32_t *rawPtr = (uint32_t*)rawImageBytes + y1*width + x1;
+                for(int y = 0; y < 2*STAMP_SIZE+1; ++y) {
+                    for(int x = 0; x < 2*STAMP_SIZE+1; ++x) {
+                        uint32_t raw = rawPtr[x]; // raw = AABBGGRR
+                        *rgbPtr++ = (raw & 0xff); // Red
+                        *rgbPtr++ = (raw & 0xff00) >> 8; // Green
+                        *rgbPtr++ = (raw & 0xff0000) >> 16; // Blue
+                    }
+                    rawPtr += width;
+                }
+                
+                // Save our Stamp structure to disk
+                NSString *filename = [[NSString alloc] initWithFormat:@"stamp_%@.dat",[self.timestampFormatter stringFromDate:timestamp]];
+                [self saveStampToFilename:filename];
             }
             // Save fixed sub-image in first exposure, for debugging
             if(false && self.exposureCount == 0) {
@@ -358,6 +390,27 @@ typedef enum {
         fprintf(out,"\n");
         rawPtr += rawWidth;
     }
+    fclose(out);
+}
+
+- (void) saveStampToFilename:(NSString*)filename {
+/**
+    NSLog(@"Saving stamp: elapsed = %u, index = %u, count = %u",_theStamp->elapsedMSecs,_theStamp->maxPixelIndex,_theStamp->exposureCount);
+    uint8_t *ptr = _theStamp->rgb;
+    for(int y = 0; y < 2*STAMP_SIZE+1; ++y) {
+        for(int x = 0; x < 2*STAMP_SIZE+1; ++x) {
+            uint8_t R= *ptr++, G = *ptr++, B = *ptr++;
+            NSLog(@"[%2d,%2d] = (%3d,%3d,%3d) %4d",x,y,R,G,B,R+2*G+B);
+        }
+    }
+**/
+    // Generate the filename for this stamp
+    NSURL *docsDirectory = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+    const char *fullName = [[[docsDirectory URLByAppendingPathComponent:filename] path] cStringUsingEncoding:NSASCIIStringEncoding];
+
+    // Save the stamp in binary format
+    FILE *out = fopen(fullName,"wb");
+    fwrite(_theStamp, sizeof(Stamp), 1, out);
     fclose(out);
 }
 
