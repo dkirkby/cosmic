@@ -92,22 +92,22 @@ typedef struct {
         // Look up this camera's capabilities
         BOOL exposureLock = [device isExposureModeSupported:AVCaptureExposureModeLocked];
         BOOL focusLock = [device isFocusModeSupported:AVCaptureFocusModeLocked];
-        if(VERBOSE) NSLog(@"Found '%@' (exposure lock? %s; focus lock? %s)",device.localizedName,
+        NSLog(@"Found '%@' (exposure lock? %s; focus lock? %s)",device.localizedName,
               (exposureLock ? "yes":"no"),(focusLock ? "yes":"no"));
         // Is this the best so far?
         if(!self.bestDevice && exposureLock) self.bestDevice = device;
     }
     if(nil == self.bestDevice) {
-        if(VERBOSE) NSLog(@"PANIC: no suitable camera device available!");
+        NSLog(@"PANIC: no suitable camera device available!");
         return;
     }
-    if(VERBOSE) NSLog(@"Using '%@' to capture images.",self.bestDevice.localizedName);
+    NSLog(@"Using '%@' to capture images.",self.bestDevice.localizedName);
     // Configure a capture session using the best device.
     NSError *error = nil;
     AVCaptureDeviceInput *input =
         [AVCaptureDeviceInput deviceInputWithDevice:self.bestDevice error:&error];
     if(!input) {
-        if(VERBOSE) NSLog(@"PANIC: failed to configure device input!");
+        NSLog(@"PANIC: failed to configure device input!");
         return;
     }
     [self.captureSession addInput:input];
@@ -138,27 +138,27 @@ typedef struct {
         CGPoint center = CGPointMake(0.5,0.5);
         if([self.bestDevice isFocusPointOfInterestSupported]) {
             [self.bestDevice setFocusPointOfInterest:center];
-            if(VERBOSE) NSLog(@"Set focus point of interest.");
+            NSLog(@"Set focus point of interest.");
         }
         if([self.bestDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
             [self.bestDevice setFocusMode:AVCaptureFocusModeAutoFocus];
-            if(VERBOSE) NSLog(@"Autofocus successful.");
+            NSLog(@"Autofocus successful.");
         }
         else if([self.bestDevice isFocusModeSupported:AVCaptureFocusModeLocked]) {
             [self.bestDevice setFocusMode:AVCaptureFocusModeLocked];
-            if(VERBOSE) NSLog(@"Focus lock successful.");
+            NSLog(@"Focus lock successful.");
         }
         if([self.bestDevice isExposurePointOfInterestSupported]) {
             [self.bestDevice setExposurePointOfInterest:center];
-            if(VERBOSE) NSLog(@"Set exposure point of interest.");
+            NSLog(@"Set exposure point of interest.");
         }
         if([self.bestDevice isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
             [self.bestDevice setExposureMode:AVCaptureExposureModeAutoExpose];
-            if(VERBOSE) NSLog(@"Autoexposure successful.");
+            NSLog(@"Autoexposure successful.");
         }
         else if([self.bestDevice isExposureModeSupported:AVCaptureExposureModeLocked]) {
             [self.bestDevice setExposureMode:AVCaptureExposureModeLocked];
-            if(VERBOSE) NSLog(@"Exposure lock successful.");
+            NSLog(@"Exposure lock successful.");
         }
         [self.bestDevice unlockForConfiguration];
         // Initialize our state
@@ -168,7 +168,7 @@ typedef struct {
         [self captureImage];
     }
     else {
-        if(VERBOSE) NSLog(@"PANIC: cannot lock device for exposure and focus configuration.");
+        NSLog(@"PANIC: cannot lock device for exposure and focus configuration.");
         return;
     }
 }
@@ -177,7 +177,7 @@ typedef struct {
 
 - (void) captureImage {
     if(self.state == IDLE) {
-        if(VERBOSE) NSLog(@"Cannot captureImage before beginImage.");
+        NSLog(@"Cannot captureImage before beginImage.");
         return;
     }
     if(VERBOSE) NSLog(@"capturing image in state %d...",self.state);
