@@ -71,9 +71,11 @@
 {
     Stamp buffer;
     NSValue *stampWrapper = [self.brain.cosmicStamps lastObject];
-    [stampWrapper getValue:&buffer];
-    NSLog(@"Cosmic Stamp: %u", buffer.exposureCount);
-    [self.collectionView reloadData];
+    if(stampWrapper){
+        [stampWrapper getValue:&buffer];
+        NSLog(@"Cosmic Stamp: %u", buffer.exposureCount);
+        [self.collectionView reloadData];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -83,9 +85,19 @@
     return self.brain.cosmicStamps.count;
 }
 
-- (UIImage *)imageForIndexPath:(NSIndexPath *)indexPath
+- (Stamp)stampForindexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    NSValue *stampWrapper = self.brain.cosmicStamps[indexPath.item];
+    if(stampWrapper){
+        
+        Stamp buffer;
+        [stampWrapper getValue:&buffer];
+        
+        return buffer;
+    }
+    
+    Stamp bad;
+    return bad;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -95,7 +107,7 @@
     
     if(!cell) NSLog(@"Error: No Cell");
     
-    [cell setImage:[self imageForIndexPath:indexPath]];
+    [cell setStamp:[self stampForindexPath:indexPath]];
     
     return cell;
 }

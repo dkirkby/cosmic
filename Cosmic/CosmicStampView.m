@@ -12,7 +12,7 @@
 
 #pragma mark - Setters/Getters
 
-- (void)setStamp:(Stamp *)stamp
+- (void)setStamp:(Stamp)stamp
 {
     _stamp = stamp;
     [self setNeedsDisplay];
@@ -49,7 +49,7 @@
     int stampWidthInPixels = (2*STAMP_SIZE+1);
     int stampHeightInPixels = (2*STAMP_SIZE+1);
     
-    UInt8 *rgbPointer = self.stamp->rgb;
+    UInt8 *rgbPointer = self.stamp.rgb;
         
     for(int x=0; x<stampHeightInPixels; ++x){
         for(int y=0; y<stampWidthInPixels; ++y){
