@@ -215,7 +215,10 @@ typedef enum {
             int countSize = sizeof(unsigned char)*width*height;
             _pixelCount = malloc(countSize);
             bzero(_pixelCount,countSize);
-            NSLog(@"Initialized for %ld x %ld images and %d x %d stamps (%ld bytes)",width,height,2*STAMP_SIZE+1,2*STAMP_SIZE+1,sizeof(Stamp));
+            
+            //now we just use lazy instantiation
+            //NSLog(@"Initialized for %ld x %ld images and %d x %d stamps (%ld bytes)",width,height,2*STAMP_SIZE+1,2*STAMP_SIZE+1,sizeof(Stamp));
+            
             _beginAt = [timestamp copy];
             _captureElapsed = self.saveCount = 0;
             self.state = RUNNING;
