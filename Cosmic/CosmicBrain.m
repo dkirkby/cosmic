@@ -9,6 +9,7 @@
 #import "CosmicBrain.h"
 #import <AVFoundation/AVFoundation.h>
 #import <ImageIO/ImageIO.h>
+#import "CosmicStamp.h"
 
 #define VERBOSE NO
 
@@ -25,7 +26,6 @@ typedef enum {
     unsigned char *_pixelCount;
     NSDate *_beginAt;
     NSTimeInterval _captureElapsed;
-    Stamp *_theStamp;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -45,12 +45,6 @@ typedef enum {
 {
     if(!_cosmicStamps) _cosmicStamps = [[NSMutableArray alloc] init];
     return _cosmicStamps;
-}
-
-- (NSMutableArray *)cosmicStampPointers
-{
-    if(!_cosmicStampPointers) _cosmicStampPointers = [[NSMutableArray alloc] init];
-    return _cosmicStampPointers;
 }
 
 - (NSDateFormatter*)timestampFormatter
@@ -221,9 +215,6 @@ typedef enum {
             int countSize = sizeof(unsigned char)*width*height;
             _pixelCount = malloc(countSize);
             bzero(_pixelCount,countSize);
-            // Allocate the stamp buffer we will use
-            if(!_theStamp) free(_theStamp);
-            _theStamp = malloc(sizeof(Stamp));
             NSLog(@"Initialized for %ld x %ld images and %d x %d stamps (%ld bytes)",width,height,2*STAMP_SIZE+1,2*STAMP_SIZE+1,sizeof(Stamp));
             _beginAt = [timestamp copy];
             _captureElapsed = self.saveCount = 0;
@@ -269,11 +260,13 @@ typedef enum {
                 if(y1 < 0) { y1 = 0; y2 = 2*STAMP_SIZE; }
                 else if(y2 >= height) { y2 = height-1; y1 = height - 2*STAMP_SIZE - 1; }
 
-                // Fill in our Stamp structure
-                _theStamp.elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
-                _theStamp.maxPixelIndex = maxIndex;
-                _theStamp.exposureCount = self.exposureCount;
-                uint8_t *rgbPtr = _theStamp.rgb;
+                // Create our Stamp structure
+                CosmicStamp *stamp = [[CosmicStamp alloc] init];
+                stamp.elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
+                stamp.maxPixelIndex = maxIndex;
+                stamp.exposureCount = self.exposureCount;
+                uint8_t *rgbPtr = stamp.rgb;
+                
                 uint32_t *rawPtr = (uint32_t*)rawImageBytes + y1*width + x1;
                 for(int y = 0; y < 2*STAMP_SIZE+1; ++y) {
                     for(int x = 0; x < 2*STAMP_SIZE+1; ++x) {
@@ -287,14 +280,8 @@ typedef enum {
                 
                 // Save our Stamp structure to disk
                 NSString *filename = [[NSString alloc] initWithFormat:@"stamp_%@.dat",[self.timestampFormatter stringFromDate:timestamp]];
-                [self saveStampToFilename:filename];
-                [self.cosmicStamps addObject:[NSValue valueWithBytes:_theStamp objCType:@encode(Stamp)]];
-                
-                
-                NSValue *cosmicStamp = [self.cosmicStamps lastObject];
-                Stamp buffer;
-                [cosmicStamp getValue:buffer];
-                
+                [self saveStamp:stamp ToFilename:filename];
+                [self.cosmicStamps addObject:stamp];      ////////////
                 
                 self.saveCount++;
             }
@@ -395,7 +382,7 @@ typedef enum {
     fclose(out);
 }
 
-- (void) saveStampToFilename:(NSString*)filename {
+- (void) saveStamp:(CosmicStamp*)stamp ToFilename:(NSString*)filename {
 /**
     NSLog(@"Saving stamp: elapsed = %u, index = %u, count = %u",_theStamp->elapsedMSecs,_theStamp->maxPixelIndex,_theStamp->exposureCount);
     uint8_t *ptr = _theStamp->rgb;
@@ -412,7 +399,18 @@ typedef enum {
 
     // Save the stamp in binary format
     FILE *out = fopen(fullName,"wb");
-    fwrite(_theStamp, sizeof(Stamp), 1, out);
+    uint32_t buffer;
+    buffer = stamp.elapsedMSecs;
+    fwrite(&buffer, sizeof(uint32_t), 1, out);
+    
+    buffer = stamp.maxPixelIndex;
+    fwrite(&buffer, sizeof(uint32_t), 1, out);
+    
+    buffer = stamp.exposureCount;
+    fwrite(&buffer, sizeof(uint32_t), 1, out);
+    
+    fwrite(stamp.rgb, sizeof(uint8_t), [CosmicStamp rgbSize], out);
+
     fclose(out);
 }
 

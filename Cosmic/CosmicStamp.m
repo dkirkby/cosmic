@@ -10,4 +10,18 @@
 
 @implementation CosmicStamp
 
+#pragma mark - Setters/Getters
+
+- (uint8_t *)rgb
+{
+    //contents of returned array are undefined
+    if(!_rgb) _rgb = malloc([[self class] rgbSize]);
+    return _rgb;
+}
+
++ (size_t)rgbSize
+{
+    return 3*(2*STAMP_SIZE+1)*(2*STAMP_SIZE+1);
+}
+
 @end

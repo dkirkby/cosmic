@@ -19,7 +19,6 @@
 @interface CosmicBrain : NSObject
 
 @property (strong, nonatomic) NSMutableArray *cosmicStamps;
-@property (strong, nonatomic) NSMutableArray *cosmicStampPointers;
 
 @property(nonatomic,assign) id <CosmicBrainDelegate> brainDelegate;
 
