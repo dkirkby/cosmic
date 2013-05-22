@@ -230,7 +230,6 @@
             <relationships>
                 <relationship kind="action" name="buttonSwipedDown:" candidateClass="UIGestureRecognizer"/>
                 <relationship kind="action" name="buttonSwipedUp:" candidateClass="UIGestureRecognizer"/>
-                <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="imageViewTapped:" candidateClass="UIGestureRecognizer"/>
                 <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
                 <relationship kind="outlet" name="exposureCountLabel" candidateClass="UILabel"/>
@@ -248,9 +247,6 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
