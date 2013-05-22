@@ -10,5 +10,5 @@
 #import "CosmicStampView.h"
 
 @interface CosmicStampViewController : UIViewController
-- (void)setStamp:(Stamp)stamp;
+- (void)setStamp:(CosmicStamp *)stamp;
 @end

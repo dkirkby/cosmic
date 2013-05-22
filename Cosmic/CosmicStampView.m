@@ -17,7 +17,7 @@
 
 #pragma mark - Setters/Getters
 
-- (void)setStamp:(Stamp)stamp
+- (void)setStamp:(CosmicStamp *)stamp
 {
     _stamp = stamp;
     [self pruneStamp];
