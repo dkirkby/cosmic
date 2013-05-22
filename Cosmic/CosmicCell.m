@@ -20,7 +20,7 @@
     return _cosmicStampView;
 }
 
-- (void)setStamp:(Stamp)stamp
+- (void)setStamp:(CosmicStamp *)stamp
 {
     self.cosmicStampView.stamp = stamp;
 }

@@ -233,7 +233,6 @@
             <relationships>
                 <relationship kind="action" name="buttonSwipedDown:" candidateClass="UIGestureRecognizer"/>
                 <relationship kind="action" name="buttonSwipedUp:" candidateClass="UIGestureRecognizer"/>
-                <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
                 <relationship kind="action" name="imageViewTapped:" candidateClass="UIGestureRecognizer"/>
                 <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
                 <relationship kind="outlet" name="exposureCountLabel" candidateClass="UILabel"/>

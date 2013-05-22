@@ -64,7 +64,7 @@
     static NSString *identifier = @"showCosmicStamp";
     if([segue.identifier isEqualToString:identifier]){
         if([segue.destinationViewController isKindOfClass:[CosmicStampViewController class]]){
-            Stamp stamp = [self stampForindexPath:[self.collectionView indexPathForCell:sender]];
+            CosmicStamp *stamp = [self stampForindexPath:[self.collectionView indexPathForCell:sender]];
             CosmicStampViewController *csvc = (CosmicStampViewController *)segue.destinationViewController;
             [csvc setStamp:stamp];
         }
@@ -87,13 +87,7 @@
 
 - (void)stampAdded
 {
-    Stamp buffer;
-    NSValue *stampWrapper = [self.brain.cosmicStamps lastObject];
-    if(stampWrapper){
-        [stampWrapper getValue:&buffer];
-        NSLog(@"Cosmic Stamp: %u", buffer.exposureCount);
-        [self.collectionView reloadData];
-    }
+    [self.collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -103,19 +97,9 @@
     return self.brain.cosmicStamps.count;
 }
 
-- (Stamp)stampForindexPath:(NSIndexPath *)indexPath
+- (CosmicStamp *)stampForindexPath:(NSIndexPath *)indexPath
 {
-    NSValue *stampWrapper = self.brain.cosmicStamps[indexPath.item];
-    if(stampWrapper){
-        
-        Stamp buffer;
-        [stampWrapper getValue:&buffer];
-        
-        return buffer;
-    }
-    
-    Stamp bad;
-    return bad;
+    return self.brain.cosmicStamps[indexPath.item];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
