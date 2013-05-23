@@ -62,7 +62,6 @@
 		FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cosmic_icon@2x.png"; path = "../cosmic_icon@2x.png"; sourceTree = "<group>"; };
 		FC9249D9174A3B520094DFB4 /* CosmicStampView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicStampView.h; sourceTree = "<group>"; };
 		FC9249DA174A3B520094DFB4 /* CosmicStampView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicStampView.m; sourceTree = "<group>"; };
-		FC9249DC174A41350094DFB4 /* Stamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stamp.h; sourceTree = "<group>"; };
 		FC9249DD174A63C60094DFB4 /* CosmicStampViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicStampViewController.h; sourceTree = "<group>"; };
 		FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicStampViewController.m; sourceTree = "<group>"; };
 		FC9249E0174A79340094DFB4 /* CosmicStamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicStamp.h; sourceTree = "<group>"; };
@@ -125,7 +124,6 @@
 			children = (
 				6398F40D16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard */,
 				6398F41016EE67FB00296AC3 /* MainStoryboard_iPad.storyboard */,
-				FC9249DC174A41350094DFB4 /* Stamp.h */,
 				FC9249E0174A79340094DFB4 /* CosmicStamp.h */,
 				FC9249E1174A79340094DFB4 /* CosmicStamp.m */,
 				6398F41F16EE6D6D00296AC3 /* CosmicBrain.h */,

@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "Stamp.h" 
 
 @class CosmicBrain;
 
