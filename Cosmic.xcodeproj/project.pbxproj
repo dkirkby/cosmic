@@ -28,6 +28,10 @@
 		FC9249DB174A3B520094DFB4 /* CosmicStampView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DA174A3B520094DFB4 /* CosmicStampView.m */; };
 		FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */; };
 		FC9249E2174A79350094DFB4 /* CosmicStamp.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249E1174A79340094DFB4 /* CosmicStamp.m */; };
+		FCA3F2A3174E6D4E00B98537 /* cosmic_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4278174298BB0029EB1C /* cosmic_icon.png */; };
+		FCA3F2A4174E6D5100B98537 /* cosmic_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */; };
+		FCA3F2AA174E6E0E00B98537 /* cosmic_icon_ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA3F2A9174E6E0E00B98537 /* cosmic_icon_ipad.png */; };
+		FCA3F2AC174E6E1100B98537 /* cosmic_icon_ipad@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FCA3F2AB174E6E1100B98537 /* cosmic_icon_ipad@2x.png */; };
 		FCF707C317452ECA00BC0D53 /* CosmicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF707C217452ECA00BC0D53 /* CosmicCell.m */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +68,8 @@
 		FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicStampViewController.m; sourceTree = "<group>"; };
 		FC9249E0174A79340094DFB4 /* CosmicStamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicStamp.h; sourceTree = "<group>"; };
 		FC9249E1174A79340094DFB4 /* CosmicStamp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicStamp.m; sourceTree = "<group>"; };
+		FCA3F2A9174E6E0E00B98537 /* cosmic_icon_ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cosmic_icon_ipad.png; path = ../cosmic_icon_ipad.png; sourceTree = "<group>"; };
+		FCA3F2AB174E6E1100B98537 /* cosmic_icon_ipad@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cosmic_icon_ipad@2x.png"; path = "../cosmic_icon_ipad@2x.png"; sourceTree = "<group>"; };
 		FCF707C117452ECA00BC0D53 /* CosmicCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosmicCell.h; sourceTree = "<group>"; };
 		FCF707C217452ECA00BC0D53 /* CosmicCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosmicCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -144,9 +150,11 @@
 		6398F3FC16EE67FB00296AC3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				FC6F4272174296C20029EB1C /* cosmos.png */,
+				FCA3F2AB174E6E1100B98537 /* cosmic_icon_ipad@2x.png */,
+				FCA3F2A9174E6E0E00B98537 /* cosmic_icon_ipad.png */,
 				FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */,
 				FC6F4278174298BB0029EB1C /* cosmic_icon.png */,
+				FC6F4272174296C20029EB1C /* cosmos.png */,
 				6398F3FD16EE67FB00296AC3 /* Cosmic-Info.plist */,
 				6398F3FE16EE67FB00296AC3 /* InfoPlist.strings */,
 				6398F40116EE67FB00296AC3 /* main.m */,
@@ -217,6 +225,10 @@
 				6398F40F16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard in Resources */,
 				6398F41216EE67FB00296AC3 /* MainStoryboard_iPad.storyboard in Resources */,
 				FC6F4273174296C20029EB1C /* cosmos.png in Resources */,
+				FCA3F2A3174E6D4E00B98537 /* cosmic_icon.png in Resources */,
+				FCA3F2A4174E6D5100B98537 /* cosmic_icon@2x.png in Resources */,
+				FCA3F2AA174E6E0E00B98537 /* cosmic_icon_ipad.png in Resources */,
+				FCA3F2AC174E6E1100B98537 /* cosmic_icon_ipad@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
