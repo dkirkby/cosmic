@@ -25,8 +25,6 @@
 		63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2C1700DA60004C5021 /* CoreVideo.framework */; };
 		63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2E1700E73C004C5021 /* ImageIO.framework */; };
 		FC6F4273174296C20029EB1C /* cosmos.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4272174296C20029EB1C /* cosmos.png */; };
-		FC6F4279174298BB0029EB1C /* cosmic_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4278174298BB0029EB1C /* cosmic_icon.png */; };
-		FC6F427B174298C20029EB1C /* cosmic_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */; };
 		FC9249DB174A3B520094DFB4 /* CosmicStampView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DA174A3B520094DFB4 /* CosmicStampView.m */; };
 		FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */; };
 		FC9249E2174A79350094DFB4 /* CosmicStamp.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249E1174A79340094DFB4 /* CosmicStamp.m */; };
@@ -219,8 +217,6 @@
 				6398F40F16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard in Resources */,
 				6398F41216EE67FB00296AC3 /* MainStoryboard_iPad.storyboard in Resources */,
 				FC6F4273174296C20029EB1C /* cosmos.png in Resources */,
-				FC6F4279174298BB0029EB1C /* cosmic_icon.png in Resources */,
-				FC6F427B174298C20029EB1C /* cosmic_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

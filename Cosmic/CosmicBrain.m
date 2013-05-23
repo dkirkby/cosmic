@@ -284,7 +284,12 @@ typedef enum {
                 // Save our Stamp structure to disk
                 NSString *filename = [[NSString alloc] initWithFormat:@"stamp_%@.dat",[self.timestampFormatter stringFromDate:timestamp]];
                 [self saveStamp:stamp ToFilename:filename];
-                [self.cosmicStamps addObject:stamp];      ////////////
+                [self.cosmicStamps addObject:stamp];
+                
+                //Try only calling delegate method here
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.brainDelegate stampAdded];
+                });
                 
                 self.saveCount++;
             }
@@ -306,9 +311,7 @@ typedef enum {
         // Update our delegate on the UI thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.brainDelegate setExposureCount:self.exposureCount];
-            [self.brainDelegate stampAdded];
             [self captureImage];
-
         });
     }];
 }

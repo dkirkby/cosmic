@@ -13,10 +13,7 @@
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
 			<key>CFBundleIconFiles</key>
-			<array>
-				<string>cosmic_icon.png</string>
-				<string>cosmic_icon@2x.png</string>
-			</array>
+			<array/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>

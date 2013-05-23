@@ -87,7 +87,10 @@
 
 - (void)stampAdded
 {
-    [self.collectionView reloadData];
+    NSArray *indexPaths = @[[NSIndexPath indexPathForItem:self.brain.cosmicStamps.count-1 inSection:0]];
+    [self.collectionView insertItemsAtIndexPaths:indexPaths];
+    //see if it auto reloads
+    //[self.collectionView reloadItemsAtIndexPaths:indexPaths];
 }
 
 #pragma mark - UICollectionViewDataSource
