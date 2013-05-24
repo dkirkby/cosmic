@@ -36,80 +36,22 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" alpha="0.84999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EUX-7s-8dh">
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="82" id="DiL-e7-Ahs"/>
-                                    <constraint firstAttribute="width" constant="224" id="bLN-oT-ZWc"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="GO" image="cosmos.png">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="goButtonPressed:" destination="2" eventType="touchUpInside" id="zZd-Bg-hAx"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.84999999999999998" contentMode="left" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zuk-KX-IVm">
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="96" id="h3j-Ei-hvW"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="6AZ-Q1-yjU" appends="YES" id="9Jo-fu-4ji"/>
-                                </connections>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="EUX-7s-8dh" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="9BT-5Z-eea"/>
                             <constraint firstItem="hKD-O5-IMn" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="L4H-Gz-qnn"/>
-                            <constraint firstItem="zuk-KX-IVm" firstAttribute="top" secondItem="EUX-7s-8dh" secondAttribute="top" type="default" id="Q5d-iF-bnD"/>
                             <constraint firstItem="hKD-O5-IMn" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="RXE-r8-iTf"/>
-                            <constraint firstItem="zuk-KX-IVm" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="msX-HY-g3T"/>
                             <constraint firstItem="hKD-O5-IMn" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="rwM-nG-Evc"/>
-                            <constraint firstItem="EUX-7s-8dh" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="vIG-sq-U7k"/>
                             <constraint firstItem="hKD-O5-IMn" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="y04-Lr-GTa"/>
-                            <constraint firstItem="zuk-KX-IVm" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="zZQ-L4-LKY"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="eb4-jA-4ka" appends="YES" id="uyL-wG-U3J"/>
-                            <outletCollection property="gestureRecognizers" destination="FwX-Jl-Ws5" appends="YES" id="vhJ-iK-KLN"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Cosmic Rays" id="cxv-X9-jHZ"/>
                     <connections>
                         <outlet property="collectionView" destination="hKD-O5-IMn" id="6ue-4q-TLM"/>
-                        <outlet property="exposureCountLabel" destination="zuk-KX-IVm" id="1mZ-qW-WPX"/>
-                        <outlet property="goButton" destination="EUX-7s-8dh" id="grw-Hm-Lol"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4" sceneMemberID="firstResponder"/>
-                <swipeGestureRecognizer direction="down" id="eb4-jA-4ka">
-                    <connections>
-                        <action selector="buttonSwipedDown:" destination="2" id="um7-GJ-VP1"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <swipeGestureRecognizer direction="up" id="FwX-Jl-Ws5">
-                    <connections>
-                        <action selector="buttonSwipedUp:" destination="2" id="VYg-P5-OIs"/>
-                    </connections>
-                </swipeGestureRecognizer>
-                <tapGestureRecognizer id="6AZ-Q1-yjU">
-                    <connections>
-                        <action selector="imageViewTapped:" destination="2" id="ja3-cP-F5n"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="596" y="-11"/>
         </scene>
@@ -206,9 +148,6 @@
             <point key="canvasLocation" x="80" y="-11"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="cosmos.png" width="448" height="162"/>
-    </resources>
     <classes>
         <class className="CosmicCell" superclassName="UICollectionViewCell">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicCell.h"/>
@@ -228,13 +167,7 @@
         <class className="CosmicViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
             <relationships>
-                <relationship kind="action" name="buttonSwipedDown:" candidateClass="UIGestureRecognizer"/>
-                <relationship kind="action" name="buttonSwipedUp:" candidateClass="UIGestureRecognizer"/>
-                <relationship kind="action" name="goButtonPressed:" candidateClass="UIButton"/>
-                <relationship kind="action" name="imageViewTapped:" candidateClass="UIGestureRecognizer"/>
                 <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
-                <relationship kind="outlet" name="exposureCountLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="goButton" candidateClass="UIButton"/>
             </relationships>
         </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
