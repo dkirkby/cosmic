@@ -158,7 +158,6 @@
                         <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="VN4-MK-Mh6" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="0CT-3A-Ytj"/>
-                            <constraint firstAttribute="bottom" secondItem="4u6-k5-ZuG" secondAttribute="bottom" constant="140" id="0b7-68-v0m"/>
                             <constraint firstAttribute="trailing" secondItem="RgC-8P-5KG" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="4xm-ZT-VEC"/>
                             <constraint firstItem="qHM-0d-Mhu" firstAttribute="centerX" secondItem="4u6-k5-ZuG" secondAttribute="centerX" type="default" id="EAY-dl-fD4"/>
                             <constraint firstItem="jsW-bs-yKJ" firstAttribute="top" secondItem="MOP-8J-QJH" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="FBT-Jo-9fU"/>
@@ -172,6 +171,7 @@
                             <constraint firstItem="VN4-MK-Mh6" firstAttribute="centerX" secondItem="qHM-0d-Mhu" secondAttribute="centerX" type="default" id="oA8-gk-XKx"/>
                             <constraint firstAttribute="bottom" secondItem="RgC-8P-5KG" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="ogW-0v-tkZ"/>
                             <constraint firstItem="qHM-0d-Mhu" firstAttribute="baseline" secondItem="MOP-8J-QJH" secondAttribute="baseline" type="default" id="oxA-Ee-PIM"/>
+                            <constraint firstAttribute="bottom" secondItem="4u6-k5-ZuG" secondAttribute="bottom" constant="96" id="s7E-qx-2nL"/>
                             <constraint firstItem="Yfk-cM-NEA" firstAttribute="baseline" secondItem="qHM-0d-Mhu" secondAttribute="baseline" type="default" id="zKA-QZ-jSN"/>
                         </constraints>
                     </view>

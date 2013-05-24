@@ -22,7 +22,7 @@
 #define WIDTH 2592
 - (void)setStamp:(CosmicStamp *)stamp
 {
-    self.stamp = stamp;
+    _stamp = stamp;
 }
 
 - (void)viewDidLoad
