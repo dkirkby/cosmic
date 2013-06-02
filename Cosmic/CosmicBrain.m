@@ -87,6 +87,12 @@ typedef enum {
         // Get a pointer to our raw image data
         GLubyte *rawImageBytes = [rawDataOutput rawBytesForImage];
         
+        // Sanity check: dump first exposure as a full image
+        if(0 == self.exposureCount) {
+            UIImage *img = [self createUIImageWithWidth:_width Height:_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:_width RawHeight:_height];
+            [self saveImageToFilesystem:img withIdentifier:@"testing"];            
+        }
+        
         // Run the analysis algorithm
         // Loop over raw pixels to find the pixel with the largest intensity r+2*g+b
         unsigned int maxIntensity = MIN_INTENSITY;
@@ -505,7 +511,7 @@ typedef enum {
     NSError *writeError;
     [UIImagePNGRepresentation(image) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
     //[UIImageJPEGRepresentation(image,1.0) writeToURL:imageURL options:NSDataWritingAtomic error:&writeError];
-    if(VERBOSE) NSLog(@"Written To Filesystem at %@", imageURL);
+    NSLog(@"Written To Filesystem at %@", imageURL);
     if(writeError) NSLog(@"Write to Filesystem Error: %@", writeError.userInfo);    
 }
 
@@ -523,14 +529,14 @@ typedef enum {
     // Loop over rows to copy from the raw data into the image data array
     for(int y = 0; y < imageHeight; ++y) {
         memcpy(imgPtr,rawPtr,bytesPerImgRow);
-        
+        /**
         for(int x = 0; x < imageWidth; ++x) {
             unsigned int val = imgPtr[x];
             unsigned char R = (val & 0xff), G = (val & 0xff00) >> 8, B = (val & 0xff0000) >> 16, A = val>>24;
             unsigned int intensity = R+2*G+B;
             NSLog(@"dump (%d,%d) R=%d G=%d B=%d A=%d I=%d",x,y,R,G,B,A,intensity);
         }
-        
+        **/
         imgPtr += imageWidth;
         rawPtr += rawWidth;
     }
