@@ -69,7 +69,7 @@ typedef enum {
     _width = 1280;
     _height = 720;
     
-    _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    _videoCamera.outputImageOrientation = UIInterfaceOrientationLandscapeLeft;
     _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     _videoCamera.runBenchmark = NO;
