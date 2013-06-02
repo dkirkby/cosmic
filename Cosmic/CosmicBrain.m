@@ -62,8 +62,8 @@ typedef enum {
     if(VERBOSE) NSLog(@"initializing capture...");
     // Initialize a session with the photo preset
     self.captureSession = [[AVCaptureSession alloc] init];
-    if([self.captureSession canSetSessionPreset:AVCaptureSessionPresetPhoto]) {
-        self.captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
+    if([self.captureSession canSetSessionPreset:AVCaptureSessionPreset1280x720]) {
+        self.captureSession.sessionPreset = AVCaptureSessionPreset1280x720;
     }
     else {
         if(VERBOSE) NSLog(@"Failed to set the photo session preset!");
