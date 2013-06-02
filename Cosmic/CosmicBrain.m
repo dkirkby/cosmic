@@ -69,6 +69,7 @@ typedef enum {
     videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
     videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     videoCamera.horizontallyMirrorRearFacingCamera = NO;
+    videoCamera.runBenchmark = NO;
     
     filter = [[GPUImageSepiaFilter alloc] init];
     [videoCamera addTarget:filter];
@@ -78,7 +79,12 @@ typedef enum {
     [rawDataOutput setNewFrameAvailableBlock:^{
         // Get a timestamp for this capture
         NSDate *timestamp = [[NSDate alloc] init];
+        // Update our exposure counter
         self.exposureCount++;
+        
+        // Run the analysis algorithm
+        
+        // Print periodic status messages
         if(self.exposureCount % 10 == 0) {
             NSTimeInterval elapsed = [timestamp timeIntervalSinceDate:_beginAt];
             NSLog(@"fps = %.3f after %d exposures.",self.exposureCount/elapsed,self.exposureCount);
@@ -98,9 +104,51 @@ typedef enum {
 }
 
 - (void) beginCapture {
+    // Try to lock the exposure and focus.
+    NSError *error = nil;
+    AVCaptureDevice *device = videoCamera.inputCamera;
+    if([device lockForConfiguration:&error]) {
+        CGPoint center = CGPointMake(0.5,0.5);
+        if([device isFocusPointOfInterestSupported]) {
+            [device setFocusPointOfInterest:center];
+            NSLog(@"Set focus point of interest.");
+        }
+        if([device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+            [device setFocusMode:AVCaptureFocusModeAutoFocus];
+            NSLog(@"Autofocus successful.");
+        }
+        else if([device isFocusModeSupported:AVCaptureFocusModeLocked]) {
+            [device setFocusMode:AVCaptureFocusModeLocked];
+            NSLog(@"Focus lock successful.");
+        }
+        if([device isExposurePointOfInterestSupported]) {
+            [device setExposurePointOfInterest:center];
+            NSLog(@"Set exposure point of interest.");
+        }
+        if([device isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
+            [device setExposureMode:AVCaptureExposureModeAutoExpose];
+            NSLog(@"Autoexposure successful.");
+        }
+        else if([device isExposureModeSupported:AVCaptureExposureModeLocked]) {
+            [device setExposureMode:AVCaptureExposureModeLocked];
+            NSLog(@"Exposure lock successful.");
+        }
+        [device unlockForConfiguration];
+        // Initialize our state
+        self.state = BEGINNING;
+        self.exposureCount = self.saveCount = 0;
+        // Capture an initial calibration image
+        [self captureImage];
+    }
+    else {
+        NSLog(@"PANIC: cannot lock device for exposure and focus configuration.");
+        return;
+    }
+    // Initialize data for this run
     _beginAt = [[NSDate alloc] init];
     self.saveCount = 0;
     self.exposureCount = 0;
+    // Start the capture process running
     [videoCamera startCameraCapture];
 }
 
