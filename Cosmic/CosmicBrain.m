@@ -27,9 +27,10 @@ typedef enum {
     unsigned char *_pixelCount;
     NSDate *_beginAt;
     NSTimeInterval _captureElapsed;
-    GPUImageVideoCamera *videoCamera;
-    GPUImageFilter *filter;
-    GPUImageRawDataOutput *rawOutput;
+    int _width, _height;
+    GPUImageVideoCamera *_videoCamera;
+    GPUImageFilter *_filter;
+    GPUImageRawDataOutput *_rawOutput;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -64,30 +65,110 @@ typedef enum {
 
 - (void) initCapture {
     
-    videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1280x720 cameraPosition:AVCaptureDevicePositionBack];
+    _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1280x720 cameraPosition:AVCaptureDevicePositionBack];
+    _width = 1280;
+    _height = 720;
     
-    videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
-    videoCamera.horizontallyMirrorFrontFacingCamera = NO;
-    videoCamera.horizontallyMirrorRearFacingCamera = NO;
-    videoCamera.runBenchmark = NO;
+    _videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
+    _videoCamera.horizontallyMirrorRearFacingCamera = NO;
+    _videoCamera.runBenchmark = NO;
     
-    filter = [[GPUImageSepiaFilter alloc] init];
-    [videoCamera addTarget:filter];
+    _filter = [[GPUImageSepiaFilter alloc] init];
+    [_videoCamera addTarget:_filter];
     
     GPUImageRawDataOutput *rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
-    [filter addTarget:rawDataOutput];
+    [_filter addTarget:rawDataOutput];
     [rawDataOutput setNewFrameAvailableBlock:^{
+
         // Get a timestamp for this capture
         NSDate *timestamp = [[NSDate alloc] init];
-        // Update our exposure counter
-        self.exposureCount++;
+        
+        // Get a pointer to our raw image data
+        GLubyte *rawImageBytes = [rawDataOutput rawBytesForImage];
         
         // Run the analysis algorithm
+        // Loop over raw pixels to find the pixel with the largest intensity r+2*g+b
+        unsigned int maxIntensity = MIN_INTENSITY;
+        unsigned maxIndex = _width*_height, index = 0;
+        unsigned lastIndex = maxIndex;
+        unsigned int *bufptr = (unsigned int *)rawImageBytes;
+        unsigned char *countPtr = _pixelCount;
+        while(index < lastIndex) {
+            // get the next 32-bit word of pixel data and advance our buffer pointer
+            unsigned int val = *bufptr++;
+            // skip hot pixels
+            if(*countPtr++ < MAX_REPEATS) {
+                // val = (A << 24) | (B << 16) | (G << 8) | R
+                // we only shift G component by 7 so that it gets multiplied by 2
+                unsigned int intensity = ((val&0xff0000) >> 16) + ((val&0xff00) >> 7) + (val&0xff);
+                if(intensity > maxIntensity) {
+                    maxIntensity = intensity;
+                    maxIndex = index;
+                }
+            }
+            index++;
+        }
+
+        // Did we find a candidate in this exposure?
+        if(maxIndex != lastIndex) {
+            
+            // Update our counts for this pixel
+            _pixelCount[maxIndex]++;
+            
+            /***
+            // Convert the candidate index back to (x,y) coordinates in the raw image
+            int maxX = maxIndex%_width;
+            int maxY = maxIndex/_width;
+            
+            // Calculate stamp bounds [x1,y1]-[x2,y2] that are centered (as far as possible)
+            // around maxX,maxY
+            int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
+            if(x1 < 0) { x1 = 0; x2 = 2*STAMP_SIZE; }
+            else if(x2 >= _width) { x2 = _width-1; x1 = _width - 2*STAMP_SIZE - 1; }
+            int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
+            if(y1 < 0) { y1 = 0; y2 = 2*STAMP_SIZE; }
+            else if(y2 >= _height) { y2 = _height-1; y1 = _height - 2*STAMP_SIZE - 1; }
+            
+            // Create our Stamp structure
+            CosmicStamp *stamp = [[CosmicStamp alloc] init];
+            stamp.elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
+            stamp.maxPixelIndex = maxIndex;
+            stamp.exposureCount = self.exposureCount;
+            uint8_t *rgbPtr = stamp.rgb;
+            
+            uint32_t *rawPtr = (uint32_t*)rawImageBytes + y1*_width + x1;
+            for(int y = 0; y < 2*STAMP_SIZE+1; ++y) {
+                for(int x = 0; x < 2*STAMP_SIZE+1; ++x) {
+                    uint32_t raw = rawPtr[x]; // raw = AABBGGRR
+                    *rgbPtr++ = (raw & 0xff); // Red
+                    *rgbPtr++ = (raw & 0xff00) >> 8; // Green
+                    *rgbPtr++ = (raw & 0xff0000) >> 16; // Blue
+                }
+                rawPtr += _width;
+            }
+            
+            // Save our Stamp structure to disk
+            NSString *filename = [[NSString alloc] initWithFormat:@"stamp_%@.dat",[self.timestampFormatter stringFromDate:timestamp]];
+            [self saveStamp:stamp ToFilename:filename];
+            [self.cosmicStamps addObject:stamp];
+            
+            //Try only calling delegate method here
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.brainDelegate stampAdded];
+            });
+            ***/
+            
+            self.saveCount++;
+        }
+
+        // Update our exposure statistics
+        self.exposureCount++;
         
         // Print periodic status messages
         if(self.exposureCount % 10 == 0) {
             NSTimeInterval elapsed = [timestamp timeIntervalSinceDate:_beginAt];
-            NSLog(@"fps = %.3f after %d exposures.",self.exposureCount/elapsed,self.exposureCount);
+            NSLog(@"saved %d of %d exposures (fps = %.3f)",self.saveCount,self.exposureCount,self.exposureCount/elapsed);
         }
         /**
         GLubyte *outputBytes = [rawDataOutput rawBytesForImage];
@@ -100,13 +181,19 @@ typedef enum {
         }
         **/
     }];
-
+    
+    // Now that we know the image dimensions, initialize an array to count how often each pixel
+    // is selected as the maximum intensity in an exposure.
+    if(_pixelCount) free(_pixelCount);
+    int countSize = sizeof(unsigned char)*_width*_height;
+    _pixelCount = malloc(countSize);
+    bzero(_pixelCount,countSize);
 }
 
 - (void) beginCapture {
     // Try to lock the exposure and focus.
     NSError *error = nil;
-    AVCaptureDevice *device = videoCamera.inputCamera;
+    AVCaptureDevice *device = _videoCamera.inputCamera;
     if([device lockForConfiguration:&error]) {
         CGPoint center = CGPointMake(0.5,0.5);
         if([device isFocusPointOfInterestSupported]) {
@@ -149,7 +236,7 @@ typedef enum {
     self.saveCount = 0;
     self.exposureCount = 0;
     // Start the capture process running
-    [videoCamera startCameraCapture];
+    [_videoCamera startCameraCapture];
 }
 
 - (void) initCaptureOriginal {
