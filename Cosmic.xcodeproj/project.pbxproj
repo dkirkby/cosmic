@@ -10,6 +10,7 @@
 		6302F885175B462F006D877F /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F882175B435A006D877F /* libGPUImage.a */; };
 		6302F887175B476E006D877F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F886175B476E006D877F /* OpenGLES.framework */; };
 		6302F889175B4783006D877F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F888175B4783006D877F /* QuartzCore.framework */; };
+		632A831A175BA2A900E0AB0B /* GPUThresholdFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 632A8319175BA2A900E0AB0B /* GPUThresholdFilter.m */; };
 		6398F3F616EE67FB00296AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F516EE67FB00296AC3 /* UIKit.framework */; };
 		6398F3F816EE67FB00296AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F716EE67FB00296AC3 /* Foundation.framework */; };
 		6398F3FA16EE67FB00296AC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F916EE67FB00296AC3 /* CoreGraphics.framework */; };
@@ -59,6 +60,8 @@
 		6302F87B175B4359006D877F /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
 		6302F886175B476E006D877F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		6302F888175B4783006D877F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		632A8318175BA2A900E0AB0B /* GPUThresholdFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUThresholdFilter.h; sourceTree = "<group>"; };
+		632A8319175BA2A900E0AB0B /* GPUThresholdFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPUThresholdFilter.m; sourceTree = "<group>"; };
 		6398F3F216EE67FB00296AC3 /* Cosmic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cosmic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6398F3F516EE67FB00296AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6398F3F716EE67FB00296AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -164,6 +167,8 @@
 		6398F3FB16EE67FB00296AC3 /* Cosmic */ = {
 			isa = PBXGroup;
 			children = (
+				632A8318175BA2A900E0AB0B /* GPUThresholdFilter.h */,
+				632A8319175BA2A900E0AB0B /* GPUThresholdFilter.m */,
 				6398F40D16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard */,
 				6398F41016EE67FB00296AC3 /* MainStoryboard_iPad.storyboard */,
 				FC9249E0174A79340094DFB4 /* CosmicStamp.h */,
@@ -308,6 +313,7 @@
 				FC9249DB174A3B520094DFB4 /* CosmicStampView.m in Sources */,
 				FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */,
 				FC9249E2174A79350094DFB4 /* CosmicStamp.m in Sources */,
+				632A831A175BA2A900E0AB0B /* GPUThresholdFilter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
