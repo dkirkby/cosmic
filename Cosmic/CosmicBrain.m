@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <ImageIO/ImageIO.h>
 #import "CosmicStamp.h"
+#import "GPUImage.h"
 
 #define VERBOSE NO
 
@@ -26,6 +27,9 @@ typedef enum {
     unsigned char *_pixelCount;
     NSDate *_beginAt;
     NSTimeInterval _captureElapsed;
+    GPUImageVideoCamera *videoCamera;
+    GPUImageFilter *filter;
+    GPUImageRawDataOutput *rawOutput;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -59,6 +63,38 @@ typedef enum {
 #pragma mark - Initialization
 
 - (void) initCapture {
+    
+    videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1280x720 cameraPosition:AVCaptureDevicePositionBack];
+    
+    videoCamera.outputImageOrientation = UIInterfaceOrientationPortrait;
+    videoCamera.horizontallyMirrorFrontFacingCamera = NO;
+    videoCamera.horizontallyMirrorRearFacingCamera = NO;
+    
+    filter = [[GPUImageSepiaFilter alloc] init];
+    [videoCamera addTarget:filter];
+    
+    GPUImageRawDataOutput *rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
+    [filter addTarget:rawDataOutput];
+    [rawDataOutput setNewFrameAvailableBlock:^{
+        NSLog(@"got frame");
+        GLubyte *outputBytes = [rawDataOutput rawBytesForImage];
+        NSInteger bytesPerRow = [rawDataOutput bytesPerRowInOutput];
+        NSLog(@"Bytes per row: %d", bytesPerRow);
+        for(unsigned int yIndex = 0; yIndex < 4; yIndex++) {
+            for(unsigned int xIndex = 0; xIndex < 4; xIndex++) {
+                NSLog(@"Byte at (%d, %d): %d, %d, %d, %d", xIndex, yIndex, outputBytes[yIndex * bytesPerRow + xIndex * 4], outputBytes[yIndex * bytesPerRow + xIndex * 4 + 1], outputBytes[yIndex * bytesPerRow + xIndex * 4 + 2], outputBytes[yIndex * bytesPerRow + xIndex * 4 + 3]);
+            }
+        }
+    }];
+    
+}
+
+- (void) beginCapture {
+    [videoCamera startCameraCapture];
+    NSLog(@"capturing...");
+}
+
+- (void) initCaptureOriginal {
     if(VERBOSE) NSLog(@"initializing capture...");
     // Initialize a session with the photo preset
     self.captureSession = [[AVCaptureSession alloc] init];
@@ -117,7 +153,7 @@ typedef enum {
 
 #pragma mark - Initial Focus/Exposure Locking
 
-- (void) beginCapture {
+- (void) beginCaptureOriginal {
     NSLog(@"begin capture...");
     // Try to lock the exposure and focus for the best device.
     NSError *error = nil;
