@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6302F885175B462F006D877F /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F882175B435A006D877F /* libGPUImage.a */; };
 		6398F3F616EE67FB00296AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F516EE67FB00296AC3 /* UIKit.framework */; };
 		6398F3F816EE67FB00296AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F716EE67FB00296AC3 /* Foundation.framework */; };
 		6398F3FA16EE67FB00296AC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F916EE67FB00296AC3 /* CoreGraphics.framework */; };
@@ -97,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6302F885175B462F006D877F /* libGPUImage.a in Frameworks */,
 				63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */,
 				63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */,
 				63B66A2B1700DA3E004C5021 /* CoreMedia.framework in Frameworks */,
