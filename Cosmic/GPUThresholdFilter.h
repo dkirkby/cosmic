@@ -2,7 +2,7 @@
 
 /** Pixels with a luminance above the threshold will appear white, and those below will be black
  */
-@interface GPUImageLuminanceThresholdFilter : GPUImageFilter
+@interface GPUThresholdFilter : GPUImageFilter
 {
     GLint thresholdUniform;
 }

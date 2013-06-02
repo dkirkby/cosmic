@@ -1,7 +1,7 @@
-#import "GPUImageLuminanceThresholdFilter.h"
+#import "GPUThresholdFilter.h"
 
 #if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-NSString *const kGPUImageLuminanceThresholdFragmentShaderString = SHADER_STRING
+NSString *const kGPUThresholdFragmentShaderString = SHADER_STRING
 ( 
  varying highp vec2 textureCoordinate;
  
@@ -20,7 +20,7 @@ NSString *const kGPUImageLuminanceThresholdFragmentShaderString = SHADER_STRING
  }
 );
 #else
-NSString *const kGPUImageLuminanceThresholdFragmentShaderString = SHADER_STRING
+NSString *const kGPUThresholdFragmentShaderString = SHADER_STRING
 (
  varying vec2 textureCoordinate;
  
@@ -40,7 +40,7 @@ NSString *const kGPUImageLuminanceThresholdFragmentShaderString = SHADER_STRING
 );
 #endif
 
-@implementation GPUImageLuminanceThresholdFilter
+@implementation GPUThresholdFilter
 
 @synthesize threshold = _threshold;
 
@@ -49,7 +49,7 @@ NSString *const kGPUImageLuminanceThresholdFragmentShaderString = SHADER_STRING
 
 - (id)init;
 {
-    if (!(self = [super initWithFragmentShaderFromString:kGPUImageLuminanceThresholdFragmentShaderString]))
+    if (!(self = [super initWithFragmentShaderFromString:kGPUThresholdFragmentShaderString]))
     {
 		return nil;
     }

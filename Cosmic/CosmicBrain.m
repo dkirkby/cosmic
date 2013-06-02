@@ -11,6 +11,7 @@
 #import <ImageIO/ImageIO.h>
 #import "CosmicStamp.h"
 #import "GPUImage.h"
+#import "GPUThresholdFilter.h"
 
 #define VERBOSE NO
 
@@ -29,7 +30,7 @@ typedef enum {
     NSTimeInterval _captureElapsed;
     int _width, _height;
     GPUImageVideoCamera *_videoCamera;
-    GPUImageFilter *_filter;
+    GPUThresholdFilter *_filter;
     GPUImageRawDataOutput *_rawOutput;
 }
 
@@ -74,7 +75,8 @@ typedef enum {
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     _videoCamera.runBenchmark = NO;
     
-    _filter = [[GPUImageSepiaFilter alloc] init];
+    _filter = [[GPUThresholdFilter alloc] init];
+    _filter.threshold = 0.25;
     [_videoCamera addTarget:_filter];
     
     GPUImageRawDataOutput *rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
