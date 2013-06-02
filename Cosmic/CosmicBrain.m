@@ -76,7 +76,14 @@ typedef enum {
     GPUImageRawDataOutput *rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
     [filter addTarget:rawDataOutput];
     [rawDataOutput setNewFrameAvailableBlock:^{
-        NSLog(@"got frame");
+        // Get a timestamp for this capture
+        NSDate *timestamp = [[NSDate alloc] init];
+        self.exposureCount++;
+        if(self.exposureCount % 10 == 0) {
+            NSTimeInterval elapsed = [timestamp timeIntervalSinceDate:_beginAt];
+            NSLog(@"fps = %.3f after %d exposures.",self.exposureCount/elapsed,self.exposureCount);
+        }
+        /**
         GLubyte *outputBytes = [rawDataOutput rawBytesForImage];
         NSInteger bytesPerRow = [rawDataOutput bytesPerRowInOutput];
         NSLog(@"Bytes per row: %d", bytesPerRow);
@@ -85,13 +92,16 @@ typedef enum {
                 NSLog(@"Byte at (%d, %d): %d, %d, %d, %d", xIndex, yIndex, outputBytes[yIndex * bytesPerRow + xIndex * 4], outputBytes[yIndex * bytesPerRow + xIndex * 4 + 1], outputBytes[yIndex * bytesPerRow + xIndex * 4 + 2], outputBytes[yIndex * bytesPerRow + xIndex * 4 + 3]);
             }
         }
+        **/
     }];
-    
+
 }
 
 - (void) beginCapture {
+    _beginAt = [[NSDate alloc] init];
+    self.saveCount = 0;
+    self.exposureCount = 0;
     [videoCamera startCameraCapture];
-    NSLog(@"capturing...");
 }
 
 - (void) initCaptureOriginal {
