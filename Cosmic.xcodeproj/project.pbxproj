@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		6302F885175B462F006D877F /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F882175B435A006D877F /* libGPUImage.a */; };
+		6302F887175B476E006D877F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F886175B476E006D877F /* OpenGLES.framework */; };
+		6302F889175B4783006D877F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F888175B4783006D877F /* QuartzCore.framework */; };
 		6398F3F616EE67FB00296AC3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F516EE67FB00296AC3 /* UIKit.framework */; };
 		6398F3F816EE67FB00296AC3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F716EE67FB00296AC3 /* Foundation.framework */; };
 		6398F3FA16EE67FB00296AC3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6398F3F916EE67FB00296AC3 /* CoreGraphics.framework */; };
@@ -55,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		6302F87B175B4359006D877F /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
+		6302F886175B476E006D877F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		6302F888175B4783006D877F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		6398F3F216EE67FB00296AC3 /* Cosmic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cosmic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6398F3F516EE67FB00296AC3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6398F3F716EE67FB00296AC3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -98,6 +102,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6302F889175B4783006D877F /* QuartzCore.framework in Frameworks */,
+				6302F887175B476E006D877F /* OpenGLES.framework in Frameworks */,
 				6302F885175B462F006D877F /* libGPUImage.a in Frameworks */,
 				63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */,
 				63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */,
@@ -124,6 +130,8 @@
 		6398F3E916EE67FA00296AC3 = {
 			isa = PBXGroup;
 			children = (
+				6302F888175B4783006D877F /* QuartzCore.framework */,
+				6302F886175B476E006D877F /* OpenGLES.framework */,
 				6302F87B175B4359006D877F /* GPUImage.xcodeproj */,
 				6398F3FB16EE67FB00296AC3 /* Cosmic */,
 				6398F3F416EE67FB00296AC3 /* Frameworks */,
