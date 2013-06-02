@@ -1,6 +1,5 @@
 #import "GPUThresholdFilter.h"
 
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
 NSString *const kGPUThresholdFragmentShaderString = SHADER_STRING
 ( 
  varying highp vec2 textureCoordinate;
@@ -8,37 +7,23 @@ NSString *const kGPUThresholdFragmentShaderString = SHADER_STRING
  uniform sampler2D inputImageTexture;
  uniform highp float threshold;
  
- const highp vec3 W = vec3(0.2125, 0.7154, 0.0721);
+ const highp vec3 W = vec3(0.25, 0.50, 0.25);
 
  void main()
  {
      highp vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);
-     highp float luminance = dot(textureColor.rgb, W);
-     highp float thresholdResult = step(threshold, luminance);
-     
-     gl_FragColor = vec4(vec3(thresholdResult), textureColor.w);
+     highp float intensity = dot(textureColor.rgb, W);
+     highp float thresholdResult = step(threshold, intensity);
+
+     highp vec4 outputColor;
+     outputColor.r = thresholdResult*textureColor.r;
+     outputColor.g = thresholdResult*textureColor.g;
+     outputColor.b = thresholdResult*textureColor.b;
+     outputColor.a = 1.0;
+
+     gl_FragColor = outputColor;
  }
 );
-#else
-NSString *const kGPUThresholdFragmentShaderString = SHADER_STRING
-(
- varying vec2 textureCoordinate;
- 
- uniform sampler2D inputImageTexture;
- uniform float threshold;
- 
- const vec3 W = vec3(0.2125, 0.7154, 0.0721);
- 
- void main()
- {
-     vec4 textureColor = texture2D(inputImageTexture, textureCoordinate);
-     float luminance = dot(textureColor.rgb, W);
-     float thresholdResult = step(threshold, luminance);
-     
-     gl_FragColor = vec4(vec3(thresholdResult), textureColor.w);
- }
-);
-#endif
 
 @implementation GPUThresholdFilter
 

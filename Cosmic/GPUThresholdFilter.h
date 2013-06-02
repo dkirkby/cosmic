@@ -7,7 +7,9 @@
     GLint thresholdUniform;
 }
 
-/** Anything above this luminance will be white, and anything below black. Ranges from 0.0 to 1.0, with 0.5 as the default
+/** Intensity is defined as R+2G+B, rescaled to the range 0-1. Any pixels whose itensity is below
+ the specified threshold will have their alpha channel set to 0. The remaining pixels will be
+ unaffected.
  */
 @property(readwrite, nonatomic) CGFloat threshold; 
 

@@ -15,7 +15,7 @@
 
 #define VERBOSE NO
 
-#define MIN_INTENSITY 64
+#define MIN_INTENSITY 256 // 64
 #define MAX_REPEATS 4
 
 typedef enum {
@@ -76,7 +76,7 @@ typedef enum {
     _videoCamera.runBenchmark = NO;
     
     _filter = [[GPUThresholdFilter alloc] init];
-    _filter.threshold = 0.25;
+    _filter.threshold = MIN_INTENSITY/1024.0;
     [_videoCamera addTarget:_filter];
     
     GPUImageRawDataOutput *rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
