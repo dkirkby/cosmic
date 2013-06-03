@@ -25,7 +25,7 @@
     int _width, _height;
     unsigned long _exposureCount, _saveCount;
     GPUImageVideoCamera *_videoCamera;
-    GPUThresholdFilter *_filter;
+    GPUThresholdFilter *_threshold;
     GPUImageLuminosity *_luminosity;
     GPUImageRawDataOutput *_rawDataOutput;
     CMTime _timestamp0,_timestamp;
@@ -67,14 +67,16 @@
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     _videoCamera.runBenchmark = NO;
     
-    _filter = [[GPUThresholdFilter alloc] init];
-    _filter.threshold = MIN_INTENSITY/1024.0;
-    [_videoCamera addTarget:_filter];
+    _threshold = [[GPUThresholdFilter alloc] init];
+    _threshold.threshold = MIN_INTENSITY/1024.0;
+    [_videoCamera addTarget:_threshold];
     
     // Use this voodoo to avoid warnings about 'capturing self strongly in this block is likely to lead to a retain cycle'
     // http://stackoverflow.com/questions/14556605/capturing-self-strongly-in-this-block-is-likely-to-lead-to-a-retain-cycle
     __unsafe_unretained typeof(self) my = self;
     
+    // See http://stackoverflow.com/questions/12168072/fragment-shader-average-luminosity/12169560#12169560
+    // for details on how the image luminosity is calculated on the GPU
     _luminosity = [[GPUImageLuminosity alloc] init];
     _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
         if(my->_exposureCount % STATS_UPDATE_INTERVAL == 0) {
@@ -96,14 +98,13 @@
             my->_timestamp = kCMTimeInvalid;
         }
     };
-    [_filter addTarget: _luminosity];
+    //!![_threshold addTarget: _luminosity];
     
     _rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
-    [_luminosity addTarget:_rawDataOutput];
     [_rawDataOutput setNewFrameAvailableBlock:^{
         
         // Did the previous filters flag this frame?
-        if(CMTIME_IS_INVALID(my->_timestamp)) return;
+        //!!if(CMTIME_IS_INVALID(my->_timestamp)) return;
         
         // Get a pointer to our raw image data. Each pixel is stored as four bytes. When accessed
         // as an unsigned int, the bytes are packed as (A << 24) | (B << 16) | (G << 8) | R.
@@ -139,6 +140,7 @@
                     maxIntensity = intensity;
                     maxIndex = index;
                 }
+                NSLog(@"%6d %08x %u %u",index,val,intensity,maxIntensity);
             }
             index++;
         }
@@ -195,6 +197,8 @@
             my->_saveCount++;
         }
     }];
+    //!![_luminosity addTarget:_rawDataOutput];
+    [_threshold addTarget:_rawDataOutput];
     
     // Now that we know the image dimensions, initialize an array to count how often each pixel
     // is selected as the maximum intensity in an exposure.
