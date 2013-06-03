@@ -12,6 +12,7 @@
 #import "CosmicStamp.h"
 #import "GPUImage.h"
 #import "GPUThresholdFilter.h"
+#import "GPUImageLuminosity.h"
 
 #define VERBOSE NO
 
@@ -31,7 +32,9 @@ typedef enum {
     int _width, _height;
     GPUImageVideoCamera *_videoCamera;
     GPUThresholdFilter *_filter;
+    GPUImageLuminosity *_luminosity;
     GPUImageRawDataOutput *_rawOutput;
+    CMTime _timestamp;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -79,9 +82,24 @@ typedef enum {
     _filter.threshold = MIN_INTENSITY/1024.0;
     [_videoCamera addTarget:_filter];
     
+    _luminosity = [[GPUImageLuminosity alloc] init];
+    _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
+        NSLog(@"luminosity = %f at %f",luminosity,CMTimeGetSeconds(frameTime));
+        if(luminosity > 0.0) {
+            _timestamp = frameTime;
+        }
+        else {
+            _timestamp = kCMTimeInvalid;
+        }
+    };
+    [_filter addTarget: _luminosity];
+    
     GPUImageRawDataOutput *rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
-    [_filter addTarget:rawDataOutput];
+    [_luminosity addTarget:rawDataOutput];
     [rawDataOutput setNewFrameAvailableBlock:^{
+        
+        // Did the previous filters flag this frame?
+        if(CMTIME_IS_INVALID(_timestamp)) return;
 
         // Get a timestamp for this capture
         NSDate *timestamp = [[NSDate alloc] init];
