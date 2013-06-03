@@ -18,6 +18,7 @@
 
 #define MIN_INTENSITY 256 // 64
 #define MAX_REPEATS 4
+#define STATS_UPDATE_INTERVAL 10 // # of exposures between NSLog updates
 
 @interface CosmicBrain () {
     unsigned char *_pixelCount;
@@ -72,13 +73,12 @@
     
     _luminosity = [[GPUImageLuminosity alloc] init];
     _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
-        if(0 == _exposureCount) {
-            // Remember the timestamp of our first exposure
+        if(_exposureCount % STATS_UPDATE_INTERVAL == 0) {
+            if(_exposureCount > 0) {
+                Float64 elapsed = CMTimeGetSeconds(CMTimeSubtract(frameTime, _timestamp0));
+                NSLog(@"saved %lu of %lu exposures (fps = %.3f)",_saveCount,_exposureCount,STATS_UPDATE_INTERVAL/elapsed);
+            }
             _timestamp0 = frameTime;
-        }
-        else if(_exposureCount % 10 == 0) {
-            Float64 elapsed = CMTimeGetSeconds(CMTimeSubtract(frameTime, _timestamp0));
-            NSLog(@"saved %d of %d exposures (fps = %.3f)",_saveCount,_exposureCount,_exposureCount/elapsed);
         }
         
         // Update our exposure counter
