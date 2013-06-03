@@ -19,29 +19,17 @@
 #define MIN_INTENSITY 256 // 64
 #define MAX_REPEATS 4
 
-typedef enum {
-    IDLE,
-    BEGINNING,
-    RUNNING
-} CosmicState;
-
 @interface CosmicBrain () {
     unsigned char *_pixelCount;
-    NSDate *_beginAt;
-    NSTimeInterval _captureElapsed;
     int _width, _height;
+    unsigned long _exposureCount, _saveCount;
     GPUImageVideoCamera *_videoCamera;
     GPUThresholdFilter *_filter;
     GPUImageLuminosity *_luminosity;
-    GPUImageRawDataOutput *_rawOutput;
+    GPUImageRawDataOutput *_rawDataOutput;
     CMTime _timestamp0,_timestamp;
 }
 
-@property(strong,nonatomic) AVCaptureDevice *bestDevice;
-@property(strong,nonatomic) AVCaptureSession *captureSession;
-@property(strong,nonatomic) AVCaptureStillImageOutput *cameraOutput;
-@property CosmicState state;
-@property int exposureCount, saveCount;
 @property(strong,nonatomic) NSDateFormatter *timestampFormatter;
 
 @end
@@ -84,17 +72,17 @@ typedef enum {
     
     _luminosity = [[GPUImageLuminosity alloc] init];
     _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
-        if(0 == self.exposureCount) {
+        if(0 == _exposureCount) {
             // Remember the timestamp of our first exposure
             _timestamp0 = frameTime;
         }
-        else if(self.exposureCount % 10 == 0) {
+        else if(_exposureCount % 10 == 0) {
             Float64 elapsed = CMTimeGetSeconds(CMTimeSubtract(frameTime, _timestamp0));
-            NSLog(@"saved %d of %d exposures (fps = %.3f)",self.saveCount,self.exposureCount,self.exposureCount/elapsed);
+            NSLog(@"saved %d of %d exposures (fps = %.3f)",_saveCount,_exposureCount,_exposureCount/elapsed);
         }
         
         // Update our exposure counter
-        self.exposureCount++;
+        _exposureCount++;
 
         // Flag this frame for further processing?
         if(luminosity > 0.0) {
@@ -106,9 +94,9 @@ typedef enum {
     };
     [_filter addTarget: _luminosity];
     
-    GPUImageRawDataOutput *rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
-    [_luminosity addTarget:rawDataOutput];
-    [rawDataOutput setNewFrameAvailableBlock:^{
+    _rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
+    [_luminosity addTarget:_rawDataOutput];
+    [_rawDataOutput setNewFrameAvailableBlock:^{
         
         // Did the previous filters flag this frame?
         if(CMTIME_IS_INVALID(_timestamp)) return;
@@ -120,10 +108,10 @@ typedef enum {
         // fastest along the "width", which actually moves down in the image from the top-right
         // corner. After each width pixels, the image data moves down one row, or left in the
         // sensor. The last pixel corresponds to the bottom-left corner of the sensor.
-        GLubyte *rawImageBytes = [rawDataOutput rawBytesForImage];
+        GLubyte *rawImageBytes = [_rawDataOutput rawBytesForImage];
         
         // Sanity check: dump first exposure as a full image
-        if(false && 0 == self.exposureCount) {
+        if(false && 0 == _exposureCount) {
             UIImage *img = [self createUIImageWithWidth:_width Height:_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:_width RawHeight:_height];
             [self saveImageToFilesystem:img withIdentifier:@"testing"];            
         }
@@ -175,7 +163,7 @@ typedef enum {
             CosmicStamp *stamp = [[CosmicStamp alloc] init];
             stamp.elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
             stamp.maxPixelIndex = maxIndex;
-            stamp.exposureCount = self.exposureCount;
+            stamp.exposureCount = _exposureCount;
             uint8_t *rgbPtr = stamp.rgb;
             
             uint32_t *rawPtr = (uint32_t*)rawImageBytes + y1*_width + x1;
@@ -200,7 +188,7 @@ typedef enum {
             });
             ***/
             
-            self.saveCount++;
+            _saveCount++;
         }
     }];
     
@@ -249,8 +237,8 @@ typedef enum {
         return;
     }
     // Initialize data for this run
-    self.saveCount = 0;
-    self.exposureCount = 0;
+    _saveCount = 0;
+    _exposureCount = 0;
     // Start the capture process running
     [_videoCamera startCameraCapture];
 }
