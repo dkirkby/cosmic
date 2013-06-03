@@ -34,7 +34,7 @@ typedef enum {
     GPUThresholdFilter *_filter;
     GPUImageLuminosity *_luminosity;
     GPUImageRawDataOutput *_rawOutput;
-    CMTime _timestamp;
+    CMTime _timestamp0,_timestamp;
 }
 
 @property(strong,nonatomic) AVCaptureDevice *bestDevice;
@@ -84,7 +84,19 @@ typedef enum {
     
     _luminosity = [[GPUImageLuminosity alloc] init];
     _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
-        NSLog(@"luminosity = %f at %f",luminosity,CMTimeGetSeconds(frameTime));
+        if(0 == self.exposureCount) {
+            // Remember the timestamp of our first exposure
+            _timestamp0 = frameTime;
+        }
+        else if(self.exposureCount % 10 == 0) {
+            Float64 elapsed = CMTimeGetSeconds(CMTimeSubtract(frameTime, _timestamp0));
+            NSLog(@"saved %d of %d exposures (fps = %.3f)",self.saveCount,self.exposureCount,self.exposureCount/elapsed);
+        }
+        
+        // Update our exposure counter
+        self.exposureCount++;
+
+        // Flag this frame for further processing?
         if(luminosity > 0.0) {
             _timestamp = frameTime;
         }
@@ -100,15 +112,12 @@ typedef enum {
         
         // Did the previous filters flag this frame?
         if(CMTIME_IS_INVALID(_timestamp)) return;
-
-        // Get a timestamp for this capture
-        NSDate *timestamp = [[NSDate alloc] init];
         
         // Get a pointer to our raw image data
         GLubyte *rawImageBytes = [rawDataOutput rawBytesForImage];
         
         // Sanity check: dump first exposure as a full image
-        if(0 == self.exposureCount) {
+        if(false && 0 == self.exposureCount) {
             UIImage *img = [self createUIImageWithWidth:_width Height:_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:_width RawHeight:_height];
             [self saveImageToFilesystem:img withIdentifier:@"testing"];            
         }
@@ -188,14 +197,6 @@ typedef enum {
             self.saveCount++;
         }
 
-        // Update our exposure statistics
-        self.exposureCount++;
-        
-        // Print periodic status messages
-        if(self.exposureCount % 10 == 0) {
-            NSTimeInterval elapsed = [timestamp timeIntervalSinceDate:_beginAt];
-            NSLog(@"saved %d of %d exposures (fps = %.3f)",self.saveCount,self.exposureCount,self.exposureCount/elapsed);
-        }
         /**
         GLubyte *outputBytes = [rawDataOutput rawBytesForImage];
         NSInteger bytesPerRow = [rawDataOutput bytesPerRowInOutput];
@@ -258,7 +259,6 @@ typedef enum {
         return;
     }
     // Initialize data for this run
-    _beginAt = [[NSDate alloc] init];
     self.saveCount = 0;
     self.exposureCount = 0;
     // Start the capture process running
