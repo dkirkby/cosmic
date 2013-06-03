@@ -76,7 +76,8 @@
     __unsafe_unretained typeof(self) my = self;
     
     // See http://stackoverflow.com/questions/12168072/fragment-shader-average-luminosity/12169560#12169560
-    // for details on how the image luminosity is calculated on the GPU
+    // for details on how the image luminosity is calculated on the GPU. For a similar max finder, see
+    // http://stackoverflow.com/questions/12488049/glsl-how-to-access-pixel-data-of-a-texture-is-glsl-shader
     _luminosity = [[GPUImageLuminosity alloc] init];
     _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
         if(my->_exposureCount % STATS_UPDATE_INTERVAL == 0) {
