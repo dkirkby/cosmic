@@ -71,25 +71,29 @@
     _filter.threshold = MIN_INTENSITY/1024.0;
     [_videoCamera addTarget:_filter];
     
+    // Use this voodoo to avoid warnings about 'capturing self strongly in this block is likely to lead to a retain cycle'
+    // http://stackoverflow.com/questions/14556605/capturing-self-strongly-in-this-block-is-likely-to-lead-to-a-retain-cycle
+    __unsafe_unretained typeof(self) my = self;
+    
     _luminosity = [[GPUImageLuminosity alloc] init];
     _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
-        if(_exposureCount % STATS_UPDATE_INTERVAL == 0) {
-            if(_exposureCount > 0) {
-                Float64 elapsed = CMTimeGetSeconds(CMTimeSubtract(frameTime, _timestamp0));
-                NSLog(@"saved %lu of %lu exposures (fps = %.3f)",_saveCount,_exposureCount,STATS_UPDATE_INTERVAL/elapsed);
+        if(my->_exposureCount % STATS_UPDATE_INTERVAL == 0) {
+            if(my->_exposureCount > 0) {
+                Float64 elapsed = CMTimeGetSeconds(CMTimeSubtract(frameTime, my->_timestamp0));
+                NSLog(@"saved %lu of %lu exposures (fps = %.3f)",my->_saveCount,my->_exposureCount,STATS_UPDATE_INTERVAL/elapsed);
             }
-            _timestamp0 = frameTime;
+            my->_timestamp0 = frameTime;
         }
         
         // Update our exposure counter
-        _exposureCount++;
+        my->_exposureCount++;
 
         // Flag this frame for further processing?
         if(luminosity > 0.0) {
-            _timestamp = frameTime;
+            my->_timestamp = frameTime;
         }
         else {
-            _timestamp = kCMTimeInvalid;
+            my->_timestamp = kCMTimeInvalid;
         }
     };
     [_filter addTarget: _luminosity];
@@ -99,7 +103,7 @@
     [_rawDataOutput setNewFrameAvailableBlock:^{
         
         // Did the previous filters flag this frame?
-        if(CMTIME_IS_INVALID(_timestamp)) return;
+        if(CMTIME_IS_INVALID(my->_timestamp)) return;
         
         // Get a pointer to our raw image data. Each pixel is stored as four bytes. When accessed
         // as an unsigned int, the bytes are packed as (A << 24) | (B << 16) | (G << 8) | R.
@@ -108,21 +112,21 @@
         // fastest along the "width", which actually moves down in the image from the top-right
         // corner. After each width pixels, the image data moves down one row, or left in the
         // sensor. The last pixel corresponds to the bottom-left corner of the sensor.
-        GLubyte *rawImageBytes = [_rawDataOutput rawBytesForImage];
+        GLubyte *rawImageBytes = [my->_rawDataOutput rawBytesForImage];
         
         // Sanity check: dump first exposure as a full image
-        if(false && 0 == _exposureCount) {
-            UIImage *img = [self createUIImageWithWidth:_width Height:_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:_width RawHeight:_height];
-            [self saveImageToFilesystem:img withIdentifier:@"testing"];            
+        if(false && 0 == my->_exposureCount) {
+            UIImage *img = [my createUIImageWithWidth:my->_width Height:my->_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:my->_width RawHeight:my->_height];
+            [my saveImageToFilesystem:img withIdentifier:@"testing"];
         }
         
         // Run the analysis algorithm
         // Loop over raw pixels to find the pixel with the largest intensity r+2*g+b
         unsigned int maxIntensity = MIN_INTENSITY;
-        unsigned maxIndex = _width*_height, index = 0;
+        unsigned maxIndex = my->_width*my->_height, index = 0;
         unsigned lastIndex = maxIndex;
         unsigned int *bufptr = (unsigned int *)rawImageBytes;
-        unsigned char *countPtr = _pixelCount;
+        unsigned char *countPtr = my->_pixelCount;
         while(index < lastIndex) {
             // get the next 32-bit word of pixel data and advance our buffer pointer
             unsigned int val = *bufptr++;
@@ -143,30 +147,30 @@
         if(maxIndex != lastIndex) {
             
             // Update our counts for this pixel
-            _pixelCount[maxIndex]++;
+            my->_pixelCount[maxIndex]++;
             
             /***
             // Convert the candidate index back to (x,y) coordinates in the raw image
-            int maxX = maxIndex%_width;
-            int maxY = maxIndex/_width;
+            int maxX = maxIndex%my->_width;
+            int maxY = maxIndex/my->_width;
             
             // Calculate stamp bounds [x1,y1]-[x2,y2] that are centered (as far as possible)
             // around maxX,maxY
             int x1 = maxX - STAMP_SIZE, x2 = maxX + STAMP_SIZE;
             if(x1 < 0) { x1 = 0; x2 = 2*STAMP_SIZE; }
-            else if(x2 >= _width) { x2 = _width-1; x1 = _width - 2*STAMP_SIZE - 1; }
+            else if(x2 >= my->_width) { x2 = my->_width-1; x1 = my->_width - 2*STAMP_SIZE - 1; }
             int y1 = maxY - STAMP_SIZE, y2 = maxY + STAMP_SIZE;
             if(y1 < 0) { y1 = 0; y2 = 2*STAMP_SIZE; }
-            else if(y2 >= _height) { y2 = _height-1; y1 = _height - 2*STAMP_SIZE - 1; }
+            else if(y2 >= my->_height) { y2 = my->_height-1; y1 = my->_height - 2*STAMP_SIZE - 1; }
             
             // Create our Stamp structure
             CosmicStamp *stamp = [[CosmicStamp alloc] init];
             stamp.elapsedMSecs = (uint32_t)(1e3*[timestamp timeIntervalSinceDate:_beginAt]);
             stamp.maxPixelIndex = maxIndex;
-            stamp.exposureCount = _exposureCount;
+            stamp.exposureCount = my->_exposureCount;
             uint8_t *rgbPtr = stamp.rgb;
             
-            uint32_t *rawPtr = (uint32_t*)rawImageBytes + y1*_width + x1;
+            uint32_t *rawPtr = (uint32_t*)rawImageBytes + y1*my->_width + x1;
             for(int y = 0; y < 2*STAMP_SIZE+1; ++y) {
                 for(int x = 0; x < 2*STAMP_SIZE+1; ++x) {
                     uint32_t raw = rawPtr[x]; // raw = AABBGGRR
@@ -174,7 +178,7 @@
                     *rgbPtr++ = (raw & 0xff00) >> 8; // Green
                     *rgbPtr++ = (raw & 0xff0000) >> 16; // Blue
                 }
-                rawPtr += _width;
+                rawPtr += my->_width;
             }
             
             // Save our Stamp structure to disk
@@ -188,7 +192,7 @@
             });
             ***/
             
-            _saveCount++;
+            my->_saveCount++;
         }
     }];
     
