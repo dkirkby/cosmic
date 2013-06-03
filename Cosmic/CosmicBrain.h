@@ -23,6 +23,5 @@
 
 - (void) initCapture;
 - (void) beginCapture;
-- (void) captureImage;
 
 @end
