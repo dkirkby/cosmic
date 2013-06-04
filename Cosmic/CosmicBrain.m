@@ -94,18 +94,20 @@
         // Flag this frame for further processing?
         if(luminosity > 0.0) {
             my->_timestamp = frameTime;
+            NSLog(@"finished detection pipeline for %f",CMTimeGetSeconds(my->_timestamp));
         }
         else {
             my->_timestamp = kCMTimeInvalid;
         }
     };
-    //!![_threshold addTarget: _luminosity];
+    [_threshold addTarget: _luminosity];
     
     _rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
     [_rawDataOutput setNewFrameAvailableBlock:^{
         
         // Did the previous filters flag this frame?
-        //!!if(CMTIME_IS_INVALID(my->_timestamp)) return;
+        if(CMTIME_IS_INVALID(my->_timestamp)) return;
+        NSLog(@"starting raw pipeline for %f",CMTimeGetSeconds(my->_timestamp));
         
         // Get a pointer to our raw image data. Each pixel is stored as four bytes. When accessed
         // as an unsigned int, the bytes are packed as (A << 24) | (B << 16) | (G << 8) | R.
@@ -141,7 +143,7 @@
                     maxIntensity = intensity;
                     maxIndex = index;
                 }
-                NSLog(@"%6d %08x %u %u",index,val,intensity,maxIntensity);
+                //NSLog(@"%6d %08x %u %u",index,val,intensity,maxIntensity);
             }
             index++;
         }
@@ -198,8 +200,8 @@
             my->_saveCount++;
         }
     }];
-    //!![_luminosity addTarget:_rawDataOutput];
-    [_threshold addTarget:_rawDataOutput];
+    // Run the raw data processing on the unfiltered video, after the detection pipeline
+    [_videoCamera addTarget:_rawDataOutput];
     
     // Now that we know the image dimensions, initialize an array to count how often each pixel
     // is selected as the maximum intensity in an exposure.
