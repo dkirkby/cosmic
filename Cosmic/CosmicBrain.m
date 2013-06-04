@@ -69,7 +69,6 @@
     
     _threshold = [[GPUThresholdFilter alloc] init];
     _threshold.threshold = MIN_INTENSITY/1024.0;
-    [_videoCamera addTarget:_threshold];
     
     // Use this voodoo to avoid warnings about 'capturing self strongly in this block is likely to lead to a retain cycle'
     // http://stackoverflow.com/questions/14556605/capturing-self-strongly-in-this-block-is-likely-to-lead-to-a-retain-cycle
@@ -100,7 +99,6 @@
             my->_timestamp = kCMTimeInvalid;
         }
     };
-    [_threshold addTarget: _luminosity];
     
     _rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
     [_rawDataOutput setNewFrameAvailableBlock:^{
@@ -200,8 +198,6 @@
             my->_saveCount++;
         }
     }];
-    // Run the raw data processing on the unfiltered video, after the detection pipeline
-    [_videoCamera addTarget:_rawDataOutput];
     
     // Now that we know the image dimensions, initialize an array to count how often each pixel
     // is selected as the maximum intensity in an exposure.
@@ -250,6 +246,12 @@
     // Initialize data for this run
     _saveCount = 0;
     _exposureCount = 0;
+
+    // Configure the GPU pipeline
+    [_videoCamera addTarget:_threshold];
+    [_threshold addTarget: _luminosity];
+    [_videoCamera addTarget:_rawDataOutput];
+
     // Start the capture process running
     [_videoCamera startCameraCapture];
 }
