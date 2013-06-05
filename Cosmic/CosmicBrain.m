@@ -255,6 +255,7 @@
     // Configure the GPU pipeline for calibration
     [_videoCamera removeAllTargets];
     [_videoCamera addTarget:_darkCalibrator];
+    [_darkCalibrator reset];
 
     // Start the calibration process running
     NSLog(@"starting calibration...");

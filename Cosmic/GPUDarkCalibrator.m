@@ -48,6 +48,10 @@
     return self;
 }
 
+- (void) reset {
+    _frameCounter = 0;
+}
+
 #pragma mark -
 #pragma mark Accessors
 
