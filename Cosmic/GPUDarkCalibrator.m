@@ -1,5 +1,10 @@
 #import "GPUDarkCalibrator.h"
 
+@interface GPUDarkCalibrator () {
+    int _frameCounter;
+}
+@end
+
 @implementation GPUDarkCalibrator
 
 @synthesize filterStrength;
@@ -32,6 +37,13 @@
     self.terminalFilter = dissolveBlendFilter;
     
     self.filterStrength = 0.5;
+    self.nCalibrationFrames = 300;
+    
+    __unsafe_unretained GPUDarkCalibrator *weakSelf = self;
+    [self setFrameProcessingCompletionBlock:^(GPUImageOutput *filter, CMTime frameTime) {
+        weakSelf->_frameCounter++;
+        NSLog(@"calibration frame %d done",weakSelf->_frameCounter);
+    }];
     
     return self;
 }

@@ -252,10 +252,19 @@
     // Try to lock the exposure and focus.
     [self lockExposureAndFocus];
     
+    // Configure the GPU pipeline for calibration
+    [_videoCamera removeAllTargets];
+    [_videoCamera addTarget:_darkCalibrator];
+
+    // Start the calibration process running
+    NSLog(@"starting calibration...");
+    [_videoCamera startCameraCapture];
+
+/**
     // Initialize data for this run
     _saveCount = 0;
     _exposureCount = 0;
-
+    
     // Configure the GPU pipeline for data taking
     [_videoCamera removeAllTargets];
     [_threshold removeAllTargets];
@@ -265,6 +274,7 @@
 
     // Start the capture process running
     [_videoCamera startCameraCapture];
+**/
 }
 
 - (void) saveImageToFilesystem:(UIImage*)image withIdentifier:(NSString*)identifier {
