@@ -10,9 +10,10 @@
 #import <AVFoundation/AVFoundation.h>
 #import <ImageIO/ImageIO.h>
 #import "CosmicStamp.h"
+
 #import "GPUImage.h"
 #import "GPUThresholdFilter.h"
-#import "GPUImageLuminosity.h"
+#import "GPUDarkCalibrator.h"
 
 #define VERBOSE NO
 
@@ -25,6 +26,7 @@
     int _width, _height;
     unsigned long _exposureCount, _saveCount;
     GPUImageVideoCamera *_videoCamera;
+    GPUDarkCalibrator *_darkCalibrator;
     GPUThresholdFilter *_threshold;
     GPUImageLuminosity *_luminosity;
     GPUImageRawDataOutput *_rawDataOutput;
@@ -66,6 +68,8 @@
     _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     _videoCamera.runBenchmark = NO;
+    
+    _darkCalibrator = [[GPUDarkCalibrator alloc] init];
     
     _threshold = [[GPUThresholdFilter alloc] init];
     _threshold.threshold = MIN_INTENSITY/1024.0;
