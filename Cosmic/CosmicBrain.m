@@ -211,8 +211,7 @@
     bzero(_pixelCount,countSize);
 }
 
-- (void) beginCapture {
-    // Try to lock the exposure and focus.
+- (void) lockExposureAndFocus {
     NSError *error = nil;
     AVCaptureDevice *device = _videoCamera.inputCamera;
     if([device lockForConfiguration:&error]) {
@@ -247,11 +246,19 @@
         NSLog(@"PANIC: cannot lock device for exposure and focus configuration.");
         return;
     }
+}
+
+- (void) beginCapture {
+    // Try to lock the exposure and focus.
+    [self lockExposureAndFocus];
+    
     // Initialize data for this run
     _saveCount = 0;
     _exposureCount = 0;
 
-    // Configure the GPU pipeline
+    // Configure the GPU pipeline for data taking
+    [_videoCamera removeAllTargets];
+    [_threshold removeAllTargets];
     [_videoCamera addTarget:_threshold];
     [_threshold addTarget: _luminosity];
     [_videoCamera addTarget:_rawDataOutput];
