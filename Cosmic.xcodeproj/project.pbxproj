@@ -28,7 +28,7 @@
 		63B66A2B1700DA3E004C5021 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2A1700DA3E004C5021 /* CoreMedia.framework */; };
 		63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2C1700DA60004C5021 /* CoreVideo.framework */; };
 		63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2E1700E73C004C5021 /* ImageIO.framework */; };
-		63C15C5D175F957500556FD3 /* GPUImageLowPassFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C15C5C175F957500556FD3 /* GPUImageLowPassFilter.m */; };
+		63C15C5D175F957500556FD3 /* GPUDarkCalibrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C15C5C175F957500556FD3 /* GPUDarkCalibrator.m */; };
 		FC6F4273174296C20029EB1C /* cosmos.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4272174296C20029EB1C /* cosmos.png */; };
 		FC9249DB174A3B520094DFB4 /* CosmicStampView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DA174A3B520094DFB4 /* CosmicStampView.m */; };
 		FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */; };
@@ -86,8 +86,8 @@
 		63B66A2A1700DA3E004C5021 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		63B66A2C1700DA60004C5021 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		63B66A2E1700E73C004C5021 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
-		63C15C5B175F957500556FD3 /* GPUImageLowPassFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUImageLowPassFilter.h; sourceTree = "<group>"; };
-		63C15C5C175F957500556FD3 /* GPUImageLowPassFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPUImageLowPassFilter.m; sourceTree = "<group>"; };
+		63C15C5B175F957500556FD3 /* GPUDarkCalibrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUDarkCalibrator.h; sourceTree = "<group>"; };
+		63C15C5C175F957500556FD3 /* GPUDarkCalibrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPUDarkCalibrator.m; sourceTree = "<group>"; };
 		FC6F4272174296C20029EB1C /* cosmos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cosmos.png; sourceTree = "<group>"; };
 		FC6F4278174298BB0029EB1C /* cosmic_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cosmic_icon.png; path = ../cosmic_icon.png; sourceTree = "<group>"; };
 		FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cosmic_icon@2x.png"; path = "../cosmic_icon@2x.png"; sourceTree = "<group>"; };
@@ -170,8 +170,8 @@
 		6398F3FB16EE67FB00296AC3 /* Cosmic */ = {
 			isa = PBXGroup;
 			children = (
-				63C15C5B175F957500556FD3 /* GPUImageLowPassFilter.h */,
-				63C15C5C175F957500556FD3 /* GPUImageLowPassFilter.m */,
+				63C15C5B175F957500556FD3 /* GPUDarkCalibrator.h */,
+				63C15C5C175F957500556FD3 /* GPUDarkCalibrator.m */,
 				632A8318175BA2A900E0AB0B /* GPUThresholdFilter.h */,
 				632A8319175BA2A900E0AB0B /* GPUThresholdFilter.m */,
 				6398F40D16EE67FB00296AC3 /* MainStoryboard_iPhone.storyboard */,
@@ -319,7 +319,7 @@
 				FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */,
 				FC9249E2174A79350094DFB4 /* CosmicStamp.m in Sources */,
 				632A831A175BA2A900E0AB0B /* GPUThresholdFilter.m in Sources */,
-				63C15C5D175F957500556FD3 /* GPUImageLowPassFilter.m in Sources */,
+				63C15C5D175F957500556FD3 /* GPUDarkCalibrator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

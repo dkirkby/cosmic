@@ -1,6 +1,6 @@
-#import "GPUImageLowPassFilter.h"
+#import "GPUDarkCalibrator.h"
 
-@implementation GPUImageLowPassFilter
+@implementation GPUDarkCalibrator
 
 @synthesize filterStrength;
 
