@@ -29,7 +29,7 @@
     GPUDarkCalibrator *_darkCalibrator;
     GPUThresholdFilter *_threshold;
     GPUImageLuminosity *_luminosity;
-    GPUImageRawDataOutput *_rawDataOutput;
+    GPUImageRawDataOutput *_finishCalibration, *_rawDataOutput;
     CMTime _timestamp0,_timestamp;
 }
 
@@ -103,6 +103,13 @@
             my->_timestamp = kCMTimeInvalid;
         }
     };
+    
+    _finishCalibration = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
+    [_finishCalibration setNewFrameAvailableBlock:^{
+        NSLog(@"Saving calibration.");
+        // Do I need to do this on a special thread?
+        [my->_videoCamera stopCameraCapture];
+    }];
     
     _rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
     [_rawDataOutput setNewFrameAvailableBlock:^{
@@ -262,9 +269,10 @@
     [_videoCamera startCameraCapture];
     double delayInSeconds = 10.0;
     dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){        
-        [_videoCamera stopCameraCapture];
-        NSLog(@"Finished calibration.");
+    dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
+        NSLog(@"Finishing calibration.");
+        // Add the finishCalibration target to the end of our chain for the next frame
+        [_darkCalibrator addTarget:_finishCalibration];
     });
 
 /**
