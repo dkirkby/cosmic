@@ -260,6 +260,12 @@
     // Start the calibration process running
     NSLog(@"starting calibration...");
     [_videoCamera startCameraCapture];
+    double delayInSeconds = 10.0;
+    dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){        
+        [_videoCamera stopCameraCapture];
+        NSLog(@"Finished calibration.");
+    });
 
 /**
     // Initialize data for this run
