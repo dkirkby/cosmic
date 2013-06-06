@@ -7,8 +7,6 @@
 
 @implementation GPUDarkCalibrator
 
-@synthesize filterStrength;
-
 - (id)init;
 {
     if (!(self = [super init]))
@@ -36,33 +34,17 @@
     self.initialFilters = [NSArray arrayWithObject:dissolveBlendFilter];
     self.terminalFilter = dissolveBlendFilter;
     
-    self.filterStrength = 0.5;
-    self.nCalibrationFrames = 300;
+    self.nCalibrationFrames = 0;
     
     __unsafe_unretained GPUDarkCalibrator *weakSelf = self;
     [self setFrameProcessingCompletionBlock:^(GPUImageOutput *filter, CMTime frameTime) {
-        weakSelf->_frameCounter++;
-        NSLog(@"calibration frame %d done",weakSelf->_frameCounter);
+        int n = ++weakSelf.nCalibrationFrames;
+        // ouptut = (1-mix)*input + mix*last_output
+        // use one-pass online updating to accumulate the mean frame with mix = (n-1)/n
+        weakSelf->dissolveBlendFilter.mix = (n-1.0)/n;
     }];
     
     return self;
-}
-
-- (void) reset {
-    _frameCounter = 0;
-}
-
-#pragma mark -
-#pragma mark Accessors
-
-- (void)setFilterStrength:(CGFloat)newValue;
-{
-    dissolveBlendFilter.mix = newValue;
-}
-
-- (CGFloat)filterStrength;
-{
-    return dissolveBlendFilter.mix;
 }
 
 @end

@@ -107,7 +107,11 @@
     _finishCalibration = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
     [_finishCalibration setNewFrameAvailableBlock:^{
         NSLog(@"Saving calibration.");
-        // Do I need to do this on a special thread?
+        // Save the raw data as in image
+        GLubyte *rawImageBytes = [my->_finishCalibration rawBytesForImage];
+        UIImage *img = [my createUIImageWithWidth:my->_width Height:my->_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:my->_width RawHeight:my->_height];
+        [my saveImageToFilesystem:img withIdentifier:@"calibration"];
+        // Don't take any more frames
         [my->_videoCamera stopCameraCapture];
     }];
     
@@ -262,15 +266,17 @@
     // Configure the GPU pipeline for calibration
     [_videoCamera removeAllTargets];
     [_videoCamera addTarget:_darkCalibrator];
-    [_darkCalibrator reset];
-
+    _darkCalibrator.nCalibrationFrames = 0;
+    
     // Start the calibration process running
     NSLog(@"starting calibration...");
     [_videoCamera startCameraCapture];
+    
     double delayInSeconds = 10.0;
     dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
-        NSLog(@"Finishing calibration.");
+        NSLog(@"Finishing calibration after %d frames (%.3f fps).",
+              _darkCalibrator.nCalibrationFrames,_darkCalibrator.nCalibrationFrames/delayInSeconds);
         // Add the finishCalibration target to the end of our chain for the next frame
         [_darkCalibrator addTarget:_finishCalibration];
     });
@@ -319,11 +325,13 @@
     for(int y = 0; y < imageHeight; ++y) {
         memcpy(imgPtr,rawPtr,bytesPerImgRow);
         /**
-        for(int x = 0; x < imageWidth; ++x) {
-            unsigned int val = imgPtr[x];
-            unsigned char R = (val & 0xff), G = (val & 0xff00) >> 8, B = (val & 0xff0000) >> 16, A = val>>24;
-            unsigned int intensity = R+2*G+B;
-            NSLog(@"dump (%d,%d) R=%d G=%d B=%d A=%d I=%d",x,y,R,G,B,A,intensity);
+        if(y < 4) {
+            for(int x = 0; x < 4; ++x) {
+                unsigned int val = imgPtr[x];
+                unsigned char R = (val & 0xff), G = (val & 0xff00) >> 8, B = (val & 0xff0000) >> 16, A = val>>24;
+                unsigned int intensity = R+2*G+B;
+                NSLog(@"dump (%d,%d) R=%d G=%d B=%d A=%d I=%d",x,y,R,G,B,A,intensity);
+            }
         }
         **/
         imgPtr += imageWidth;
