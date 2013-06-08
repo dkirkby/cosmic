@@ -259,7 +259,7 @@
     }
 }
 
-- (void) beginCapture {
+- (void) beginCalibration {
     // Try to lock the exposure and focus.
     [self lockExposureAndFocus];
     
@@ -271,14 +271,21 @@
     // Start the calibration process running
     NSLog(@"starting calibration...");
     [_videoCamera startCameraCapture];
+}
+
+- (void) endCalibration {
+    // Add the finishCalibration target to the end of our chain for the next frame
+    [_darkCalibrator addTarget:_finishCalibration];
+    NSLog(@"Finishing calibration after %d frames.", _darkCalibrator.nCalibrationFrames);
+}
+
+- (void) beginCapture {
     
+    [self beginCalibration];
     double delayInSeconds = 10.0;
     dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
-        NSLog(@"Finishing calibration after %d frames (%.3f fps).",
-              _darkCalibrator.nCalibrationFrames,_darkCalibrator.nCalibrationFrames/delayInSeconds);
-        // Add the finishCalibration target to the end of our chain for the next frame
-        [_darkCalibrator addTarget:_finishCalibration];
+        [self endCalibration];
     });
 
 /**
