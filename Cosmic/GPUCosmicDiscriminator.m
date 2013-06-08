@@ -1,5 +1,9 @@
 #import "GPUCosmicDiscriminator.h"
 
+// See http://stackoverflow.com/questions/12168072/fragment-shader-average-luminosity/12169560#12169560
+// for details on how the GPUImageAverageColor filter that this is based on works. For a similar max finder, see
+// http://stackoverflow.com/questions/12488049/glsl-how-to-access-pixel-data-of-a-texture-is-glsl-shader
+
 NSString *const kGPUCosmicDiscriminatorVertexShaderString = SHADER_STRING
 (
  attribute vec4 position;

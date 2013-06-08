@@ -13,6 +13,7 @@
 
 #import "GPUImage.h"
 #import "GPUThresholdFilter.h"
+#import "GPUCosmicDiscriminator.h"
 #import "GPUDarkCalibrator.h"
 
 #define VERBOSE NO
@@ -29,6 +30,7 @@
     GPUDarkCalibrator *_darkCalibrator;
     GPUThresholdFilter *_threshold;
     GPUImageLuminosity *_luminosity;
+    GPUCosmicDiscriminator *_discriminator;
     GPUImageRawDataOutput *_finishCalibration, *_rawDataOutput;
     CMTime _timestamp0,_timestamp;
 }
@@ -60,27 +62,43 @@
 
 - (void) initCapture {
     
+    // Use this voodoo to avoid warnings about 'capturing self strongly in this block is likely to lead to a
+    // retain cycle' in the callback blocks declared below. For details, see:
+    // http://stackoverflow.com/questions/14556605/capturing-self-strongly-in-this-block-is-likely-to-lead-to-a-retain-cycle
+    __unsafe_unretained typeof(self) my = self;
+
+    // Create and configure our video input source
     _videoCamera = [[GPUImageVideoCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1280x720 cameraPosition:AVCaptureDevicePositionBack];
-    _width = 1280;
-    _height = 720;
-    
     _videoCamera.outputImageOrientation = UIInterfaceOrientationLandscapeLeft;
     _videoCamera.horizontallyMirrorFrontFacingCamera = NO;
     _videoCamera.horizontallyMirrorRearFacingCamera = NO;
     _videoCamera.runBenchmark = NO;
+    _videoCamera.frameRate = 100; // run as fast as possible (could we ever exceed 30 fps?)
     
+    // Remember our input source size (it would be better to get this directly from _videoCamera somehow...)
+    _width = 1280;
+    _height = 720;
+
+    // Create our dark frame calibrator
     _darkCalibrator = [[GPUDarkCalibrator alloc] init];
+    
+    // Create and configure our end-of-calibration handler
+    _finishCalibration = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(_width,_height) resultsInBGRAFormat:YES];
+    [_finishCalibration setNewFrameAvailableBlock:^{
+        NSLog(@"Saving calibration.");
+        // Save the raw data as in image
+        GLubyte *rawImageBytes = [my->_finishCalibration rawBytesForImage];
+        UIImage *img = [my createUIImageWithWidth:my->_width Height:my->_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:my->_width RawHeight:my->_height];
+        [my saveImageToFilesystem:img withIdentifier:@"calibration"];
+        // Don't take any more frames
+        [my->_videoCamera stopCameraCapture];
+    }];
     
     _threshold = [[GPUThresholdFilter alloc] init];
     _threshold.threshold = MIN_INTENSITY/1024.0;
     
-    // Use this voodoo to avoid warnings about 'capturing self strongly in this block is likely to lead to a retain cycle'
-    // http://stackoverflow.com/questions/14556605/capturing-self-strongly-in-this-block-is-likely-to-lead-to-a-retain-cycle
-    __unsafe_unretained typeof(self) my = self;
+    _discriminator = [[GPUCosmicDiscriminator alloc] init];
     
-    // See http://stackoverflow.com/questions/12168072/fragment-shader-average-luminosity/12169560#12169560
-    // for details on how the image luminosity is calculated on the GPU. For a similar max finder, see
-    // http://stackoverflow.com/questions/12488049/glsl-how-to-access-pixel-data-of-a-texture-is-glsl-shader
     _luminosity = [[GPUImageLuminosity alloc] init];
     _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
         if(my->_exposureCount % STATS_UPDATE_INTERVAL == 0) {
@@ -104,18 +122,8 @@
         }
     };
     
-    _finishCalibration = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
-    [_finishCalibration setNewFrameAvailableBlock:^{
-        NSLog(@"Saving calibration.");
-        // Save the raw data as in image
-        GLubyte *rawImageBytes = [my->_finishCalibration rawBytesForImage];
-        UIImage *img = [my createUIImageWithWidth:my->_width Height:my->_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:my->_width RawHeight:my->_height];
-        [my saveImageToFilesystem:img withIdentifier:@"calibration"];
-        // Don't take any more frames
-        [my->_videoCamera stopCameraCapture];
-    }];
-    
-    _rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(1280.0, 720.0) resultsInBGRAFormat:YES];
+    // Create and configure our cosmic candidate output handler
+    _rawDataOutput = [[GPUImageRawDataOutput alloc] initWithImageSize:CGSizeMake(_width,_height) resultsInBGRAFormat:YES];
     [_rawDataOutput setNewFrameAvailableBlock:^{
         
         // Did the previous filters flag this frame?
@@ -214,8 +222,8 @@
         }
     }];
     
-    // Now that we know the image dimensions, initialize an array to count how often each pixel
-    // is selected as the maximum intensity in an exposure.
+    // Initialize an array to count how often each pixel is selected as the maximum intensity in an exposure.
+    // (This should eventually move to a mask texture that is applied directly by the GPU...)
     if(_pixelCount) free(_pixelCount);
     int countSize = sizeof(unsigned char)*_width*_height;
     _pixelCount = malloc(countSize);
@@ -282,13 +290,12 @@
 - (void) beginCapture {
     
     [self beginCalibration];
-    double delayInSeconds = 10.0;
+    double delayInSeconds = 1.0;
     dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
     dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
         [self endCalibration];
     });
 
-/**
     // Initialize data for this run
     _saveCount = 0;
     _exposureCount = 0;
@@ -302,7 +309,6 @@
 
     // Start the capture process running
     [_videoCamera startCameraCapture];
-**/
 }
 
 - (void) saveImageToFilesystem:(UIImage*)image withIdentifier:(NSString*)identifier {
