@@ -56,10 +56,11 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
      highp float lowerRightIntensity = dot(lowerRightColor.rgb, W);
 
      highp vec4 outputColor;
-     outputColor.r = 0.5;
-     outputColor.g = 0.25;
-     outputColor.b = 0.75;
-     outputColor.a = 1.0;
+     outputColor = vec4(upperLeftInputTextureCoordinate,lowerRightInputTextureCoordinate);
+     //outputColor.r = 0.5;
+     //outputColor.g = 0.25;
+     //outputColor.b = 0.75;
+     //outputColor.a = 1.0;
      
      gl_FragColor = outputColor;
  }

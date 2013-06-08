@@ -116,8 +116,8 @@
     [_rawDataOutput setNewFrameAvailableBlock:^{
         
         // Did the previous filters flag this frame?
-        if(CMTIME_IS_INVALID(my->_timestamp)) return;
-        NSLog(@"starting raw pipeline for %f",CMTimeGetSeconds(my->_timestamp));
+        //!!if(CMTIME_IS_INVALID(my->_timestamp)) return;
+        //!!NSLog(@"starting raw pipeline for %f",CMTimeGetSeconds(my->_timestamp));
         
         // Get a pointer to our raw image data. Each pixel is stored as four bytes. When accessed
         // as an unsigned int, the bytes are packed as (A << 24) | (B << 16) | (G << 8) | R.
@@ -129,7 +129,7 @@
         GLubyte *rawImageBytes = [my->_rawDataOutput rawBytesForImage];
         
         // Sanity check: dump first exposure as a full image
-        if(0 == my->_exposureCount) {
+        if(1 == my->_exposureCount) {
             UIImage *img = [my createUIImageWithWidth:my->_width Height:my->_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:my->_width RawHeight:my->_height];
             [my saveImageToFilesystem:img withIdentifier:@"testing"];
         }
