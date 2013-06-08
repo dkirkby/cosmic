@@ -75,7 +75,7 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
     
     __unsafe_unretained GPUCosmicDiscriminator *weakSelf = self;
     [self setFrameProcessingCompletionBlock:^(GPUImageOutput *filter, CMTime frameTime) {
-        [weakSelf extractAverageColorAtFrameTime:frameTime];
+        [weakSelf finalizeAtFrameTime:frameTime];
     }];
 
     return self;
@@ -105,10 +105,10 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
 
         NSUInteger numberOfReductionsInX = floor(log(inputTextureSize.width) / log(4.0));
         NSUInteger numberOfReductionsInY = floor(log(inputTextureSize.height) / log(4.0));
-//        NSLog(@"Reductions in X: %d, y: %d", numberOfReductionsInX, numberOfReductionsInY);
+        NSLog(@"Reductions in X: %d, y: %d", numberOfReductionsInX, numberOfReductionsInY);
         
         NSUInteger reductionsToHitSideLimit = MIN(numberOfReductionsInX, numberOfReductionsInY);
-//        NSLog(@"Total reductions: %d", reductionsToHitSideLimit);
+        NSLog(@"Total reductions: %d", reductionsToHitSideLimit);
         for (NSUInteger currentReduction = 0; currentReduction < reductionsToHitSideLimit; currentReduction++)
         {
 //            CGSize currentStageSize = CGSizeMake(ceil(inputTextureSize.width / pow(4.0, currentReduction + 1.0)), ceil(inputTextureSize.height / pow(4.0, currentReduction + 1.0)));
@@ -120,11 +120,7 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
 //                currentStageSize.height = 2.0; // TODO: Rotate the image to account for this case, which causes FBO construction to fail
             }
             
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
             [stageSizes addObject:[NSValue valueWithCGSize:currentStageSize]];
-#else
-            [stageSizes addObject:[NSValue valueWithSize:NSSizeFromCGSize(currentStageSize)]];
-#endif
 
             GLuint textureForStage;
             glGenTextures(1, &textureForStage);
@@ -135,7 +131,7 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             [stageTextures addObject:[NSNumber numberWithInt:textureForStage]];
             
-//            NSLog(@"At reduction: %d size in X: %f, size in Y:%f", currentReduction, currentStageSize.width, currentStageSize.height);
+            NSLog(@"At reduction: %d size in X: %f, size in Y:%f", currentReduction, currentStageSize.width, currentStageSize.height);
         }
     });
 }
@@ -193,13 +189,9 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
             GLuint currentTexture = [[stageTextures objectAtIndex:currentStage] intValue];
             glBindTexture(GL_TEXTURE_2D, currentTexture);
             
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
             CGSize currentFramebufferSize = [[stageSizes objectAtIndex:currentStage] CGSizeValue];
-#else
-            NSSize currentFramebufferSize = [[stageSizes objectAtIndex:currentStage] sizeValue];
-#endif
             
-//            NSLog(@"FBO stage size: %f, %f", currentFramebufferSize.width, currentFramebufferSize.height);
+            NSLog(@"FBO stage size: %f, %f", currentFramebufferSize.width, currentFramebufferSize.height);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)currentFramebufferSize.width, (int)currentFramebufferSize.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, currentTexture, 0);
             GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -247,11 +239,7 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
         GLuint currentFramebuffer = [[stageFramebuffers objectAtIndex:currentStage] intValue];
         glBindFramebuffer(GL_FRAMEBUFFER, currentFramebuffer);
         
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
         CGSize currentStageSize = [[stageSizes objectAtIndex:currentStage] CGSizeValue];
-#else
-        NSSize currentStageSize = [[stageSizes objectAtIndex:currentStage] sizeValue];
-#endif
         glViewport(0, 0, (int)currentStageSize.width, (int)currentStageSize.height);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -317,13 +305,9 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
     inputRotation = kGPUImageNoRotation;
 }
 
-- (void)extractAverageColorAtFrameTime:(CMTime)frameTime;
+- (void)finalizeAtFrameTime:(CMTime)frameTime;
 {
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
     CGSize finalStageSize = [[stageSizes lastObject] CGSizeValue];
-#else
-    NSSize finalStageSize = [[stageSizes lastObject] sizeValue];
-#endif
     NSUInteger totalNumberOfPixels = round(finalStageSize.width * finalStageSize.height);
     
     if (rawImagePixels == NULL)
@@ -342,15 +326,15 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
         blueTotal += rawImagePixels[byteIndex++];
         alphaTotal += rawImagePixels[byteIndex++];
     }
-    
+/*
     CGFloat normalizedRedTotal = (CGFloat)redTotal / (CGFloat)totalNumberOfPixels / 255.0;
     CGFloat normalizedGreenTotal = (CGFloat)greenTotal / (CGFloat)totalNumberOfPixels / 255.0;
     CGFloat normalizedBlueTotal = (CGFloat)blueTotal / (CGFloat)totalNumberOfPixels / 255.0;
     CGFloat normalizedAlphaTotal = (CGFloat)alphaTotal / (CGFloat)totalNumberOfPixels / 255.0;
-    
+*/    
     if (_cosmicDiscriminatorFinishedBlock != NULL)
     {
-        _cosmicDiscriminatorFinishedBlock(normalizedRedTotal, normalizedGreenTotal, normalizedBlueTotal, normalizedAlphaTotal, frameTime);
+        _cosmicDiscriminatorFinishedBlock(frameTime);
     }
 }
 

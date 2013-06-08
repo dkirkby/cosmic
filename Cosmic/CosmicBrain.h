@@ -24,6 +24,7 @@
 - (void) initCapture;
 - (void) beginCalibration;
 - (void) endCalibration;
+- (void) beginRun;
 - (void) beginCapture;
 
 @end

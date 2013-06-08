@@ -13,8 +13,8 @@ extern NSString *const kGPUCosmicDiscriminatorVertexShaderString;
 }
 
 // This block is called on the completion of color averaging for a frame
-@property(nonatomic, copy) void(^cosmicDiscriminatorFinishedBlock)(CGFloat redComponent, CGFloat greenComponent, CGFloat blueComponent, CGFloat alphaComponent, CMTime frameTime);
+@property(nonatomic, copy) void(^cosmicDiscriminatorFinishedBlock)(CMTime frameTime);
 
-- (void)extractAverageColorAtFrameTime:(CMTime)frameTime;
+- (void)finalizeAtFrameTime:(CMTime)frameTime;
 
 @end

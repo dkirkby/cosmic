@@ -29,7 +29,6 @@
     GPUImageVideoCamera *_videoCamera;
     GPUDarkCalibrator *_darkCalibrator;
     GPUThresholdFilter *_threshold;
-    GPUImageLuminosity *_luminosity;
     GPUCosmicDiscriminator *_discriminator;
     GPUImageRawDataOutput *_finishCalibration, *_rawDataOutput;
     CMTime _timestamp0,_timestamp;
@@ -98,9 +97,8 @@
     _threshold.threshold = MIN_INTENSITY/1024.0;
     
     _discriminator = [[GPUCosmicDiscriminator alloc] init];
-    
-    _luminosity = [[GPUImageLuminosity alloc] init];
-    _luminosity.luminosityProcessingFinishedBlock = ^(CGFloat luminosity, CMTime frameTime) {
+    _discriminator.cosmicDiscriminatorFinishedBlock = ^(CMTime frameTime) {
+        NSLog(@"tick");
         if(my->_exposureCount % STATS_UPDATE_INTERVAL == 0) {
             if(my->_exposureCount > 0) {
                 Float64 elapsed = CMTimeGetSeconds(CMTimeSubtract(frameTime, my->_timestamp0));
@@ -111,15 +109,6 @@
         
         // Update our exposure counter
         my->_exposureCount++;
-
-        // Flag this frame for further processing?
-        if(luminosity > 0.0) {
-            my->_timestamp = frameTime;
-            NSLog(@"finished detection pipeline for %f",CMTimeGetSeconds(my->_timestamp));
-        }
-        else {
-            my->_timestamp = kCMTimeInvalid;
-        }
     };
     
     // Create and configure our cosmic candidate output handler
@@ -287,15 +276,7 @@
     NSLog(@"Finishing calibration after %d frames.", _darkCalibrator.nCalibrationFrames);
 }
 
-- (void) beginCapture {
-    
-    [self beginCalibration];
-    double delayInSeconds = 1.0;
-    dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-    dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
-        [self endCalibration];
-    });
-
+- (void) beginRun {
     // Initialize data for this run
     _saveCount = 0;
     _exposureCount = 0;
@@ -303,12 +284,27 @@
     // Configure the GPU pipeline for data taking
     [_videoCamera removeAllTargets];
     [_threshold removeAllTargets];
-    [_videoCamera addTarget:_threshold];
-    [_threshold addTarget: _luminosity];
-    [_videoCamera addTarget:_rawDataOutput];
-
+    [_videoCamera addTarget:_discriminator];
+    //!![_videoCamera addTarget:_threshold];
+    //!![_threshold addTarget: _discriminator];
+    //!![_videoCamera addTarget:_rawDataOutput];
+    
     // Start the capture process running
-    [_videoCamera startCameraCapture];
+    NSLog(@"starting run...");
+    [_videoCamera startCameraCapture];    
+}
+
+- (void) beginCapture {
+    [self beginCalibration];
+    double delayInSeconds = 10.0;
+    dispatch_time_t stopTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(stopTime, dispatch_get_main_queue(), ^(void){
+        [self endCalibration];
+        dispatch_time_t startRunTime = dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC);
+        dispatch_after(startRunTime, dispatch_get_main_queue(), ^(void){
+            [self beginRun];
+        });
+    });
 }
 
 - (void) saveImageToFilesystem:(UIImage*)image withIdentifier:(NSString*)identifier {
