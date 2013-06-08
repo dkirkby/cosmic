@@ -129,10 +129,12 @@
         GLubyte *rawImageBytes = [my->_rawDataOutput rawBytesForImage];
         
         // Sanity check: dump first exposure as a full image
-        if(false && 0 == my->_exposureCount) {
+        if(0 == my->_exposureCount) {
             UIImage *img = [my createUIImageWithWidth:my->_width Height:my->_height AtLeftEdge:0 TopEdge:0 FromRawData:rawImageBytes WithRawWidth:my->_width RawHeight:my->_height];
             [my saveImageToFilesystem:img withIdentifier:@"testing"];
         }
+
+        return;
         
         // Run the analysis algorithm
         // Loop over raw pixels to find the pixel with the largest intensity r+2*g+b
@@ -287,7 +289,7 @@
     //!![_videoCamera addTarget:_threshold];
     //!![_threshold addTarget: _discriminator];
     [_videoCamera addTarget:_discriminator];
-    //!![_videoCamera addTarget:_rawDataOutput];
+    [_videoCamera addTarget:_rawDataOutput];
     
     // Start the capture process running
     NSLog(@"starting run...");
@@ -333,16 +335,14 @@
     // Loop over rows to copy from the raw data into the image data array
     for(int y = 0; y < imageHeight; ++y) {
         memcpy(imgPtr,rawPtr,bytesPerImgRow);
-        /**
         if(y < 4) {
             for(int x = 0; x < 4; ++x) {
                 unsigned int val = imgPtr[x];
                 unsigned char R = (val & 0xff), G = (val & 0xff00) >> 8, B = (val & 0xff0000) >> 16, A = val>>24;
                 unsigned int intensity = R+2*G+B;
-                NSLog(@"dump (%d,%d) R=%d G=%d B=%d A=%d I=%d",x,y,R,G,B,A,intensity);
+                NSLog(@"DUMP[%d,%d] %02x %02x %02x %02x (%d)",x,y,R,G,B,A,intensity);
             }
         }
-        **/
         imgPtr += imageWidth;
         rawPtr += rawWidth;
     }

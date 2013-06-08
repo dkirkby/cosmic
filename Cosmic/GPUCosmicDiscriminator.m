@@ -55,8 +55,8 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
      highp float lowerLeftIntensity = dot(lowerLeftColor.rgb, W);
      highp float lowerRightIntensity = dot(lowerRightColor.rgb, W);
 
-     lowp vec4 outputColor;
-     outputColor.r = 0.0;
+     highp vec4 outputColor;
+     outputColor.r = 0.5;
      outputColor.g = 0.25;
      outputColor.b = 0.75;
      outputColor.a = 1.0;
@@ -64,6 +64,12 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
      gl_FragColor = outputColor;
  }
 );
+
+@interface GPUCosmicDiscriminator () {
+    BOOL _firstTime;
+}
+
+@end
 
 @implementation GPUCosmicDiscriminator
 
@@ -91,6 +97,8 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
         [weakSelf finalizeAtFrameTime:frameTime];
     }];
 
+    _firstTime = YES;
+    
     return self;
 }
 
@@ -266,42 +274,28 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
 
         currentTexture = [[stageTextures objectAtIndex:currentStage] intValue];
 
-//        NSUInteger totalBytesForImage = (int)currentStageSize.width * (int)currentStageSize.height * 4;
-//        GLubyte *rawImagePixels2 = (GLubyte *)malloc(totalBytesForImage);
-//        glReadPixels(0, 0, (int)currentStageSize.width, (int)currentStageSize.height, GL_RGBA, GL_UNSIGNED_BYTE, rawImagePixels2);
-//        CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, rawImagePixels2, totalBytesForImage, NULL);
-//        CGColorSpaceRef defaultRGBColorSpace = CGColorSpaceCreateDeviceRGB();
-//
-//        CGFloat currentRedTotal = 0.0f, currentGreenTotal = 0.0f, currentBlueTotal = 0.0f, currentAlphaTotal = 0.0f;
-//        NSUInteger totalNumberOfPixels = totalBytesForImage / 4;
-//        
-//        for (NSUInteger currentPixel = 0; currentPixel < totalNumberOfPixels; currentPixel++)
-//        {
-//            currentRedTotal += (CGFloat)rawImagePixels2[(currentPixel * 4)] / 255.0f;
-//            currentGreenTotal += (CGFloat)rawImagePixels2[(currentPixel * 4) + 1] / 255.0f;
-//            currentBlueTotal += (CGFloat)rawImagePixels2[(currentPixel * 4 + 2)] / 255.0f;
-//            currentAlphaTotal += (CGFloat)rawImagePixels2[(currentPixel * 4) + 3] / 255.0f;
-//        }
-//        
-//        NSLog(@"Stage %d average image red: %f, green: %f, blue: %f, alpha: %f", currentStage, currentRedTotal / (CGFloat)totalNumberOfPixels, currentGreenTotal / (CGFloat)totalNumberOfPixels, currentBlueTotal / (CGFloat)totalNumberOfPixels, currentAlphaTotal / (CGFloat)totalNumberOfPixels);
-//
-//        
-//        CGImageRef cgImageFromBytes = CGImageCreate((int)currentStageSize.width, (int)currentStageSize.height, 8, 32, 4 * (int)currentStageSize.width, defaultRGBColorSpace, kCGBitmapByteOrderDefault | kCGImageAlphaLast, dataProvider, NULL, NO, kCGRenderingIntentDefault);
-//
-//        UIImage *imageToSave = [UIImage imageWithCGImage:cgImageFromBytes];
-//        
-//        NSData *dataForPNGFile = UIImagePNGRepresentation(imageToSave);
-//        
-//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//        NSString *documentsDirectory = [paths objectAtIndex:0];
-//        
-//        NSString *imageName = [NSString stringWithFormat:@"AverageLevel%d.png", currentStage];
-//        NSError *error = nil;
-//        if (![dataForPNGFile writeToFile:[documentsDirectory stringByAppendingPathComponent:imageName] options:NSAtomicWrite error:&error])
-//        {
-//            return;
-//        }
+        if(_firstTime) {
+            NSUInteger width = (int)currentStageSize.width;
+            NSUInteger height = (int)currentStageSize.height;
+            NSUInteger totalBytesForImage = 4*width*height;
+            GLubyte *rawImagePixels2 = (GLubyte *)malloc(totalBytesForImage);
+            glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, rawImagePixels2);
+
+            NSUInteger totalNumberOfPixels = totalBytesForImage / 4;
+            for (NSUInteger currentPixel = 0; currentPixel < totalNumberOfPixels; currentPixel++) {
+                NSUInteger row = currentPixel / width;
+                NSUInteger col = currentPixel % width;
+                if(row < 4 && col < 4) {
+                    GLubyte r = rawImagePixels2[currentPixel*4];
+                    GLubyte g = rawImagePixels2[currentPixel*4+1];
+                    GLubyte b = rawImagePixels2[currentPixel*4+2];
+                    GLubyte a = rawImagePixels2[currentPixel*4+3];
+                    NSLog(@"RGBA[%d,%d,%d] = %02x %02x %02x %02x",currentStage,row,col,r,g,b,a);
+                }
+            }
+        }
     }
+    _firstTime = NO;
 }
 
 - (void)prepareForImageCapture;
