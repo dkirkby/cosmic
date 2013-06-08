@@ -1,6 +1,6 @@
 #import "GPUImageFilter.h"
 
-extern NSString *const kGPUImageColorAveragingVertexShaderString;
+extern NSString *const kGPUCosmicDiscriminatorVertexShaderString;
 
 @interface GPUCosmicDiscriminator : GPUImageFilter
 {
@@ -13,7 +13,7 @@ extern NSString *const kGPUImageColorAveragingVertexShaderString;
 }
 
 // This block is called on the completion of color averaging for a frame
-@property(nonatomic, copy) void(^colorAverageProcessingFinishedBlock)(CGFloat redComponent, CGFloat greenComponent, CGFloat blueComponent, CGFloat alphaComponent, CMTime frameTime);
+@property(nonatomic, copy) void(^cosmicDiscriminatorFinishedBlock)(CGFloat redComponent, CGFloat greenComponent, CGFloat blueComponent, CGFloat alphaComponent, CMTime frameTime);
 
 - (void)extractAverageColorAtFrameTime:(CMTime)frameTime;
 

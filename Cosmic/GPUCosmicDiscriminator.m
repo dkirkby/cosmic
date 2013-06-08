@@ -1,6 +1,6 @@
 #import "GPUCosmicDiscriminator.h"
 
-NSString *const kGPUImageColorAveragingVertexShaderString = SHADER_STRING
+NSString *const kGPUCosmicDiscriminatorVertexShaderString = SHADER_STRING
 (
  attribute vec4 position;
  attribute vec4 inputTextureCoordinate;
@@ -24,8 +24,7 @@ NSString *const kGPUImageColorAveragingVertexShaderString = SHADER_STRING
  }
  );
 
-#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
+NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
 (
  precision highp float;
  
@@ -48,40 +47,17 @@ NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
      gl_FragColor = 0.25 * (upperLeftColor + upperRightColor + lowerLeftColor + lowerRightColor);
  }
 );
-#else
-NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
-(
- uniform sampler2D inputImageTexture;
- 
- varying vec2 outputTextureCoordinate;
- 
- varying vec2 upperLeftInputTextureCoordinate;
- varying vec2 upperRightInputTextureCoordinate;
- varying vec2 lowerLeftInputTextureCoordinate;
- varying vec2 lowerRightInputTextureCoordinate;
- 
- void main()
- {
-     vec4 upperLeftColor = texture2D(inputImageTexture, upperLeftInputTextureCoordinate);
-     vec4 upperRightColor = texture2D(inputImageTexture, upperRightInputTextureCoordinate);
-     vec4 lowerLeftColor = texture2D(inputImageTexture, lowerLeftInputTextureCoordinate);
-     vec4 lowerRightColor = texture2D(inputImageTexture, lowerRightInputTextureCoordinate);
-     
-     gl_FragColor = 0.25 * (upperLeftColor + upperRightColor + lowerLeftColor + lowerRightColor);
- }
-);
-#endif
 
 @implementation GPUCosmicDiscriminator
 
-@synthesize colorAverageProcessingFinishedBlock = _colorAverageProcessingFinishedBlock;
+@synthesize cosmicDiscriminatorFinishedBlock = _cosmicDiscriminatorFinishedBlock;
 
 #pragma mark -
 #pragma mark Initialization and teardown
 
 - (id)init;
 {
-    if (!(self = [super initWithVertexShaderFromString:kGPUImageColorAveragingVertexShaderString fragmentShaderFromString:kGPUImageColorAveragingFragmentShaderString]))
+    if (!(self = [super initWithVertexShaderFromString:kGPUCosmicDiscriminatorVertexShaderString fragmentShaderFromString:kGPUCosmicDiscriminatorFragmentShaderString]))
     {
         return nil;
     }
@@ -368,9 +344,9 @@ NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
     CGFloat normalizedBlueTotal = (CGFloat)blueTotal / (CGFloat)totalNumberOfPixels / 255.0;
     CGFloat normalizedAlphaTotal = (CGFloat)alphaTotal / (CGFloat)totalNumberOfPixels / 255.0;
     
-    if (_colorAverageProcessingFinishedBlock != NULL)
+    if (_cosmicDiscriminatorFinishedBlock != NULL)
     {
-        _colorAverageProcessingFinishedBlock(normalizedRedTotal, normalizedGreenTotal, normalizedBlueTotal, normalizedAlphaTotal, frameTime);
+        _cosmicDiscriminatorFinishedBlock(normalizedRedTotal, normalizedGreenTotal, normalizedBlueTotal, normalizedAlphaTotal, frameTime);
     }
 }
 
