@@ -284,8 +284,9 @@
     // Configure the GPU pipeline for data taking
     [_videoCamera removeAllTargets];
     [_threshold removeAllTargets];
-    [_videoCamera addTarget:_threshold];
-    [_threshold addTarget: _discriminator];
+    //!![_videoCamera addTarget:_threshold];
+    //!![_threshold addTarget: _discriminator];
+    [_videoCamera addTarget:_discriminator];
     //!![_videoCamera addTarget:_rawDataOutput];
     
     // Start the capture process running

@@ -32,6 +32,8 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
 (
  precision highp float;
  
+ const highp vec3 W = vec3(0.25, 0.50, 0.25);
+ 
  uniform sampler2D inputImageTexture;
  
  varying highp vec2 outputTextureCoordinate;
@@ -47,8 +49,19 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
      highp vec4 upperRightColor = texture2D(inputImageTexture, upperRightInputTextureCoordinate);
      highp vec4 lowerLeftColor = texture2D(inputImageTexture, lowerLeftInputTextureCoordinate);
      highp vec4 lowerRightColor = texture2D(inputImageTexture, lowerRightInputTextureCoordinate);
+
+     highp float upperLeftIntensity = dot(upperLeftColor.rgb, W);
+     highp float upperRightIntensity = dot(upperRightColor.rgb, W);
+     highp float lowerLeftIntensity = dot(lowerLeftColor.rgb, W);
+     highp float lowerRightIntensity = dot(lowerRightColor.rgb, W);
+
+     lowp vec4 outputColor;
+     outputColor.r = 0.0;
+     outputColor.g = 0.25;
+     outputColor.b = 0.75;
+     outputColor.a = 1.0;
      
-     gl_FragColor = 0.25 * (upperLeftColor + upperRightColor + lowerLeftColor + lowerRightColor);
+     gl_FragColor = outputColor;
  }
 );
 
@@ -103,22 +116,18 @@ NSString *const kGPUCosmicDiscriminatorFragmentShaderString = SHADER_STRING
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
 
-        NSUInteger numberOfReductionsInX = floor(log(inputTextureSize.width) / log(4.0));
-        NSUInteger numberOfReductionsInY = floor(log(inputTextureSize.height) / log(4.0));
-        NSLog(@"Reductions in X: %d, y: %d", numberOfReductionsInX, numberOfReductionsInY);
-        
-        NSUInteger reductionsToHitSideLimit = MIN(numberOfReductionsInX, numberOfReductionsInY);
-        NSLog(@"Total reductions: %d", reductionsToHitSideLimit);
-        for (NSUInteger currentReduction = 0; currentReduction < reductionsToHitSideLimit; currentReduction++)
-        {
-//            CGSize currentStageSize = CGSizeMake(ceil(inputTextureSize.width / pow(4.0, currentReduction + 1.0)), ceil(inputTextureSize.height / pow(4.0, currentReduction + 1.0)));
-            CGSize currentStageSize = CGSizeMake(floor(inputTextureSize.width / pow(4.0, currentReduction + 1.0)), floor(inputTextureSize.height / pow(4.0, currentReduction + 1.0)));
-            if ( (currentStageSize.height < 2.0) || (currentStageSize.width < 2.0) )
-            {
-                // A really small last stage seems to cause significant errors in the average, so I abort and leave the rest to the CPU at this point
-                break;
-//                currentStageSize.height = 2.0; // TODO: Rotate the image to account for this case, which causes FBO construction to fail
-            }
+        NSUInteger nReductions = 4;
+        int width = (int)floor(inputTextureSize.width+0.5);
+        int height = (int)floor(inputTextureSize.height+0.5);
+        NSAssert(width % (1<<nReductions) == 0,
+                 @"Input texture width %d is not a multiple of %d.",width,(1<<nReductions));
+        NSAssert(height % (1<<nReductions) == 0,
+                 @"Input texture height %d is not a multiple of %d.",height,(1<<nReductions));
+        NSLog(@"Will reduce %u times for size %f x %f", nReductions,inputTextureSize.width,inputTextureSize.height);
+        NSUInteger divisor = 1;
+        for (NSUInteger currentReduction = 0; currentReduction < nReductions; currentReduction++) {
+            divisor *= 2;
+            CGSize currentStageSize = CGSizeMake(width/divisor, height/divisor);
             
             [stageSizes addObject:[NSValue valueWithCGSize:currentStageSize]];
 
