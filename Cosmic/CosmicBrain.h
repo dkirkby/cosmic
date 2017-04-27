@@ -22,7 +22,9 @@
 @property(nonatomic,assign) id <CosmicBrainDelegate> brainDelegate;
 
 - (void) initCapture;
+- (void) beginCalibration;
+- (void) endCalibration;
+- (void) beginRun;
 - (void) beginCapture;
-- (void) captureImage;
 
 @end
