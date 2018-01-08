@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6302F885175B462F006D877F /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F882175B435A006D877F /* libGPUImage.a */; };
 		6302F887175B476E006D877F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F886175B476E006D877F /* OpenGLES.framework */; };
 		6302F889175B4783006D877F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6302F888175B4783006D877F /* QuartzCore.framework */; };
 		632A831A175BA2A900E0AB0B /* GPUThresholdFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 632A8319175BA2A900E0AB0B /* GPUThresholdFilter.m */; };
@@ -30,6 +29,8 @@
 		63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2C1700DA60004C5021 /* CoreVideo.framework */; };
 		63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B66A2E1700E73C004C5021 /* ImageIO.framework */; };
 		63C15C5D175F957500556FD3 /* GPUDarkCalibrator.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C15C5C175F957500556FD3 /* GPUDarkCalibrator.m */; };
+		A006CFEB2002FEE900B63D31 /* GPUImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A006CFE82002FECD00B63D31 /* GPUImage.framework */; };
+		A006CFED2002FEFC00B63D31 /* GPUImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A006CFE82002FECD00B63D31 /* GPUImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		FC6F4273174296C20029EB1C /* cosmos.png in Resources */ = {isa = PBXBuildFile; fileRef = FC6F4272174296C20029EB1C /* cosmos.png */; };
 		FC9249DB174A3B520094DFB4 /* CosmicStampView.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DA174A3B520094DFB4 /* CosmicStampView.m */; };
 		FC9249DF174A63C60094DFB4 /* CosmicStampViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FC9249DE174A63C60094DFB4 /* CosmicStampViewController.m */; };
@@ -42,24 +43,43 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6302F881175B435A006D877F /* PBXContainerItemProxy */ = {
+		A006CFE52002FECD00B63D31 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6302F87B175B4359006D877F /* GPUImage.xcodeproj */;
+			containerPortal = A006CFDF2002FECD00B63D31 /* GPUImage.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = BCF1A33414DDB1EC00852800;
 			remoteInfo = GPUImage;
 		};
-		6302F883175B435A006D877F /* PBXContainerItemProxy */ = {
+		A006CFE72002FECD00B63D31 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6302F87B175B4359006D877F /* GPUImage.xcodeproj */;
+			containerPortal = A006CFDF2002FECD00B63D31 /* GPUImage.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BCF1A34414DDB1EC00852800;
-			remoteInfo = GPUImageTests;
+			remoteGlobalIDString = BCE209E51943F20C002FEED8;
+			remoteInfo = GPUImageFramework;
+		};
+		A006CFE92002FEE100B63D31 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A006CFDF2002FECD00B63D31 /* GPUImage.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BCE209E41943F20C002FEED8;
+			remoteInfo = GPUImageFramework;
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		A006CFEC2002FEF000B63D31 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A006CFED2002FEFC00B63D31 /* GPUImage.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		6302F87B175B4359006D877F /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = ../GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
 		6302F886175B476E006D877F /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		6302F888175B4783006D877F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		632A8318175BA2A900E0AB0B /* GPUThresholdFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUThresholdFilter.h; sourceTree = "<group>"; };
@@ -91,6 +111,7 @@
 		63B66A2E1700E73C004C5021 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		63C15C5B175F957500556FD3 /* GPUDarkCalibrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPUDarkCalibrator.h; sourceTree = "<group>"; };
 		63C15C5C175F957500556FD3 /* GPUDarkCalibrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPUDarkCalibrator.m; sourceTree = "<group>"; };
+		A006CFDF2002FECD00B63D31 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = GPUImage/framework/GPUImage.xcodeproj; sourceTree = "<group>"; };
 		FC6F4272174296C20029EB1C /* cosmos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cosmos.png; sourceTree = "<group>"; };
 		FC6F4278174298BB0029EB1C /* cosmic_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cosmic_icon.png; path = ../cosmic_icon.png; sourceTree = "<group>"; };
 		FC6F427A174298C20029EB1C /* cosmic_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cosmic_icon@2x.png"; path = "../cosmic_icon@2x.png"; sourceTree = "<group>"; };
@@ -111,9 +132,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A006CFEB2002FEE900B63D31 /* GPUImage.framework in Frameworks */,
 				6302F889175B4783006D877F /* QuartzCore.framework in Frameworks */,
 				6302F887175B476E006D877F /* OpenGLES.framework in Frameworks */,
-				6302F885175B462F006D877F /* libGPUImage.a in Frameworks */,
 				63B66A2F1700E73C004C5021 /* ImageIO.framework in Frameworks */,
 				63B66A2D1700DA60004C5021 /* CoreVideo.framework in Frameworks */,
 				63B66A2B1700DA3E004C5021 /* CoreMedia.framework in Frameworks */,
@@ -127,21 +148,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6302F87C175B4359006D877F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6302F882175B435A006D877F /* libGPUImage.a */,
-				6302F884175B435A006D877F /* GPUImageTests.octest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		6398F3E916EE67FA00296AC3 = {
 			isa = PBXGroup;
 			children = (
+				A006CFDF2002FECD00B63D31 /* GPUImage.xcodeproj */,
 				6302F888175B4783006D877F /* QuartzCore.framework */,
 				6302F886175B476E006D877F /* OpenGLES.framework */,
-				6302F87B175B4359006D877F /* GPUImage.xcodeproj */,
 				6398F3FB16EE67FB00296AC3 /* Cosmic */,
 				6398F3F416EE67FB00296AC3 /* Frameworks */,
 				6398F3F316EE67FB00296AC3 /* Products */,
@@ -219,6 +231,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		A006CFE02002FECD00B63D31 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A006CFE62002FECD00B63D31 /* libGPUImage.a */,
+				A006CFE82002FECD00B63D31 /* GPUImage.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -229,10 +250,12 @@
 				6398F3EE16EE67FA00296AC3 /* Sources */,
 				6398F3EF16EE67FA00296AC3 /* Frameworks */,
 				6398F3F016EE67FA00296AC3 /* Resources */,
+				A006CFEC2002FEF000B63D31 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A006CFEA2002FEE100B63D31 /* PBXTargetDependency */,
 			);
 			name = Cosmic;
 			productName = Cosmic;
@@ -248,6 +271,11 @@
 				CLASSPREFIX = Cosmic;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "David Kirkby";
+				TargetAttributes = {
+					6398F3F116EE67FA00296AC3 = {
+						DevelopmentTeam = DT7EN6L6WY;
+					};
+				};
 			};
 			buildConfigurationList = 6398F3ED16EE67FA00296AC3 /* Build configuration list for PBXProject "Cosmic" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -261,8 +289,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 6302F87C175B4359006D877F /* Products */;
-					ProjectRef = 6302F87B175B4359006D877F /* GPUImage.xcodeproj */;
+					ProductGroup = A006CFE02002FECD00B63D31 /* Products */;
+					ProjectRef = A006CFDF2002FECD00B63D31 /* GPUImage.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -273,18 +301,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		6302F882175B435A006D877F /* libGPUImage.a */ = {
+		A006CFE62002FECD00B63D31 /* libGPUImage.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libGPUImage.a;
-			remoteRef = 6302F881175B435A006D877F /* PBXContainerItemProxy */;
+			remoteRef = A006CFE52002FECD00B63D31 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		6302F884175B435A006D877F /* GPUImageTests.octest */ = {
+		A006CFE82002FECD00B63D31 /* GPUImage.framework */ = {
 			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = GPUImageTests.octest;
-			remoteRef = 6302F883175B435A006D877F /* PBXContainerItemProxy */;
+			fileType = wrapper.framework;
+			path = GPUImage.framework;
+			remoteRef = A006CFE72002FECD00B63D31 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -330,6 +358,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A006CFEA2002FEE100B63D31 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GPUImageFramework;
+			targetProxy = A006CFE92002FEE100B63D31 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6398F3FE16EE67FB00296AC3 /* InfoPlist.strings */ = {
@@ -384,7 +420,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "../GPUImage/framework/**";
+				HEADER_SEARCH_PATHS = (
+					"../GPUImage/Source/**",
+					"../GPUImage/Source/iOS/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -410,7 +449,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				HEADER_SEARCH_PATHS = "../GPUImage/framework/**";
+				HEADER_SEARCH_PATHS = (
+					"../GPUImage/Source/**",
+					"../GPUImage/Source/iOS/**",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
@@ -422,8 +464,11 @@
 		6398F41916EE67FB00296AC3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEVELOPMENT_TEAM = DT7EN6L6WY;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Cosmic/Cosmic-Prefix.pch";
+				HEADER_SEARCH_PATHS = "/Users/shermangrewal/Desktop/Programming/xCode/Workspace/cosmic/GPUImage/framework/Source/**";
 				INFOPLIST_FILE = "Cosmic/Cosmic-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -433,8 +478,11 @@
 		6398F41A16EE67FB00296AC3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEVELOPMENT_TEAM = DT7EN6L6WY;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Cosmic/Cosmic-Prefix.pch";
+				HEADER_SEARCH_PATHS = "/Users/shermangrewal/Desktop/Programming/xCode/Workspace/cosmic/GPUImage/framework/Source/**";
 				INFOPLIST_FILE = "Cosmic/Cosmic-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
