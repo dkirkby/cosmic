@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ProcessingVC.swift
 //
 //
 //  Created by Sherman Grewal on 2018-08-23.
@@ -11,7 +11,7 @@ import AVFoundation
 import CoreMotion
 import CoreGraphics
 
-class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class ProcessingVC: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     
     //MARK: outlets
@@ -83,7 +83,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     /*initializing the CIimage is very expensive so we will only make it one from the invalidState one,
      but the instance variable for the image is not available yet since self is not finished setting up yet so
      we have to make it static for use in the next line*/
-    lazy var image = CIImage(cgImage: (ViewController.invalidStateImage?.cgImage)!)
+    lazy var image = CIImage(cgImage: (ProcessingVC.invalidStateImage?.cgImage)!)
     lazy  var cgimage = ciContext.createCGImage(image, from: image.extent)
     var uiImage = UIImage()
     
@@ -112,8 +112,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     override func viewDidLoad() {
         super.viewDidLoad()
         motionManager.startAccelerometerUpdates()
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(ViewController.updateAcc), userInfo: nil, repeats: true)
-        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ViewController.updateThreshold), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(ProcessingVC.updateAcc), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(ProcessingVC.updateThreshold), userInfo: nil, repeats: true)
         
         
         //  logAllFilters()

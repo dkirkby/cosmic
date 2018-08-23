@@ -149,10 +149,10 @@
             </objects>
             <point key="canvasLocation" x="1210" y="-11"/>
         </scene>
-        <!--View Controller-->
+        <!--ProcessingVC-->
         <scene sceneID="Df4-mm-inv">
             <objects>
-                <viewController storyboardIdentifier="ViewController" id="9yS-02-YeO" customClass="ViewController" customModule="Cosmic" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="9yS-02-YeO" customClass="ProcessingVC" customModule="Cosmic" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="fJl-mx-LhK"/>
                         <viewControllerLayoutGuide type="bottom" id="eS3-vP-TXb"/>
