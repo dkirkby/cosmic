@@ -1,19 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12D78" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="ALA-rs-deI">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="9yS-02-YeO">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Cosmic View Controller - Cosmic Rays-->
+        <!--Cosmic Rays-->
         <scene sceneID="5">
             <objects>
                 <viewController id="2" customClass="CosmicViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4fh-Au-1kJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vs5-AV-ovE"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="3">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hKD-O5-IMn">
-                                <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="wYm-DA-PGU">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -27,9 +37,8 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
-                                        <color key="backgroundColor" red="5.6274711639999997e-05" green="0.73840862770000004" blue="0.035807823850000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="5.6274711639999997e-05" green="0.73840862770000004" blue="0.035807823850000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <segue destination="WFD-Db-qnA" kind="push" identifier="showCosmicStamp" id="isk-6b-d3o"/>
                                         </connections>
@@ -37,13 +46,13 @@
                                 </cells>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="hKD-O5-IMn" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" type="default" id="L4H-Gz-qnn"/>
-                            <constraint firstItem="hKD-O5-IMn" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" type="default" id="RXE-r8-iTf"/>
-                            <constraint firstItem="hKD-O5-IMn" firstAttribute="leading" secondItem="3" secondAttribute="leading" type="default" id="rwM-nG-Evc"/>
-                            <constraint firstItem="hKD-O5-IMn" firstAttribute="top" secondItem="3" secondAttribute="top" type="default" id="y04-Lr-GTa"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" id="L4H-Gz-qnn"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="bottom" secondItem="3" secondAttribute="bottom" id="RXE-r8-iTf"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="leading" secondItem="3" secondAttribute="leading" id="rwM-nG-Evc"/>
+                            <constraint firstItem="hKD-O5-IMn" firstAttribute="top" secondItem="3" secondAttribute="top" id="y04-Lr-GTa"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Cosmic Rays" id="cxv-X9-jHZ"/>
@@ -55,66 +64,77 @@
             </objects>
             <point key="canvasLocation" x="596" y="-11"/>
         </scene>
-        <!--Cosmic Stamp View Controller - Close Up-->
+        <!--Close Up-->
         <scene sceneID="oHS-cK-t5L">
             <objects>
                 <viewController id="WFD-Db-qnA" customClass="CosmicStampViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3jf-1p-XdH"/>
+                        <viewControllerLayoutGuide type="bottom" id="QSV-vF-MWM"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Bwj-67-5I9">
-                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4u6-k5-ZuG" customClass="CosmicStampView">
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="571"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jsW-bs-yKJ">
+                                <rect key="frame" x="20" y="626" width="42" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VN4-MK-Mh6">
+                                <rect key="frame" x="166" y="626" width="42" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgC-8P-5KG">
+                                <rect key="frame" x="313" y="626" width="42" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Time" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MOP-8J-QJH">
+                                <rect key="frame" x="20" y="598" width="38" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="(x,y)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qHM-0d-Mhu">
+                                <rect key="frame" x="171" y="598" width="33" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Count" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yfk-cM-NEA">
+                                <rect key="frame" x="308" y="598" width="46.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="VN4-MK-Mh6" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="0CT-3A-Ytj"/>
-                            <constraint firstAttribute="trailing" secondItem="RgC-8P-5KG" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="4xm-ZT-VEC"/>
-                            <constraint firstItem="qHM-0d-Mhu" firstAttribute="centerX" secondItem="4u6-k5-ZuG" secondAttribute="centerX" type="default" id="EAY-dl-fD4"/>
-                            <constraint firstItem="jsW-bs-yKJ" firstAttribute="top" secondItem="MOP-8J-QJH" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="FBT-Jo-9fU"/>
-                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" type="default" id="HGh-of-B7b"/>
-                            <constraint firstItem="jsW-bs-yKJ" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="Jvl-kj-x6D"/>
-                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="top" secondItem="Bwj-67-5I9" secondAttribute="top" type="default" id="Ztb-uS-2qA"/>
-                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="trailing" secondItem="Bwj-67-5I9" secondAttribute="trailing" type="default" id="cLp-mx-YHt"/>
-                            <constraint firstItem="MOP-8J-QJH" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" constant="20" symbolic="YES" type="default" id="dAM-Bt-gTp"/>
-                            <constraint firstAttribute="trailing" secondItem="Yfk-cM-NEA" secondAttribute="trailing" constant="20" symbolic="YES" type="default" id="mPE-lk-f1f"/>
-                            <constraint firstAttribute="bottom" secondItem="jsW-bs-yKJ" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="nu0-q5-pbE"/>
-                            <constraint firstItem="VN4-MK-Mh6" firstAttribute="centerX" secondItem="qHM-0d-Mhu" secondAttribute="centerX" type="default" id="oA8-gk-XKx"/>
-                            <constraint firstAttribute="bottom" secondItem="RgC-8P-5KG" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="ogW-0v-tkZ"/>
-                            <constraint firstItem="qHM-0d-Mhu" firstAttribute="baseline" secondItem="MOP-8J-QJH" secondAttribute="baseline" type="default" id="oxA-Ee-PIM"/>
+                            <constraint firstAttribute="bottom" secondItem="VN4-MK-Mh6" secondAttribute="bottom" constant="20" symbolic="YES" id="0CT-3A-Ytj"/>
+                            <constraint firstAttribute="trailing" secondItem="RgC-8P-5KG" secondAttribute="trailing" constant="20" symbolic="YES" id="4xm-ZT-VEC"/>
+                            <constraint firstItem="qHM-0d-Mhu" firstAttribute="centerX" secondItem="4u6-k5-ZuG" secondAttribute="centerX" id="EAY-dl-fD4"/>
+                            <constraint firstItem="jsW-bs-yKJ" firstAttribute="top" secondItem="MOP-8J-QJH" secondAttribute="bottom" constant="8" symbolic="YES" id="FBT-Jo-9fU"/>
+                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" id="HGh-of-B7b"/>
+                            <constraint firstItem="jsW-bs-yKJ" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" constant="20" symbolic="YES" id="Jvl-kj-x6D"/>
+                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="top" secondItem="Bwj-67-5I9" secondAttribute="top" id="Ztb-uS-2qA"/>
+                            <constraint firstItem="4u6-k5-ZuG" firstAttribute="trailing" secondItem="Bwj-67-5I9" secondAttribute="trailing" id="cLp-mx-YHt"/>
+                            <constraint firstItem="MOP-8J-QJH" firstAttribute="leading" secondItem="Bwj-67-5I9" secondAttribute="leading" constant="20" symbolic="YES" id="dAM-Bt-gTp"/>
+                            <constraint firstAttribute="trailing" secondItem="Yfk-cM-NEA" secondAttribute="trailing" constant="20" symbolic="YES" id="mPE-lk-f1f"/>
+                            <constraint firstAttribute="bottom" secondItem="jsW-bs-yKJ" secondAttribute="bottom" constant="20" symbolic="YES" id="nu0-q5-pbE"/>
+                            <constraint firstItem="VN4-MK-Mh6" firstAttribute="centerX" secondItem="qHM-0d-Mhu" secondAttribute="centerX" id="oA8-gk-XKx"/>
+                            <constraint firstAttribute="bottom" secondItem="RgC-8P-5KG" secondAttribute="bottom" constant="20" symbolic="YES" id="ogW-0v-tkZ"/>
+                            <constraint firstItem="qHM-0d-Mhu" firstAttribute="baseline" secondItem="MOP-8J-QJH" secondAttribute="baseline" id="oxA-Ee-PIM"/>
                             <constraint firstAttribute="bottom" secondItem="4u6-k5-ZuG" secondAttribute="bottom" constant="96" id="s7E-qx-2nL"/>
-                            <constraint firstItem="Yfk-cM-NEA" firstAttribute="baseline" secondItem="qHM-0d-Mhu" secondAttribute="baseline" type="default" id="zKA-QZ-jSN"/>
+                            <constraint firstItem="Yfk-cM-NEA" firstAttribute="baseline" secondItem="qHM-0d-Mhu" secondAttribute="baseline" id="zKA-QZ-jSN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Close Up" id="GQy-Ho-TYF"/>
@@ -129,13 +149,41 @@
             </objects>
             <point key="canvasLocation" x="1210" y="-11"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="Df4-mm-inv">
+            <objects>
+                <viewController storyboardIdentifier="ViewController" id="9yS-02-YeO" customClass="ViewController" customModule="Cosmic" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="fJl-mx-LhK"/>
+                        <viewControllerLayoutGuide type="bottom" id="eS3-vP-TXb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0Vr-ed-ts0">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Wf-dD-rze">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <connections>
+                        <outlet property="cameraView" destination="0Wf-dD-rze" id="Sr9-4Q-gQn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pIN-oW-9xo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-809.5" y="-76.5"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="yTh-d8-EgQ">
             <objects>
                 <navigationController id="ALA-rs-deI" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="mgd-oe-ywt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -148,47 +196,4 @@
             <point key="canvasLocation" x="80" y="-11"/>
         </scene>
     </scenes>
-    <classes>
-        <class className="CosmicCell" superclassName="UICollectionViewCell">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicCell.h"/>
-        </class>
-        <class className="CosmicStampView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicStampView.h"/>
-        </class>
-        <class className="CosmicStampViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicStampViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="coordinatesLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="cosmicStampView" candidateClass="CosmicStampView"/>
-                <relationship kind="outlet" name="countLabel" candidateClass="UILabel"/>
-                <relationship kind="outlet" name="timeLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="CosmicViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/CosmicViewController.h"/>
-            <relationships>
-                <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-        <class className="UICollectionReusableView" superclassName="UIView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionReusableView.h"/>
-        </class>
-        <class className="UICollectionViewCell" superclassName="UICollectionReusableView">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewCell.h"/>
-        </class>
-        <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
-        </class>
-    </classes>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination"/>
-    </simulatedMetricsContainer>
 </document>
