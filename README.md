@@ -1,6 +1,10 @@
 cosmic
 ======
 
-Cosmic ray detector for iOS
+Cosmic ray detector for iOS.
 
-And thats basically it at this point.
+Created by David Kirkby, Dylan Kirkby, and Sherman Grewal.
+
+[David's GitHub](https://github.com/dkirkby)
+[Dylan's GitHub](https://github.com/captainkirkby)
+[Sherman's GitHub](https://github.com/sherman-grewal)
