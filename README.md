@@ -1,12 +1,8 @@
 cosmic
 ======
 
-Cosmic ray detector for iOS.
+iOS software to study the feasibility of detecting cosmic rays with an iPhone, using the CMOS camera as the particle detector and the phone's GPU for real time analysis.
 
-Created by David Kirkby, Dylan Kirkby, and Sherman Grewal.
+Created March 2013.
 
-[David's GitHub](https://github.com/dkirkby)
-
-[Dylan's GitHub](https://github.com/captainkirkby)
-
-[Sherman's GitHub](https://github.com/sherman-grewal)
+Developers: [dkirkby](https://github.com/dkirkby), [captainkirkby](https://github.com/captainkirkby), [sherman-grewal](https://github.com/sherman-grewal)
